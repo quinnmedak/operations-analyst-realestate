@@ -205,3 +205,17 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# dbt
+profiles.yml
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Snowflake / secrets
+.env
+*.env
+snowflake_config.json
+
+# Streamlit secrets
+.streamlit/secrets.toml
