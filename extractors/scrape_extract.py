@@ -1,0 +1,123 @@
+import os
+import re
+import time
+from datetime import datetime
+from pathlib import Path
+from dotenv import load_dotenv
+import requests
+import pandas as pd
+import snowflake.connector
+from snowflake.connector.pandas_tools import write_pandas
+
+load_dotenv()
+
+FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY")
+OUT_DIR = Path("knowledge/raw")
+
+QUERIES = [
+    "JLL commercial real estate market outlook office vacancy United States",
+    "CBRE commercial real estate investment trends cap rates forecast",
+    "Cushman Wakefield Los Angeles Southern California commercial real estate market",
+]
+
+
+def slugify_url(url: str) -> str:
+    slug = re.sub(r"^https?://", "", url)
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", slug)
+    return slug.strip("-")
+
+
+def save_results(results):
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    run_ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    for r in results:
+        markdown = r.get("markdown") or ""
+        if not markdown:
+            print(f"  WARNING: no markdown for {r['url']}, skipping")
+            continue
+        slug = slugify_url(r["url"])
+        filepath = OUT_DIR / f"{run_ts}_{slug}.md"
+        content = (
+            f"---\n"
+            f"title: {r['title']}\n"
+            f"url: {r['url']}\n"
+            f"scraped_at: {datetime.now().isoformat(timespec='seconds')}\n"
+            f"---\n\n"
+            f"{markdown}\n"
+        )
+        filepath.write_text(content, encoding="utf-8")
+        print(f"  Saved: {filepath}")
+
+
+def load_to_snowflake(df):
+    conn = snowflake.connector.connect(
+        account=os.getenv("SNOWFLAKE_ACCOUNT"),
+        user=os.getenv("SNOWFLAKE_USER"),
+        password=os.getenv("SNOWFLAKE_PASSWORD"),
+        database=os.getenv("SNOWFLAKE_DATABASE"),
+        warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
+        schema="RAW",
+    )
+    conn.cursor().execute("CREATE SCHEMA IF NOT EXISTS RAW")
+    conn.cursor().execute("""
+        CREATE TABLE IF NOT EXISTS RAW.SCRAPE_ARTICLES (
+            TITLE VARCHAR,
+            URL VARCHAR,
+            SCRAPED_AT TIMESTAMP,
+            BODY TEXT,
+            SOURCE_QUERY VARCHAR,
+            LOADED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    df.columns = [c.upper() for c in df.columns]
+    write_pandas(conn, df, "SCRAPE_ARTICLES", auto_create_table=False)
+    conn.close()
+    print(f"Loaded {len(df)} rows to Snowflake")
+
+
+if __name__ == "__main__":
+    api_url = "https://api.firecrawl.dev/v2/search"
+    headers = {"Authorization": f"Bearer {FIRECRAWL_API_KEY}"}
+
+    all_results = []
+
+    for query in QUERIES:
+        print(f"\nSearching: {query}")
+        payload = {
+            "query": query,
+            "limit": 3,
+            "scrapeOptions": {"formats": ["markdown"]},
+        }
+        response = requests.post(api_url, headers=headers, json=payload)
+        data = response.json()
+        results = data["data"]["web"]
+        print(f"  Firecrawl returned {len(results)} results")
+
+        for r in results:
+            print(f"  - {r['title']}")
+            print(f"    {r['url']}")
+            print(f"    markdown length: {len(r.get('markdown') or '')} chars")
+            r["source_query"] = query
+
+        all_results.extend(results)
+        time.sleep(1)
+
+    save_results(all_results)
+
+    rows = [
+        {
+            "title": r.get("title", ""),
+            "url": r.get("url", ""),
+            "scraped_at": datetime.now().isoformat(),
+            "body": r.get("markdown") or "",
+            "source_query": r.get("source_query", ""),
+        }
+        for r in all_results
+        if r.get("markdown")
+    ]
+
+    if rows:
+        df = pd.DataFrame(rows)
+        print(f"\nLoading {len(df)} articles to Snowflake...")
+        print(df[["title", "url"]].to_string())
+        load_to_snowflake(df)
