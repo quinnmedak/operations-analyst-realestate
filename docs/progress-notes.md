@@ -1,28 +1,44 @@
 # Project Progress Notes
 
-## What We've Built So Far
+---
 
-### Step 1: Python Extractor (`extractors/fred_extract.py`)
-- Calls the FRED API (Federal Reserve Economic Data) — free, no rate limits
-- Loops over 6 economic series and collects all historical data points
-- Stores results in a pandas DataFrame (5,183 rows x 3 columns)
-- Loads data into Snowflake
+## Session: Apr 20 — Knowledge Base Strategy
 
-### Step 2: Snowflake Raw Table
+### What the Knowledge Base Is For
 
-Why Snowflake: 
-- Allows for querying better of the large data that is stored on PostGres Database
-- Storage and computing are paid for separately (data stored in snowflake is not paid, only computing)
+The knowledge base answers qualitative questions that the dashboard can't. The dashboard shows the numbers (vacancy rates, mortgage rates, delinquencies). The knowledge base provides the industry narrative behind those numbers — queryable live via Claude Code during the final interview demo.
 
-- Database: `OPERATIONS_ANALYST`
-- Schema: `RAW`
-- Table: `FRED_OBSERVATIONS`
-- 5,183 rows, 3 columns: `SERIES_ID`, `DATE`, `VALUE`
-- All 6 series land in one table, distinguished by `series_id`
+The two outputs together tell a complete analyst story:
+- **Dashboard:** "vacancy rates rose 40% from 2021-2023" (the what)
+- **Knowledge base:** "JLL Research attributes this to remote work permanently reducing office demand, especially in secondary markets" (the why/context)
+
+### Questions the Knowledge Base Should Be Able to Answer
+
+These map directly to the FRED diagnostic story (inflation → rate hikes → CRE lending tightened → delinquencies rose → vacancies increased):
+
+1. Why did office vacancies spike specifically? (remote work, lease expirations, demand shifts)
+2. Which CRE sectors are most stressed — office vs. industrial vs. retail?
+3. What are analysts forecasting for 2024-2025?
+4. How is JLL specifically positioning/advising clients in this environment?
+
+### How to Know You Have Enough Data
+
+Scrape with those questions in mind. A JLL Research report on office absorption and remote work → grab it. A report on logistics/industrial that your FRED data doesn't touch → lower priority.
+
+You have enough when you can ask Claude Code one of those questions and get a substantive answer with citations from 2+ different sources. 15 focused on-topic sources beats 40 scattered ones.
+
+**Good scrape targets:** JLL Research (jll.com/research), CBRE Insights, Bisnow, GlobeSt — market reports, press releases, research articles about CRE market conditions.
 
 ---
 
-## The 6 FRED Series (Your Data)
+## Session: Apr 19 — FRED Pipeline
+
+## Milestone 01: Extract & Load (due Apr 27)
+
+### Done
+
+**Source 1 — FRED API extractor (`extractors/fred_extract.py`)**
+- Calls FRED API for 6 economic series, stores in `RAW.FRED_OBSERVATIONS` (5,183 rows x 3 cols: `SERIES_ID`, `DATE`, `VALUE`)
 
 | Series ID | What it measures | Role in the story |
 |---|---|---|
@@ -35,25 +51,43 @@ Why Snowflake:
 
 **Diagnostic story:** Inflation spiked → Fed raised rates → mortgage rates surged → CRE lending tightened → delinquencies rose → vacancies increased
 
----
-
-## Star Schema (coming in dbt)
-
-**`fact_observations`** — 5,183 rows, one per series per date
-| series_id | date | value |
-
-**`dim_series`** — 6 rows, one per series
-| series_id | series_name | units | frequency |
-
-They connect on `series_id`.
+**Snowflake raw table**
+- Database: `OPERATIONS_ANALYST`, Schema: `RAW`, Table: `FRED_OBSERVATIONS`
 
 ---
 
-## What's Next
+### Still Needed (Milestone 01)
 
-- [ ] Set up dbt project
-- [ ] Write staging model (`stg_fred_observations`) — cleans raw data
-- [ ] Write mart models (`dim_series` + `fact_observations`) — star schema
-- [ ] Set up GitHub Actions to automate the pipeline
-- [ ] Add pipeline diagram to README
-- [ ] Commit everything
+- [ ] GitHub Actions pipeline for FRED extractor
+- [ ] Source 2: web scrape extractor → `RAW.SCRAPE_ARTICLES`
+- [ ] GitHub Actions pipeline for scrape extractor
+- [ ] Pipeline diagram in README
+- [ ] Submit repo URL to Brightspace
+
+---
+
+## Milestone 02: Transform, Present & Polish (due May 4)
+
+### Still Needed
+
+- [ ] dbt staging model: `stg_fred_observations`
+- [ ] dbt staging model: `stg_scrape_articles`
+- [ ] dbt mart: `dim_series` + `fact_observations` (star schema)
+- [ ] dbt tests passing
+- [ ] Streamlit dashboard (deployed to Streamlit Community Cloud)
+- [ ] Knowledge base: 15+ raw sources in `knowledge/raw/`, 3+ wiki pages in `knowledge/wiki/`
+- [ ] Presentation slides (PDF)
+- [ ] README (pipeline diagram, ERD, insights summary)
+- [ ] ERD generated from dbt models
+
+---
+
+## Star Schema Design (for Milestone 02 dbt)
+
+**`fact_observations`** — one row per series per date
+| series_id | observation_date | value |
+
+**`dim_series`** — one row per series
+| series_id | series_name | units | frequency | category |
+
+Connect on `series_id`.
