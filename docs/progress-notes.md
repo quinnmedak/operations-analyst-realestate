@@ -2,6 +2,27 @@
 
 ---
 
+## Session: Apr 21 — Milestone 01 Web Scrape Pipeline
+
+### Done
+
+- Scraped 3 initial sources manually via Claude Code + Firecrawl MCP, saved to `knowledge/raw/`:
+  - `01-jll-us-office-market-dynamics-q1-2026.md` — JLL U.S. Office Q1 2026
+  - `02-cbre-us-real-estate-market-outlook-2026.md` — CBRE 2026 Market Outlook (all sectors)
+  - `03-cushman-wakefield-greater-los-angeles-marketbeats.md` — C&W Greater LA MarketBeats Q1 2026
+- Built `extractors/scrape_extract.py` — runs 3 CRE Firecrawl queries, saves markdown to `knowledge/raw/`, loads rows to `RAW.SCRAPE_ARTICLES` in Snowflake
+- Added all 7 GitHub Actions secrets (FRED_API_KEY, FIRECRAWL_API_KEY, all Snowflake creds)
+- Created `.github/workflows/fred_extract.yml` — scheduled monthly on the 1st, also has manual trigger
+- Pushed all of the above to GitHub
+
+### Still Needed (Milestone 01 — due Apr 27)
+
+- [ ] Test `scrape_extract.py` locally — verify Snowflake load works, check `RAW.SCRAPE_ARTICLES`
+- [ ] GitHub Actions workflow for scrape extractor (`scrape_extract.yml`)
+- [ ] Pipeline diagram in README
+
+---
+
 ## Session: Apr 20 — Knowledge Base Strategy
 
 ### What the Knowledge Base Is For
