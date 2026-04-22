@@ -14,13 +14,8 @@ load_dotenv()
 api_key = os.getenv("FRED_API_KEY")                                                                                                                           
 api_url = "https://api.stlouisfed.org/fred/series/observations"
 series_ids = [
-      "RRVRUSQ156N",                                                                                                                           
-      "DRCRELEXFACBS",                                                                                                                         
-      "CRLACBS",                                                                                                                               
-      "MORTGAGE30US",
-      "UNRATE",
-      "CPIAUCSL"
-  ]
+    "MORTGAGE30US",  # 30-year mortgage rate — weekly
+]
                                                                                                                                                
 results = []
 
@@ -33,16 +28,17 @@ def load_to_snowflake(df):
         warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
         schema="RAW"                                                                                                                         
     )
-    conn.cursor().execute("CREATE SCHEMA IF NOT EXISTS RAW")                                                                                 
-    conn.cursor().execute("""                                                                                                                
+    conn.cursor().execute("CREATE SCHEMA IF NOT EXISTS RAW")
+    conn.cursor().execute("""
         CREATE TABLE IF NOT EXISTS RAW.FRED_OBSERVATIONS (
-            SERIES_ID VARCHAR,                                                                                                               
+            SERIES_ID VARCHAR,
             DATE VARCHAR,
-            VALUE VARCHAR,                                                                                                                   
+            VALUE VARCHAR,
             LOADED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )                                                                                                                                    
+        )
     """)
-    df.columns = [c.upper() for c in df.columns]                                                                                             
+    conn.cursor().execute("TRUNCATE TABLE IF EXISTS RAW.FRED_OBSERVATIONS")
+    df.columns = [c.upper() for c in df.columns]
     write_pandas(conn, df, "FRED_OBSERVATIONS", auto_create_table=False)                                                                     
     conn.close()
     print(f"Loaded {len(df)} rows to Snowflake")

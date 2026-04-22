@@ -15,9 +15,9 @@ FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY")
 OUT_DIR = Path("knowledge/raw")
 
 QUERIES = [
-    "JLL commercial real estate market outlook office vacancy United States",
-    "CBRE commercial real estate investment trends cap rates forecast",
-    "Cushman Wakefield Los Angeles Southern California commercial real estate market",
+    "Cushman Wakefield Los Angeles industrial marketbeat 2025 PDF",
+    "site:bisnow.com Los Angeles commercial real estate office industrial 2025",
+    "JLL Los Angeles commercial real estate market outlook 2025",
 ]
 
 
