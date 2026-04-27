@@ -47,7 +47,9 @@ This project satisfies that requirement with three API integrations:
 - `RAW.REIT_DAILY_PRICES` — one row per company per trading day: open, high, low, close price, volume, dividends. ~11,300 rows, 5 years of history.
 - `RAW.REIT_QUARTERLY_FINANCIALS` — one row per company per quarter: total revenue, net income, EBITDA, operating income, total assets, total debt, net debt, long-term debt. ~55 rows.
 
-**Why this source:** REIT financial data is the closest publicly available proxy for commercial real estate market health. When office tenants leave buildings, office REIT revenue falls. When industrial demand grows from e-commerce, industrial REIT revenue grows. This data lets us answer real questions that a JLL Capital Markets advisor or institutional investor would ask — by property type, over time, and with actual dollar figures.
+**Why this source:** Commercial real estate is almost entirely a private market — lease terms, sale prices, vacancy rates, and rental income are not publicly disclosed. Accessing this data normally requires paid subscriptions like CoStar or MSCI Real Capital Analytics. REITs are the exception: because they are publicly traded companies, they are required by the SEC to report their financials every quarter. This makes REIT data the only freely available window into real CRE financial performance.
+
+The data maps directly to market conditions by property type: BXP, SLG, and VNO own Manhattan and Boston office towers, so their declining revenue is a direct signal of falling office demand — not just investor sentiment. Prologis and STAG own industrial warehouses, so their growing revenue reflects real e-commerce-driven demand. This distinction matters analytically: if office REIT *stock prices* fall but *revenue* holds steady, that is a sentiment problem. If both fall together, that is genuine business deterioration. REIT quarterly financials are the data that answers that question — a real question a JLL analyst would ask.
 
 ---
 
