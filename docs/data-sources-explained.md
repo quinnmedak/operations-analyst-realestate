@@ -59,8 +59,6 @@ The data maps directly to market conditions by property type: BXP, SLG, and VNO 
 
 **Total debt** is the most directly actionable metric for JLL. When interest rates rise, companies carrying heavy debt can't afford to refinance. That creates distressed assets — properties owners are forced to sell below market value. JLL gets hired to broker those sales. Tracking which sectors carry the highest leverage ratios tells you where distressed activity is most likely to emerge — and where JLL should be focusing business development.
 
-**Dividends** are less central to this specific role. Dividend yield is the primary return metric for REIT investors, not for JLL internally. It is included because it is in the data and matters to JLL's institutional investor clients, but it is not the strongest analytical story for a BI analyst role.
-
 The metrics that most directly connect to the JLL BI Analyst job are: stock price trends as a market health signal, debt leverage as a refinancing risk indicator, and revenue decline as evidence of real occupancy deterioration. These three together tell the story a JLL analyst would need to tell a client.
 
 ---
@@ -72,9 +70,6 @@ Pull `close` from `fact_daily_prices`, filter `dim_reit.property_type = 'Office'
 
 **"Which property type generates the most revenue?"**
 Sum `total_revenue` from `fact_quarterly_financials`, group by `dim_reit.property_type`. Ranks office, industrial, retail, and multifamily by revenue scale.
-
-**"Which companies pay the highest dividends?"**
-Sum `dividends` from `fact_daily_prices`, group by `dim_reit.company`. Dividend yield is a core metric for CRE investors.
 
 **"How has total debt changed for office REITs since 2022?"**
 Pull `total_debt` and `net_debt` from `fact_quarterly_financials`, filter to Office, group by quarter. Shows whether office companies took on more debt as revenues softened.
