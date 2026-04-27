@@ -15,9 +15,10 @@ FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY")
 OUT_DIR = Path("knowledge/raw")
 
 QUERIES = [
-    "Cushman Wakefield Los Angeles industrial marketbeat 2025 PDF",
-    "site:bisnow.com Los Angeles commercial real estate office industrial 2025",
-    "JLL Los Angeles commercial real estate market outlook 2025",
+    "JLL US industrial market dynamics 2025 2026 warehouse logistics",
+    "CBRE multifamily apartment market outlook 2026 rent vacancy",
+    "JLL life science real estate market outlook 2025",
+    "CBRE US retail market outlook 2026",
 ]
 
 
@@ -85,10 +86,16 @@ if __name__ == "__main__":
         print(f"\nSearching: {query}")
         payload = {
             "query": query,
-            "limit": 3,
+            "limit": 2,
             "scrapeOptions": {"formats": ["markdown"]},
         }
         response = requests.post(api_url, headers=headers, json=payload)
+        print(f"  status {response.status_code}")
+
+        if response.status_code != 200:
+            print(f"  ERROR - HTTP {response.status_code}: {response.text[:200]}")
+            continue
+
         data = response.json()
         results = data["data"]["web"]
         print(f"  Firecrawl returned {len(results)} results")

@@ -1,6 +1,7 @@
 import os
-import requests       
-import json                                                                                                                                         
+import time
+import requests
+import json
 from dotenv import load_dotenv
 
 import snowflake.connector
@@ -14,7 +15,15 @@ load_dotenv()
 api_key = os.getenv("FRED_API_KEY")                                                                                                                           
 api_url = "https://api.stlouisfed.org/fred/series/observations"
 series_ids = [
-    "MORTGAGE30US",  # 30-year mortgage rate — weekly
+    "MORTGAGE30US",    # 30-year fixed mortgage rate — weekly
+    "DGS10",           # 10-Year Treasury yield — daily (cap rate benchmark)
+    "FEDFUNDS",        # Federal Funds Rate — monthly (policy rate)
+    "T10Y2Y",          # 10yr minus 2yr Treasury spread — daily (yield curve)
+    "UNRATE",          # Unemployment rate — monthly (office demand driver)
+    "PAYEMS",          # Total nonfarm payrolls — monthly (job growth)
+    "ECOMPCTNSA",      # E-commerce as % of retail sales — quarterly (industrial driver)
+    "DRCRELEXFACBS",   # CRE loan delinquency rate — quarterly (sector financial stress)
+    "CREACBW027SBOG",  # CRE loans at commercial banks — weekly (credit availability)
 ]
                                                                                                                                                
 results = []
@@ -50,8 +59,14 @@ for series_id in series_ids:
           "file_type": "json"
       }                                                                                                                                        
       response = requests.get(api_url, params=params)
-      data = response.json()                                                                                                                   
-                  
+      print(f"{series_id}: status {response.status_code}")
+
+      if response.status_code != 200:
+          print(f"{series_id}: ERROR - HTTP {response.status_code}")
+          continue
+
+      data = response.json()
+
       if "observations" not in data:
           print(f"{series_id}: ERROR - {data}")
           continue                                                                                                                             
@@ -63,7 +78,8 @@ for series_id in series_ids:
               "value": obs["value"]
           })                                                                                                                                   
                   
-      print(f"{series_id}: {len(data['observations'])} rows") 
+      print(f"{series_id}: {len(data['observations'])} rows")
+      time.sleep(0.5)
 
 df = pd.DataFrame(results)                                                                                                                   
 print(df)
