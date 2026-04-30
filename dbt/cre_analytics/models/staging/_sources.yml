@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+    schema: RAW
+    tables:
+      - name: reit_daily_prices
+      - name: reit_quarterly_financials
+      - name: fred_observations
+      - name: bls_metro_employment

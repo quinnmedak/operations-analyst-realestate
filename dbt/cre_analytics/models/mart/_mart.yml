@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: dim_date
+    columns:
+      - name: date_day
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_reit
+    columns:
+      - name: ticker
+        tests:
+          - unique
+          - not_null
+      - name: property_type
+        tests:
+          - not_null
+
+  - name: fact_daily_prices
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_reit')
+              field: ticker
+      - name: date_day
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_day
+      - name: close
+        tests:
+          - not_null
+
+  - name: fact_quarterly_financials
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_reit')
+              field: ticker
+      - name: period_date
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+
+  - name: fact_macro_quarterly
+    columns:
+      - name: year_quarter
+        tests:
+          - unique
+          - not_null
+      - name: fedfunds
+        tests:
+          - not_null
+
+  - name: fact_metro_employment
+    columns:
+      - name: date_day
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_day
+      - name: employment_thousands
+        tests:
+          - not_null
