@@ -25,4 +25,5 @@ SELECT
     MAX(CASE WHEN series_id = 'CREACBW027SBOG' THEN avg_value END)          AS creacbw027sbog
 FROM quarterly
 GROUP BY year, quarter
+HAVING MAX(CASE WHEN series_id = 'FEDFUNDS' THEN avg_value END) IS NOT NULL
 ORDER BY year, quarter
