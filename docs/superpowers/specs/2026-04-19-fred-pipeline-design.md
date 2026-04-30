@@ -10,15 +10,17 @@ Extract macroeconomic data from the FRED API, load to Snowflake raw, transform t
 **Base URL:** `https://api.stlouisfed.org/fred`
 **Auth:** API key via `FRED_API_KEY` environment variable (free, no rate limit issues at this volume)
 
-**Series:**
+**Series:o**
 
-| Series ID | Metric | Frequency | ~Rows |
-|---|---|---|---|
-| `COMREAINTUSQ159N` | Commercial RE Price Index | Quarterly | ~100 |
-| `MORTGAGE30US` | 30-Year Mortgage Rate | Weekly | ~2,700 |
-| `UNRATE` | Unemployment Rate | Monthly | ~900 |
-| `HOUST` | Housing Starts | Monthly | ~780 |
-| `CPIAUCSL` | CPI (Inflation) | Monthly | ~920 |
+
+| Series ID          | Metric                    | Frequency | ~Rows  |
+| ------------------ | ------------------------- | --------- | ------ |
+| `COMREAINTUSQ159N` | Commercial RE Price Index | Quarterly | ~100   |
+| `MORTGAGE30US`     | 30-Year Mortgage Rate     | Weekly    | ~2,700 |
+| `UNRATE`           | Unemployment Rate         | Monthly   | ~900   |
+| `HOUST`            | Housing Starts            | Monthly   | ~780   |
+| `CPIAUCSL`         | CPI (Inflation)           | Monthly   | ~920   |
+
 
 Total: ~5,400 rows
 
@@ -37,9 +39,11 @@ Follows the mp03 tutorial pattern: request → parse → loop → DataFrame → 
 ## dbt Models
 
 **Staging:**
+
 - `stg_fred_observations` — cast types, rename columns, filter null values
 
 **Mart (star schema):**
+
 - `dim_series` — one row per series (series_id, name, units, frequency, category)
 - `fact_observations` — one row per series per date (series_id, date, value)
 
@@ -48,6 +52,7 @@ At least one dbt test on each model (not_null, unique).
 ## GitHub Actions
 
 Scheduled workflow (weekly cron):
+
 - Runs `fred_extract.py`
 - Then `dbt run && dbt test`
 - Secrets: `FRED_API_KEY` + Snowflake credentials (`SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_USER`, `SNOWFLAKE_PASSWORD`, `SNOWFLAKE_DATABASE`, `SNOWFLAKE_WAREHOUSE`, `SNOWFLAKE_SCHEMA`)
