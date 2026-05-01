@@ -165,9 +165,9 @@ st.markdown("#### How has investor confidence in office vs. industrial shifted o
 SECTOR_COLORS = {
     "Office":       "#2C2C2C",
     "Industrial":   "#E30613",
-    "Retail":       "#D1D5DB",
-    "Multifamily":  "#D1D5DB",
-    "Life Science": "#D1D5DB",
+    "Retail":       "#6366F1",
+    "Multifamily":  "#F59E0B",
+    "Life Science": "#10B981",
 }
 
 try:
@@ -225,3 +225,41 @@ try:
 
 except Exception as e:
     st.error(f"Could not load price trend: {e}")
+
+# ── Chart 6 — CRE Loan Delinquency Rate ──────────────────────────────────────
+
+st.markdown("#### How stressed is the CRE lending market?")
+
+try:
+    delinquency = run_query("""
+        SELECT
+            TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
+            drcrelexfacbs AS delinquency_rate
+        FROM ANALYTICS.FACT_MACRO_QUARTERLY
+        WHERE drcrelexfacbs IS NOT NULL
+          AND year >= 2008
+        ORDER BY year, quarter
+    """)
+
+    fig6 = px.line(
+        delinquency,
+        x="PERIOD_DATE",
+        y="DELINQUENCY_RATE",
+        labels={"PERIOD_DATE": "", "DELINQUENCY_RATE": "Delinquency Rate (%)"},
+    )
+    fig6.update_traces(line_color="#E30613", line_width=1.8)
+    fig6.update_layout(
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        font_color="#2C2C2C",
+        height=360,
+        margin=dict(t=20, b=20, l=0, r=0),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(gridcolor="#F0F0F0"),
+    )
+
+    st.plotly_chart(fig6, use_container_width=True)
+    st.caption("Source: FRED (DRCRELEXFACBS) via Snowflake · FACT_MACRO_QUARTERLY · 2008–present")
+
+except Exception as e:
+    st.error(f"Could not load delinquency data: {e}")
