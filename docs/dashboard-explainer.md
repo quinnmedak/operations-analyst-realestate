@@ -76,3 +76,41 @@ Four headline numbers that give an immediate read on where the commercial real e
 **Connection to vacancy:** Delinquency rises because vacancy rises. When offices empty out, owners lose rental income and can't service their debt. This chart is therefore an indirect proxy for vacancy stress — not a substitute for vacancy data, but confirmation that the vacancy problem is severe enough to reach the lending market.
 
 ---
+
+## Diagnostic — Why It's Happening
+
+---
+
+### Chart 2 — Rising Rates Crushed Office Valuations
+
+**What it shows:** Two lines on dual axes — office REIT indexed price (left) and Fed Funds Rate (right) — from 2019 to present. The inverse relationship between the two is the story.
+
+**The story in four phases:**
+- 2020–2022: Rates cut to 0% during COVID, office prices held then recovered
+- 2022–2023: Fed raised rates from 0% to 5.3% in 18 months — the fastest rate hike in 40 years. Office prices fell 60% in lockstep.
+- 2023–2025: Rates peaked and started falling. Office prices partially recovered, confirming rate sensitivity.
+- 2025–2026: Rates still declining but office prices falling again — suggesting something beyond rates is now driving the decline.
+
+**Why it matters to investors:** It separates two possible explanations for the office crash: (1) a rate problem — temporary, fixable when cuts arrive — or (2) a structural problem — remote work permanently killed demand. This chart shows rates explain the 2022–2023 crash clearly. But the 2025–2026 divergence (falling prices despite falling rates) signals the problem may now be structural, not cyclical.
+
+**How it connects to Chart 3:** If rates are falling but office is still declining, the decline may be real — not just investor fear. Chart 3 tests that directly by overlaying stock price movement against actual revenue.
+
+---
+
+### Chart 4 — LA Employment vs. Peer Cities
+
+**What it shows:** Indexed employment across major metros from 2020 to present. All metros start at 100 so you can see relative recovery trajectories. Interactive — user selects which cities to compare.
+
+**Why employment is the right signal:** Employment is a leading indicator for office demand. Companies hire first, then sign leases. By the time vacancy rates and leasing volume move, the employment trend has already played out. This chart gives a signal before it shows up in the data JLL is already watching.
+
+**The story:** Dallas is up 20%+ from its 2020 baseline — Sun Belt job growth is real and sustained. New York recovered to ~5% above baseline and is now plateauing. LA is the weakest of the four major metros — never fully recovered and now sitting below where it started.
+
+**What this means for office recovery:** LA's office leasing recovery depends on employers hiring in office-using sectors. This chart says that's not happening relative to peers. Office demand in LA is unlikely to recover until this employment trend reverses.
+
+**How JLL uses this:**
+- *Advising investors:* "LA employment is lagging Dallas by 20 points — office recovery will be slower here. If allocating capital, Dallas gives a cleaner recovery story right now."
+- *Advising tenants:* Companies expanding office footprints can see which markets have growing workforces to hire from.
+- *Internal resource allocation:* Markets with recovering employment need leasing broker capacity. Markets like LA need more capital markets and restructuring support.
+- *Business development:* Walking into a client meeting with this chart positions JLL as a strategic advisor with forward-looking intelligence, not just a transaction broker.
+
+---

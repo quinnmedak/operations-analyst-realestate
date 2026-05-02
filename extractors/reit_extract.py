@@ -51,7 +51,7 @@ def extract_daily_prices():
     rows = []
     for ticker in TICKERS:
         print(f"  {ticker}: fetching price history")
-        hist = yf.Ticker(ticker).history(period="5y").reset_index()
+        hist = yf.Ticker(ticker).history(period="max").reset_index()
         hist["ticker"] = ticker
         hist["date"] = pd.to_datetime(hist["Date"]).dt.tz_localize(None).dt.date
         for _, r in hist.iterrows():
