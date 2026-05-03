@@ -81,23 +81,26 @@ GitHub's built-in Actions failure emails handle notification — no extra workfl
 
 ### Scope boundary
 
-These workflows extract and load to Snowflake RAW only. `dbt run` is not triggered automatically. Mart tables are refreshed manually when needed.
+These workflows extract and load to Snowflake RAW only. The mp04 tutorial covers no dbt automation — dbt runs manually when mart tables need refreshing.
 
 ---
 
 ## Verification steps (post-implementation)
 
+Follow this order exactly — manual green first, then trust the schedule.
+
 1. Push both workflow files to `main`
-2. Go to GitHub → **Actions** tab → find each workflow
-3. Click **Run workflow** → confirm the run finishes green
-4. Check run logs to confirm expected row counts (matches local runs)
-5. Confirm GitHub shows "This workflow has a schedule" on each workflow page
-6. Only after manual green: trust the schedule
+2. Go to GitHub → **Actions** tab → find `REIT Extract & Load`
+3. Click **Run workflow** → wait for green check
+4. Check run logs — confirm row count matches a local run
+5. Repeat steps 2–4 for `BLS Extract & Load`
+6. On each workflow page confirm GitHub shows "This workflow has a schedule"
+7. Both green manually → schedules are trusted
 
 ---
 
 ## Out of scope
 
-- dbt automation (separate decision)
-- Scrape pipeline automation (Step 10, handled separately)
+- Scrape pipeline automation (Step 10, separate brainstorm)
+- dbt automation (not in mp04 tutorial, not required by rubric)
 - Slack or webhook failure alerts
