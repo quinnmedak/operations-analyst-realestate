@@ -133,7 +133,7 @@ with st.sidebar:
     st.markdown("### LA CRE Analytics")
     st.caption("JLL Business Intelligence · Commercial Real Estate")
     st.divider()
-    start_year = st.slider("Start Year", 2008, 2024, 2015)
+    start_year = st.slider("Start Year", 2008, 2024, 2018)
     st.divider()
     st.caption("Data: yfinance · FRED · BLS")
 
@@ -362,7 +362,7 @@ st.markdown('<div class="section-header">Investor Signals</div>', unsafe_allow_h
 # ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
 
 st.markdown("#### How has investor confidence in office vs. industrial shifted?")
-st.caption("Industrial REITs have gained ~150% since 2015 while office has lost ~35% — a divergence that began before COVID and widened sharply after 2022.")
+st.caption("Industrial REITs up ~160% since 2018; office down ~36% — and the gap is still widening.")
 
 SECTOR_COLORS = {
     "Office":       "#2C2C2C",
