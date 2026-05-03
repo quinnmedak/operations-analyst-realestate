@@ -103,11 +103,11 @@ Where sources agree: Cushman's three quarters of data and Bisnow's Q4 investment
 
 ## Sources
 
-- `2026-04-22_13-26-54_assets-cushmanwakefield-com-...-la-industrial-marketbeat-q1-2025.md` — C&W LA Industrial Q1 2025
-- `2026-04-22_13-26-54_assets-cushmanwakefield-com-...-los-angeles-americas-marketbeat-industrial-q22025.md` — C&W LA Industrial Q2 2025
-- `2026-04-22_13-26-54_assets-cushmanwakefield-com-...-la-americas-marketbeat-industrial-q32025.md` — C&W LA Industrial Q3 2025
+- `08-cushman-wakefield-la-industrial-marketbeat-q1-2025.md` — C&W LA Industrial Q1 2025
+- `09-cushman-wakefield-la-industrial-marketbeat-q2-2025.md` — C&W LA Industrial Q2 2025
+- `10-cushman-wakefield-la-industrial-marketbeat-q3-2025.md` — C&W LA Industrial Q3 2025
 - `2026-04-28_23-17-26_www-jll-com-en-us-insights-market-dynamics-los-angeles-industrial.md` — JLL LA Industrial Q1 2026 (stub — gated)
-- `2026-04-26_22-21-05_www-jll-com-en-us-insights-market-dynamics-industrial-market-statistics-trends.md` — JLL US Industrial Q1 2026
-- `2026-04-26_22-21-05_www-jll-com-en-us-insights-industrial-tenant-demand-study.md` — JLL Industrial Tenant Demand Study (Aug 2025)
-- `2026-04-22_13-26-54_www-bisnow-com-los-angeles-news-industrial-greater-la-industrial-on-the-upswing-with-12b-in-sales-volume-in-q4-2025-132791.md` — Bisnow: SoCal Industrial Q4 2025 Investment
-- `2026-04-22_13-26-54_www-bisnow-com-los-angeles-news-capital-markets-los-angeles-capital-markets-rebound-office-retail-industrial-133385.md` — Bisnow: LA capital markets rebound
+- `16-jll-industrial-market-statistics-trends.md` — JLL US Industrial Q1 2026
+- `15-jll-industrial-tenant-demand-study.md` — JLL Industrial Tenant Demand Study (Aug 2025)
+- `12-bisnow-la-industrial-upswing-q4-2025.md` — Bisnow: SoCal Industrial Q4 2025 Investment
+- `11-bisnow-la-capital-markets-rebound-2025.md` — Bisnow: LA capital markets rebound

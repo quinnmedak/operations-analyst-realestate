@@ -60,5 +60,5 @@ The macro signal an analyst should watch: the rate environment and employment in
 |---|---|
 | CBRE U.S. Real Estate Market Outlook 2026 | `knowledge/raw/02-cbre-us-real-estate-market-outlook-2026.md` |
 | JLL U.S. Office Market Dynamics Q1 2026 | `knowledge/raw/01-jll-us-office-market-dynamics-q1-2026.md` |
-| Bisnow: LA Capital Markets Rebound, Feb 2026 | `knowledge/raw/2026-04-22_13-26-54_www-bisnow-com-los-angeles-news-capital-markets-los-angeles-capital-markets-rebound-office-retail-industrial-133385.md` |
-| JLL Global Real Estate Perspective, Feb 2026 | `knowledge/raw/2026-04-28_23-36-16_www-jll-com-en-us-insights-market-perspectives-global.md` |
+| Bisnow: LA Capital Markets Rebound, Feb 2026 | `knowledge/raw/11-bisnow-la-capital-markets-rebound-2025.md` |
+| JLL Global Real Estate Perspective, Feb 2026 | `knowledge/raw/23-jll-global-market-perspectives.md` |

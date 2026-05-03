@@ -58,5 +58,5 @@ For an LA-focused investor, the city's AI life sciences ranking suggests that we
 
 | Source | File |
 |---|---|
-| JLL 2025 Life Sciences Real Estate Perspective and Cluster Analysis (Sep 2025) | `knowledge/raw/2026-04-26_22-21-05_www-jll-com-en-us-insights-market-outlook-life-sciences-real-estate-outlook.md` |
-| JLL Lab Market Newsroom: Unprecedented Tenant Advantage (Oct 2025) | `knowledge/raw/2026-04-26_22-21-05_www-jll-com-en-us-newsroom-lab-market-faces-unprecedented-tenant-advantage.md` |
+| JLL 2025 Life Sciences Real Estate Perspective and Cluster Analysis (Sep 2025) | `knowledge/raw/17-jll-life-sciences-real-estate-outlook.md` |
+| JLL Lab Market Newsroom: Unprecedented Tenant Advantage (Oct 2025) | `knowledge/raw/18-jll-lab-market-tenant-advantage.md` |

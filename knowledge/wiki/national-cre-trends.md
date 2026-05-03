@@ -95,7 +95,7 @@ LA's position — same phase as Boston and Chicago, behind New York and Dallas �
 ## Sources
 
 - `01-jll-us-office-market-dynamics-q1-2026.md` — JLL US Office Market Dynamics Q1 2026
-- `2026-04-26_22-21-05_www-jll-com-en-us-insights-market-dynamics-industrial-market-statistics-trends.md` — JLL US Industrial Market Dynamics Q1 2026
+- `16-jll-industrial-market-statistics-trends.md` — JLL US Industrial Market Dynamics Q1 2026
 - `02-cbre-us-real-estate-market-outlook-2026.md` — CBRE US Real Estate Market Outlook 2026
 - `03-cushman-wakefield-greater-los-angeles-marketbeats.md` — C&W Greater LA MarketBeat (national context sections)
-- `2026-04-28_23-36-16_www-jll-com-en-us-insights-market-perspectives-global.md` — JLL Global Real Estate Perspective Feb 2026
+- `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026

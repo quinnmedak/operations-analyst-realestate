@@ -110,10 +110,10 @@ Nationally, JLL US Office Q1 2026 shows positive net absorption for the third co
 
 ## Sources
 
-- `2026-04-22_13-14-43_assets-cushmanwakefield-com-...-los-angeles-office-marketbeat-q2-2025.md` — Cushman & Wakefield LA Office MarketBeat Q2 2025 (primary data source: submarket table, key transactions, employment)
+- `04-cushman-wakefield-la-office-marketbeat-q2-2025.md` — Cushman & Wakefield LA Office MarketBeat Q2 2025 (primary data source: submarket table, key transactions, employment)
 - `01-jll-us-office-market-dynamics-q1-2026.md` — JLL US Office Market Dynamics Q1 2026
 - `2026-04-28_23-17-26_www-jll-com-en-us-insights-market-dynamics-los-angeles-office.md` — JLL LA Office Q1 2026 (stub — gated page, confirms report exists)
-- `2026-04-28_23-36-16_www-bisnow-com-los-angeles-news-office-sunset-media-center-kilroy-132609.md` — Bisnow: Sunset Media Center sale, 14M SF 2025 leasing figure
-- `2026-04-22_13-26-54_www-bisnow-com-los-angeles-news-capital-markets-los-angeles-capital-markets-rebound-office-retail-industrial-133385.md` — Bisnow: LA capital markets rebound, owner-user activity, private capital dominance
+- `21-bisnow-la-office-kilroy-sunset-media-center.md` — Bisnow: Sunset Media Center sale, 14M SF 2025 leasing figure
+- `11-bisnow-la-capital-markets-rebound-2025.md` — Bisnow: LA capital markets rebound, owner-user activity, private capital dominance
 - `03-cushman-wakefield-greater-los-angeles-marketbeats.md` — C&W Greater LA MarketBeat (Q1 2026 page summary)
-- `2026-04-28_23-36-16_www-jll-com-en-us-insights-market-perspectives-global.md` — JLL Global Real Estate Perspective Feb 2026 (Property Clock, city comparison data)
+- `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026 (Property Clock, city comparison data)

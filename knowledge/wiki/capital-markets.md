@@ -80,8 +80,8 @@ The divergence between Sunset Media Center at $187/SF and the Amazon warehouse a
 
 ## Sources
 
-- `2026-04-22_13-14-43_www-cbre-com-insights-books-us-real-estate-market-outlook-2026-capital-markets.md` — CBRE US Market Outlook 2026: Capital Markets chapter
-- `2026-04-22_13-14-43_www-cbre-com-insights-reports-us-cap-rate-survey-h1-2025.md` — CBRE Cap Rate Survey H1 2025
-- `2026-04-22_13-14-43_www-cbre-com-insights-reports-us-cap-rate-survey-h2-2025.md` — CBRE Cap Rate Survey H2 2025
-- `2026-04-22_13-26-54_www-bisnow-com-los-angeles-news-capital-markets-los-angeles-capital-markets-rebound-office-retail-industrial-133385.md` — Bisnow: LA capital markets rebound 2025
-- `2026-04-28_23-36-16_www-jll-com-en-us-insights-market-perspectives-global.md` — JLL Global Real Estate Perspective Feb 2026
+- `05-cbre-us-real-estate-outlook-2026-capital-markets.md` — CBRE US Market Outlook 2026: Capital Markets chapter
+- `06-cbre-us-cap-rate-survey-h1-2025.md` — CBRE Cap Rate Survey H1 2025
+- `07-cbre-us-cap-rate-survey-h2-2025.md` — CBRE Cap Rate Survey H2 2025
+- `11-bisnow-la-capital-markets-rebound-2025.md` — Bisnow: LA capital markets rebound 2025
+- `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026
