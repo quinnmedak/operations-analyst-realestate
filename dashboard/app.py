@@ -357,7 +357,7 @@ except Exception as e:
 
 st.divider()
 
-st.markdown('<div class="section-header">Investor Signals</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header">Market Performance</div>', unsafe_allow_html=True)
 
 # ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
 
@@ -425,7 +425,7 @@ try:
         legend_title_text="Sector",
         height=380,
         margin=dict(t=20, b=20, l=0, r=0),
-        xaxis=dict(showgrid=False),
+        xaxis=dict(showgrid=False, range=[prices["DATE_DAY"].min(), prices["DATE_DAY"].max()]),
         yaxis=dict(gridcolor="#F0F0F0"),
     )
     fig.update_traces(line_width=1.8)
@@ -437,6 +437,8 @@ except Exception as e:
     st.error(f"Could not load price trend: {e}")
 
 # ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
+
+st.markdown('<div class="section-header">The Drivers</div>', unsafe_allow_html=True)
 
 st.markdown("#### Rising rates crushed office valuations — as borrowing got expensive, investors priced buildings lower")
 st.caption("The fastest rate hike cycle in 40 years hit office from both sides: higher borrowing costs reduced what buyers could pay, while remote work simultaneously killed tenant demand.")
@@ -525,7 +527,7 @@ except Exception as e:
 # ── Chart 5 — Why Industrial Held Up ─────────────────────────────────────────
 
 st.markdown("#### E-commerce permanently raised demand for warehouses — industrial never needed a recovery")
-st.caption("E-commerce grew from ~11% to ~16% of all retail sales post-COVID. That demand is structural — it doesn't reverse when rates rise or the economy slows.")
+st.caption("E-commerce share of retail sales climbed structurally through COVID and stayed there — warehouse demand followed and never gave it back.")
 
 try:
     ecom = run_query("""
@@ -584,12 +586,9 @@ try:
         secondary_y=False,
     )
 
-    fig5.add_annotation(
-        x="2020-07-01", y=industrial_q["INDEXED_PRICE"].max() * 0.75,
-        text="COVID accelerates<br>e-commerce adoption",
-        showarrow=True, arrowhead=2, arrowcolor="#6B7280",
-        font=dict(size=11, color="#6B7280"),
-        ax=60, ay=-40,
+    fig5.add_vrect(
+        x0="2020-01-01", x1="2022-01-01",
+        fillcolor="rgba(134, 239, 172, 0.15)", line_width=0,
     )
 
     fig5.update_layout(
@@ -599,7 +598,7 @@ try:
         height=380,
         margin=dict(t=20, b=20, l=0, r=0),
         xaxis=dict(showgrid=False),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="top", y=0.99, xanchor="left", x=0.01),
     )
     fig5.update_yaxes(title_text="Industrial REIT Price (Start = 100)", secondary_y=False, gridcolor="#F0F0F0")
     fig5.update_yaxes(title_text="E-Commerce % of Retail Sales", secondary_y=True, showgrid=False)
@@ -622,7 +621,7 @@ try:
             drcrelexfacbs AS delinquency_rate
         FROM ANALYTICS.FACT_MACRO_QUARTERLY
         WHERE drcrelexfacbs IS NOT NULL
-          AND year >= 2008
+          AND year >= {start_year}
         ORDER BY year, quarter
     """)
 
