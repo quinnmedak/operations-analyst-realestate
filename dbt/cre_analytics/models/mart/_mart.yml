@@ -76,3 +76,21 @@ models:
       - name: employment_thousands
         tests:
           - not_null
+
+  - name: fact_la_market_snapshot
+    columns:
+      - name: property_type
+        tests:
+          - not_null
+      - name: submarket
+        tests:
+          - not_null
+      - name: period_date
+        tests:
+          - not_null
+      - name: vacancy_rate
+        tests:
+          - not_null
+      - name: ytd_net_absorption_sf
+        tests:
+          - not_null

@@ -1,0 +1,12 @@
+version: 2
+
+seeds:
+  - name: la_marketbeat
+    config:
+      column_types:
+        vacancy_rate: float
+        vacancy_rate_bps_qoq: int
+        vacancy_rate_bps_yoy: int
+        qtr_net_absorption_sf: int
+        ytd_net_absorption_sf: int
+        asking_rent_psf: float

@@ -1,149 +1,209 @@
-# BI Analytics Pipeline — Commercial Real Estate
+# LA Commercial Real Estate Analytics
 
-An end-to-end data pipeline and analytics project built to demonstrate Business Intelligence Analyst skills for a role at JLL. Pulls commercial real estate market data from public sources, transforms it through a Snowflake star schema via dbt, and surfaces insights through an interactive Streamlit dashboard and a Claude Code-queryable knowledge base.
+An end-to-end data pipeline and analytics project targeting the JLL Business Intelligence Analyst role. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 24 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
 
-**Target role:** Business Intelligence Analyst — JLL (Rosemead, CA)
-**GitHub repo:** https://github.com/quinnmedak/operations-analyst-realestate
+## Job Posting
 
----
+- **Role:** Business Intelligence Analyst
+- **Company:** JLL (Jones Lang LaSalle)
+- **Location:** Rosemead, CA
+
+This project demonstrates the posting's core requirements: SQL-driven descriptive and diagnostic analytics, ETL pipelines loading structured data to a cloud data warehouse, dimensional modeling with dbt, and delivering stakeholder-facing insights via an interactive dashboard.
 
 ## Tech Stack
 
 | Layer | Tool |
 |---|---|
+| Source 1 | yfinance Python client — REIT daily prices + quarterly financials |
+| Source 2 | FRED API — macroeconomic indicators (fed funds, delinquency, e-commerce) |
+| Source 3 | BLS API — metro-level employment by sector |
+| Source 4 | Firecrawl — CRE market reports (JLL, CBRE, Cushman & Wakefield, Bisnow) |
 | Data Warehouse | Snowflake (AWS US East 1) |
-| Transformation | dbt (staging + mart layers) |
-| Orchestration | GitHub Actions (scheduled) |
+| Transformation | dbt (staging views + mart star schema) |
+| Orchestration | GitHub Actions (scheduled + manual trigger) |
 | Dashboard | Streamlit (Streamlit Community Cloud) |
 | Knowledge Base | Claude Code (scrape → synthesize → query) |
-| Version Control | Git + GitHub |
 
----
+## Pipeline Diagram
 
-## Data Sources
+```mermaid
+flowchart TB
+    subgraph s1 [Structured Data Path]
+        direction LR
+        A[yfinance\nFRED\nBLS] -->|extractors/*.py| B[GitHub Actions\nscheduled]
+        B --> C[Snowflake RAW\nraw tables]
+        C --> D[dbt Staging\nviews]
+        D --> E[dbt Mart\nstar schema]
+        E --> F[Streamlit\nDashboard]
+    end
 
-### Source 1: REIT Financial Data (yfinance)
-Daily stock prices and quarterly financial statements for 9 major commercial real estate REITs across office, industrial, retail, multifamily, and life science property types.
+    subgraph s2 [Knowledge Base Path]
+        direction LR
+        G[Firecrawl\nMarket Reports] -->|scrape_extract.py| H[knowledge/raw/\n24 sources]
+        H -->|Claude Code| I[knowledge/wiki/\n7 synthesis pages]
+    end
 
-**Raw tables:** `RAW.REIT_DAILY_PRICES`, `RAW.REIT_QUARTERLY_FINANCIALS`
+    s1 ~~~ s2
+```
 
-| Ticker | Company | Property Type |
-|---|---|---|
-| BXP | Boston Properties | Office |
-| SLG | SL Green Realty | Office |
-| VNO | Vornado Realty Trust | Office |
-| PLD | Prologis | Industrial |
-| STAG | STAG Industrial | Industrial |
-| SPG | Simon Property Group | Retail |
-| EQR | Equity Residential | Multifamily |
-| AVB | AvalonBay Communities | Multifamily |
-| ARE | Alexandria Real Estate | Life Science |
+## ERD (Star Schema)
 
-### Source 2 (Supplementary): FRED Macroeconomic Data
-30-year fixed mortgage rate (`MORTGAGE30US`) from the Federal Reserve Bank of St. Louis. Used as macro context to explain REIT valuation changes — the 2022–23 rate hike cycle overlaid against REIT price drops is the project's core diagnostic insight.
+```mermaid
+erDiagram
+    dim_date {
+        date date_day PK
+        int year
+        int quarter
+        int month
+        string month_name
+    }
+    dim_reit {
+        string ticker PK
+        string company_name
+        string property_type
+        string primary_market
+    }
+    fact_daily_prices {
+        string ticker FK
+        date date_day FK
+        float close
+        float volume
+        float dividends
+    }
+    fact_quarterly_financials {
+        string ticker FK
+        date period_date
+        int year
+        int quarter
+        float total_revenue
+        float net_income
+        float ebitda
+        float total_debt
+    }
+    fact_macro_quarterly {
+        string year_quarter PK
+        int year
+        int quarter
+        float fedfunds
+        float drcrelexfacbs
+        float ecompctnsa
+        float dgs10
+        float mortgage30us
+    }
+    fact_metro_employment {
+        date date_day FK
+        string metro
+        string supersector
+        float employment_thousands
+    }
+    fact_la_market_snapshot {
+        string property_type
+        string submarket
+        date period_date
+        float vacancy_rate
+        int ytd_net_absorption_sf
+        float asking_rent_psf
+    }
 
-**Raw table:** `RAW.FRED_OBSERVATIONS`
+    dim_reit ||--o{ fact_daily_prices : "ticker"
+    dim_reit ||--o{ fact_quarterly_financials : "ticker"
+    dim_date ||--o{ fact_daily_prices : "date_day"
+    dim_date ||--o{ fact_metro_employment : "date_day"
+```
 
-### Source 3: Web Scraped Market Research (Firecrawl)
-Qualitative market intelligence from JLL, CBRE, Cushman & Wakefield, and Bisnow. 20 raw sources covering national office market dynamics, Greater Los Angeles office and industrial market reports, 2026 sector forecasts, and LA capital markets activity.
+## Dashboard Preview
 
-**Raw table:** `RAW.SCRAPE_ARTICLES` | **Knowledge base:** `knowledge/raw/` (20 files)
+*Screenshot — add after deployment*
 
-See [docs/data-sources.md](docs/data-sources.md) for full source documentation, stakeholder questions, and analytical use cases.
+## Key Insights
 
----
+**Descriptive (what happened?):** LA office vacancy reached 24.1% in Q2 2025 — 12 consecutive quarters of negative net absorption with no bottom in sight — while industrial held at 4.8% and posted its first positive YTD absorption since 2022.
 
-## Pipeline Setup
+**Diagnostic (why did it happen?):** The Fed raised rates from near zero to 5.3% in 18 months. Every incremental rate increase raised the cost to finance a building purchase and raised the cost to refinance existing debt. Office absorbed both hits simultaneously: remote work reduced tenant demand while rising rates reduced buyer demand. Industrial was insulated because e-commerce growth permanently raised warehouse demand regardless of borrowing costs.
 
-### Prerequisites
-- Python 3.11+
-- Snowflake trial account (AWS US East 1)
-- FRED API key (free at fred.stlouisfed.org)
-- Firecrawl API key (free tier at firecrawl.dev)
+**Recommendation:** LA leasing brokers should advise tenant clients to sign long-term office leases now → office landlords are offering the most aggressive concessions in a decade (free rent, large TI allowances, below-market rents) because they need cash flow to service debt on underwater assets. The window closes when rates fall enough to relieve landlord financial pressure.
 
-### Environment Variables
+## Live Dashboard
+
+**URL:** *(add Streamlit Community Cloud URL after deployment)*
+
+## Knowledge Base
+
+A Claude Code-curated wiki built from 24 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions.
+
+**Query it:** Open Claude Code in this repo and ask:
+
+- "What does my knowledge base say about LA office vacancy trends?"
+- "How does LA's office market compare to Dallas and New York?"
+- "What sectors are analysts most bullish on for 2026?"
+- "What's the investment thesis for distressed office in LA right now?"
+- "How has e-commerce driven industrial demand?"
+
+Claude Code reads wiki pages first and falls back to raw sources when needed. See `CLAUDE.md` for query conventions.
+
+## Setup & Reproduction
+
+**Prerequisites:** Python 3.11+, Snowflake trial account (AWS US East 1), FRED API key (free at fred.stlouisfed.org), Firecrawl API key (free tier at firecrawl.dev)
+
 Create a `.env` file in the project root:
+
 ```
 SNOWFLAKE_ACCOUNT=your_account
 SNOWFLAKE_USER=your_user
 SNOWFLAKE_PASSWORD=your_password
 SNOWFLAKE_DATABASE=your_database
 SNOWFLAKE_WAREHOUSE=your_warehouse
+SNOWFLAKE_SCHEMA=ANALYTICS
 FRED_API_KEY=your_fred_key
 FIRECRAWL_API_KEY=your_firecrawl_key
 ```
 
-### Install Dependencies
+Install dependencies:
+
 ```bash
-pip install yfinance pandas snowflake-connector-python snowflake-connector-python[pandas] python-dotenv requests
+pip install -r requirements.txt
 ```
 
-### Run Extractors
+Run extractors:
+
 ```bash
-# REIT financial data (daily prices + quarterly financials)
-python extractors/reit_extract.py
-
-# FRED mortgage rate data
-python extractors/fred_extract.py
-
-# Web scrape to knowledge base + Snowflake
-python extractors/scrape_extract.py
+python extractors/reit_extract.py       # REIT daily prices + quarterly financials
+python extractors/fred_extract.py       # FRED macro indicators
+python extractors/bls_extract.py        # BLS metro employment
+python extractors/scrape_extract.py     # Web scrape → knowledge/raw/
 ```
 
----
+Run dbt transforms:
 
-## Star Schema (dbt Mart)
+```bash
+cd dbt/cre_analytics
+dbt seed            # Load static MarketBeat data
+dbt run             # Build staging + mart models
+dbt test            # Validate data quality
+```
 
-*ERD coming in Milestone 02*
+Run the dashboard locally:
 
-**Fact tables:**
-- `fact_daily_prices` — one row per REIT per trading day (price, volume, dividends)
-- `fact_quarterly_financials` — one row per REIT per quarter (revenue, net income, EBITDA, debt)
-- `fact_macro_quarterly` — MORTGAGE30US aggregated to quarterly grain for diagnostic joins
+```bash
+streamlit run dashboard/app.py
+```
 
-**Dimension tables:**
-- `dim_reit` — company name, property type, primary market
-- `dim_date` — year, quarter, month, month name
+## Repository Structure
 
----
-
-## Dashboard
-
-*Deployed URL coming in Milestone 02*
-
-**Descriptive views:**
-- REIT price trends by property type over time
-- Revenue and EBITDA comparison across sectors
-- Dividend yield by company
-
-**Diagnostic views:**
-- Office REIT price vs. mortgage rate overlay (2020–2025)
-- Revenue trend vs. stock price for office REITs (sentiment vs. fundamentals)
-- Debt-to-assets ratio by property type in rising rate environment
-
----
-
-## Knowledge Base
-
-20 raw sources in `knowledge/raw/` from 4 sites: JLL, CBRE, Cushman & Wakefield, Bisnow. Sources cover national office market dynamics, Greater Los Angeles office and industrial market reports (Q1–Q3 2025), 2026 sector forecasts, and LA capital markets activity.
-
-Wiki pages synthesized by Claude Code in `knowledge/wiki/` *(coming Milestone 02)*
-
-**To query the knowledge base:**
-1. Open Claude Code in this repo
-2. Ask questions like:
-   - "What does my knowledge base say about LA office vacancy?"
-   - "What are analysts forecasting for industrial CRE in 2026?"
-   - "How is the LA market performing compared to national trends?"
-
----
-
-## Insights Summary
-
-*Coming in Milestone 02 after dbt models and dashboard are built*
-
----
-
-## Pipeline Diagram
-
-*Coming in Milestone 02*
+```
+.
+├── .github/workflows/      # GitHub Actions pipelines (scheduled extraction)
+├── extractors/             # Python scripts: reit, fred, bls, scrape
+├── dbt/cre_analytics/
+│   ├── models/staging/     # Cleaning, type casting, renaming per source
+│   ├── models/mart/        # Star schema: fact + dimension tables
+│   └── seeds/              # Static MarketBeat data (la_marketbeat.csv)
+├── dashboard/              # Streamlit app (app.py)
+├── knowledge/
+│   ├── raw/                # 24 scraped market reports
+│   └── wiki/               # 7 Claude Code-generated synthesis pages
+├── docs/                   # Proposal, job posting, specs, plans, slides
+├── .gitignore
+├── CLAUDE.md               # Project context for Claude Code
+└── README.md               # This file
+```

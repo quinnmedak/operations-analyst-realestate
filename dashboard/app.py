@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import streamlit as st
 import snowflake.connector
 import plotly.express as px
@@ -21,30 +22,79 @@ st.markdown("""
     .section-header {
         border-left: 4px solid #E30613;
         padding-left: 12px;
-        margin: 32px 0 16px 0;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #2C2C2C;
+        margin: 36px 0 12px 0;
+        font-size: 1.0rem;
+        font-weight: 700;
+        color: #111827;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.09em;
     }
-    .kpi-label {
-        font-size: 0.78rem;
+    .sub-header {
+        font-size: 0.70rem;
+        font-weight: 700;
         color: #6B7280;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
-    }
-    .kpi-value {
-        font-size: 1.9rem;
-        font-weight: 700;
-        color: #2C2C2C;
-        line-height: 1.1;
+        letter-spacing: 0.07em;
+        margin: 20px 0 8px 0;
+        padding-left: 4px;
+        border-left: 2px solid #D1D5DB;
     }
     .kpi-card {
-        background: #F8F8F8;
-        border-radius: 6px;
-        padding: 20px 24px;
+        background: #FFFFFF;
+        border: 1px solid #E5E7EB;
+        border-top: 3px solid #E30613;
+        border-radius: 3px;
+        padding: 14px 12px;
+        min-height: 128px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 2px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .kpi-label {
+        font-size: 0.70rem;
+        color: #6B7280;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+    .kpi-value {
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.05;
+    }
+    .kpi-value-red {
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: #B91C1C;
+        line-height: 1.05;
+    }
+    .kpi-value-green {
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: #166534;
+        line-height: 1.05;
+    }
+    .kpi-unit {
+        font-size: 0.63rem;
+        color: #9CA3AF;
+        letter-spacing: 0.04em;
+        min-height: 13px;
+    }
+    .kpi-delta {
+        font-size: 0.68rem;
+        color: #6B7280;
+    }
+    .kpi-delta-bad {
+        font-size: 0.68rem;
+        color: #B91C1C;
+    }
+    .kpi-delta-good {
+        font-size: 0.68rem;
+        color: #166534;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -83,7 +133,7 @@ with st.sidebar:
     st.markdown("### LA CRE Analytics")
     st.caption("JLL Business Intelligence · Commercial Real Estate")
     st.divider()
-    start_year = st.slider("Start Year", 2019, 2024, 2020)
+    start_year = st.slider("Start Year", 2008, 2024, 2019)
     st.divider()
     st.caption("Data: yfinance · FRED · BLS")
 
@@ -95,6 +145,95 @@ st.caption("Portfolio project — Quinn Medak · JLL Business Intelligence Analy
 # ── KPI Row ───────────────────────────────────────────────────────────────────
 
 st.markdown('<div class="section-header">Current State</div>', unsafe_allow_html=True)
+
+# ── Space Market KPI Row ──────────────────────────────────────────────────────
+
+st.markdown('<div class="sub-header">Space Market</div>', unsafe_allow_html=True)
+
+try:
+    snapshot = run_query("""
+        SELECT
+            property_type,
+            vacancy_rate,
+            vacancy_rate_bps_yoy,
+            ytd_net_absorption_sf,
+            absorption_context
+        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
+        WHERE submarket = 'LA Total'
+        ORDER BY property_type
+    """)
+
+    off = snapshot[snapshot["PROPERTY_TYPE"] == "Office"].iloc[0]
+    ind = snapshot[snapshot["PROPERTY_TYPE"] == "Industrial"].iloc[0]
+
+    def fmt_absorption(sf):
+        sf = int(sf)
+        sign = "+" if sf > 0 else ""
+        if abs(sf) >= 1_000_000:
+            return f"{sign}{sf / 1_000_000:.1f}M"
+        return f"{sign}{sf / 1_000:.0f}K"
+
+    def fmt_bps(bps):
+        bps = int(bps)
+        arrow = "▲" if bps > 0 else "▼"
+        return f"{arrow} {abs(bps)} bps YoY"
+
+    def absorption_css(sf):
+        return "kpi-value-green" if int(sf) > 0 else "kpi-value-red"
+
+    def bps_delta_css(bps):
+        # For vacancy: rising (positive) is bad → red; falling → green
+        return "kpi-delta-bad" if int(bps) > 0 else "kpi-delta-good"
+
+    def context_delta_css(sf):
+        return "kpi-delta-bad" if int(sf) < 0 else "kpi-delta-good"
+
+    sm1, sm2, sm3, sm4 = st.columns(4)
+
+    with sm1:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Office Vacancy</div>
+            <div class="kpi-value">{off['VACANCY_RATE']:.1f}%</div>
+            <div class="kpi-unit">&nbsp;</div>
+            <div class="{bps_delta_css(off['VACANCY_RATE_BPS_YOY'])}">{fmt_bps(off['VACANCY_RATE_BPS_YOY'])}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with sm2:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Industrial Vacancy</div>
+            <div class="kpi-value">{ind['VACANCY_RATE']:.1f}%</div>
+            <div class="kpi-unit">&nbsp;</div>
+            <div class="{bps_delta_css(ind['VACANCY_RATE_BPS_YOY'])}">{fmt_bps(ind['VACANCY_RATE_BPS_YOY'])}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with sm3:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Office YTD Absorption</div>
+            <div class="{absorption_css(off['YTD_NET_ABSORPTION_SF'])}">{fmt_absorption(off['YTD_NET_ABSORPTION_SF'])}</div>
+            <div class="kpi-unit">SF YTD</div>
+            <div class="{context_delta_css(off['YTD_NET_ABSORPTION_SF'])}">{off['ABSORPTION_CONTEXT']}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with sm4:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Industrial YTD Absorption</div>
+            <div class="{absorption_css(ind['YTD_NET_ABSORPTION_SF'])}">{fmt_absorption(ind['YTD_NET_ABSORPTION_SF'])}</div>
+            <div class="kpi-unit">SF YTD</div>
+            <div class="{context_delta_css(ind['YTD_NET_ABSORPTION_SF'])}">{ind['ABSORPTION_CONTEXT']}</div>
+        </div>""", unsafe_allow_html=True)
+
+    st.caption("Source: Cushman & Wakefield MarketBeat · Office Q2 2025 · Industrial Q3 2025")
+
+except Exception as e:
+    st.error(f"Could not load market snapshot: {e}")
+
+# ── Financial Signals KPI Row ─────────────────────────────────────────────────
+
+st.markdown('<div class="sub-header">Financial Signals</div>', unsafe_allow_html=True)
 
 try:
     latest_date = run_query("""
@@ -168,8 +307,56 @@ try:
 except Exception as e:
     st.error(f"Could not load KPI data: {e}")
 
-# ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
+# ── Market Fundamentals — Submarket Expander ─────────────────────────────────
 
+st.markdown('<div class="section-header">Market Fundamentals</div>', unsafe_allow_html=True)
+
+try:
+    submarkets_raw = run_query("""
+        SELECT
+            property_type,
+            submarket,
+            vacancy_rate,
+            qtr_net_absorption_sf,
+            ytd_net_absorption_sf,
+            asking_rent_psf
+        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
+        WHERE submarket != 'LA Total'
+        ORDER BY
+            property_type,
+            CASE WHEN submarket LIKE '%TOTAL%' THEN 1 ELSE 0 END,
+            vacancy_rate DESC
+    """)
+
+    def fmt_sf(v):
+        if pd.isna(v):
+            return "—"
+        v = int(v)
+        sign = "+" if v > 0 else ""
+        return f"{sign}{v:,}"
+
+    with st.expander("Submarket breakdown — Office Q2 2025 / Industrial Q3 2025"):
+        for prop_type, period_label in [("Office", "Q2 2025"), ("Industrial", "Q3 2025")]:
+            df_sub = submarkets_raw[submarkets_raw["PROPERTY_TYPE"] == prop_type].copy()
+            df_display = pd.DataFrame({
+                "Submarket":              df_sub["SUBMARKET"].values,
+                "Vacancy":                df_sub["VACANCY_RATE"].apply(lambda x: f"{x:.1f}%").values,
+                "QTR Absorption (SF)":    df_sub["QTR_NET_ABSORPTION_SF"].apply(fmt_sf).values,
+                "YTD Absorption (SF)":    df_sub["YTD_NET_ABSORPTION_SF"].apply(fmt_sf).values,
+                "Asking Rent ($/SF/mo)":  df_sub["ASKING_RENT_PSF"].apply(lambda x: f"${x:.2f}").values,
+            })
+            st.markdown(f"**{prop_type} — {period_label}**")
+            st.dataframe(df_display, hide_index=True, use_container_width=True)
+        st.caption("Source: Cushman & Wakefield MarketBeat · ANALYTICS.FACT_LA_MARKET_SNAPSHOT")
+
+except Exception as e:
+    st.error(f"Could not load submarket data: {e}")
+
+# ── Investor Signals ──────────────────────────────────────────────────────────
+
+st.markdown('<div class="section-header">Investor Signals</div>', unsafe_allow_html=True)
+
+# ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
 
 st.markdown("#### How has investor confidence in office vs. industrial shifted over five years?")
 
@@ -242,13 +429,13 @@ except Exception as e:
 st.markdown("#### How stressed is the CRE lending market?")
 
 try:
-    delinquency = run_query("""
+    delinquency = run_query(f"""
         SELECT
             TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
             drcrelexfacbs AS delinquency_rate
         FROM ANALYTICS.FACT_MACRO_QUARTERLY
         WHERE drcrelexfacbs IS NOT NULL
-          AND year >= 2008
+          AND year >= {start_year}
         ORDER BY year, quarter
     """)
 
@@ -281,17 +468,17 @@ except Exception as e:
 st.markdown("#### Rising rates crushed office valuations — as borrowing got expensive, investors priced buildings lower")
 
 try:
-    rates = run_query("""
+    rates = run_query(f"""
         SELECT
             TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
             fedfunds
         FROM ANALYTICS.FACT_MACRO_QUARTERLY
         WHERE fedfunds IS NOT NULL
-          AND year >= 2019
+          AND year >= {start_year}
         ORDER BY year, quarter
     """)
 
-    office_q = run_query("""
+    office_q = run_query(f"""
         WITH quarterly AS (
             SELECT
                 DATE_TRUNC('quarter', f.date_day) AS period_date,
@@ -299,7 +486,7 @@ try:
             FROM ANALYTICS.FACT_DAILY_PRICES f
             JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
             WHERE r.property_type = 'Office'
-              AND YEAR(f.date_day) >= 2019
+              AND YEAR(f.date_day) >= {start_year}
             GROUP BY 1
         )
         SELECT
@@ -431,7 +618,7 @@ except Exception as e:
 
 # ── Chart 4 — LA Employment vs. Peer Cities ───────────────────────────────────
 
-st.markdown('<div class="section-header">Actionable — What Comes Next</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header">Outlook</div>', unsafe_allow_html=True)
 st.markdown("#### Is LA's office demand recovering? Employment in office-using sectors is the earliest signal.")
 
 try:
