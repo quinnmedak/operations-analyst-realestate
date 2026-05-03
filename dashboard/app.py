@@ -133,7 +133,7 @@ with st.sidebar:
     st.markdown("### LA CRE Analytics")
     st.caption("JLL Business Intelligence · Commercial Real Estate")
     st.divider()
-    start_year = st.slider("Start Year", 2008, 2024, 2019)
+    start_year = st.slider("Start Year", 2008, 2024, 2015)
     st.divider()
     st.caption("Data: yfinance · FRED · BLS")
 
@@ -182,7 +182,6 @@ try:
         return "kpi-value-green" if int(sf) > 0 else "kpi-value-red"
 
     def bps_delta_css(bps):
-        # For vacancy: rising (positive) is bad → red; falling → green
         return "kpi-delta-bad" if int(bps) > 0 else "kpi-delta-good"
 
     def context_delta_css(sf):
@@ -264,7 +263,7 @@ try:
         LIMIT 1
     """)["FEDFUNDS"].iloc[0]
 
-    delinquency = run_query("""
+    delinquency_kpi = run_query("""
         SELECT drcrelexfacbs
         FROM ANALYTICS.FACT_MACRO_QUARTERLY
         WHERE drcrelexfacbs IS NOT NULL
@@ -299,7 +298,7 @@ try:
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">CRE Loan Delinquency</div>
-            <div class="kpi-value">{delinquency:.2f}%</div>
+            <div class="kpi-value">{delinquency_kpi:.2f}%</div>
         </div>""", unsafe_allow_html=True)
 
     st.caption(f"REIT prices as of {latest_date} · Macro data quarterly avg (FRED)")
@@ -308,6 +307,8 @@ except Exception as e:
     st.error(f"Could not load KPI data: {e}")
 
 # ── Market Fundamentals — Submarket Expander ─────────────────────────────────
+
+st.divider()
 
 st.markdown('<div class="section-header">Market Fundamentals</div>', unsafe_allow_html=True)
 
@@ -354,11 +355,14 @@ except Exception as e:
 
 # ── Investor Signals ──────────────────────────────────────────────────────────
 
+st.divider()
+
 st.markdown('<div class="section-header">Investor Signals</div>', unsafe_allow_html=True)
 
 # ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
 
-st.markdown("#### How has investor confidence in office vs. industrial shifted over five years?")
+st.markdown("#### How has investor confidence in office vs. industrial shifted?")
+st.caption("Industrial REITs have gained ~150% since 2015 while office has lost ~35% — a divergence that began before COVID and widened sharply after 2022.")
 
 SECTOR_COLORS = {
     "Office":       "#2C2C2C",
@@ -369,7 +373,7 @@ SECTOR_COLORS = {
 }
 
 try:
-    prices = run_query("""
+    prices = run_query(f"""
         WITH daily_avg AS (
             SELECT
                 f.date_day,
@@ -377,7 +381,7 @@ try:
                 AVG(f.close) AS avg_close
             FROM ANALYTICS.FACT_DAILY_PRICES f
             JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
-            WHERE YEAR(f.date_day) >= 2019
+            WHERE YEAR(f.date_day) >= {start_year}
               AND r.property_type IN ('Office', 'Industrial')
             GROUP BY f.date_day, r.property_type
         )
@@ -406,6 +410,14 @@ try:
             "PROPERTY_TYPE": "Sector",
         },
     )
+
+    fig.add_vrect(
+        x0="2020-02-01", x1="2020-05-01",
+        fillcolor="#F3F4F6", opacity=0.6, line_width=0,
+        annotation_text="COVID", annotation_position="top left",
+        annotation_font_size=11, annotation_font_color="#6B7280",
+    )
+
     fig.update_layout(
         plot_bgcolor="#FFFFFF",
         paper_bgcolor="#FFFFFF",
@@ -424,48 +436,10 @@ try:
 except Exception as e:
     st.error(f"Could not load price trend: {e}")
 
-# ── Chart 6 — CRE Loan Delinquency Rate ──────────────────────────────────────
-
-st.markdown("#### How stressed is the CRE lending market?")
-
-try:
-    delinquency = run_query(f"""
-        SELECT
-            TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
-            drcrelexfacbs AS delinquency_rate
-        FROM ANALYTICS.FACT_MACRO_QUARTERLY
-        WHERE drcrelexfacbs IS NOT NULL
-          AND year >= {start_year}
-        ORDER BY year, quarter
-    """)
-
-    fig6 = px.line(
-        delinquency,
-        x="PERIOD_DATE",
-        y="DELINQUENCY_RATE",
-        labels={"PERIOD_DATE": "", "DELINQUENCY_RATE": "Delinquency Rate (%)"},
-    )
-    fig6.update_traces(line_color="#E30613", line_width=1.8)
-    fig6.update_layout(
-        plot_bgcolor="#FFFFFF",
-        paper_bgcolor="#FFFFFF",
-        font_color="#2C2C2C",
-        height=360,
-        margin=dict(t=20, b=20, l=0, r=0),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(gridcolor="#F0F0F0"),
-    )
-
-    st.plotly_chart(fig6, use_container_width=True)
-    st.caption("Source: FRED (DRCRELEXFACBS) via Snowflake · FACT_MACRO_QUARTERLY · 2008–present")
-
-except Exception as e:
-    st.error(f"Could not load delinquency data: {e}")
-
 # ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
 
-
 st.markdown("#### Rising rates crushed office valuations — as borrowing got expensive, investors priced buildings lower")
+st.caption("The fastest rate hike cycle in 40 years hit office from both sides: higher borrowing costs reduced what buyers could pay, while remote work simultaneously killed tenant demand.")
 
 try:
     rates = run_query(f"""
@@ -519,6 +493,17 @@ try:
         secondary_y=True,
     )
 
+    fig2.add_vline(
+        x="2022-03-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
+        annotation_text="Fed begins hiking", annotation_position="top left",
+        annotation_font_size=11, annotation_font_color="#6B7280",
+    )
+    fig2.add_vline(
+        x="2023-07-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
+        annotation_text="Rate peak: 5.33%", annotation_position="top right",
+        annotation_font_size=11, annotation_font_color="#6B7280",
+    )
+
     fig2.update_layout(
         plot_bgcolor="#FFFFFF",
         paper_bgcolor="#FFFFFF",
@@ -540,6 +525,7 @@ except Exception as e:
 # ── Chart 5 — Why Industrial Held Up ─────────────────────────────────────────
 
 st.markdown("#### E-commerce permanently raised demand for warehouses — industrial never needed a recovery")
+st.caption("E-commerce grew from ~11% to ~16% of all retail sales post-COVID. That demand is structural — it doesn't reverse when rates rise or the economy slows.")
 
 try:
     ecom = run_query("""
@@ -582,8 +568,8 @@ try:
             x=ecom["PERIOD_DATE"],
             y=ecom["ECOM_4Q_AVG"],
             name="E-Commerce % of Retail (4Q avg)",
-            marker_color="#D1D5DB",
-            opacity=0.5,
+            marker_color="#9CA3AF",
+            opacity=0.6,
         ),
         secondary_y=True,
     )
@@ -596,6 +582,14 @@ try:
             mode="lines",
         ),
         secondary_y=False,
+    )
+
+    fig5.add_annotation(
+        x="2020-07-01", y=industrial_q["INDEXED_PRICE"].max() * 0.75,
+        text="COVID accelerates<br>e-commerce adoption",
+        showarrow=True, arrowhead=2, arrowcolor="#6B7280",
+        font=dict(size=11, color="#6B7280"),
+        ax=60, ay=-40,
     )
 
     fig5.update_layout(
@@ -616,10 +610,76 @@ try:
 except Exception as e:
     st.error(f"Could not load e-commerce chart: {e}")
 
-# ── Chart 4 — LA Employment vs. Peer Cities ───────────────────────────────────
+# ── Chart 6 — CRE Loan Delinquency Rate (moved last — context/reassurance) ───
+
+st.markdown("#### Is this 2008? CRE loans are stressed — but the system isn't breaking.")
+st.caption("Delinquency is rising but remains less than one-quarter of the 2010 peak. The lending market is under pressure, not in crisis.")
+
+try:
+    delinquency_df = run_query("""
+        SELECT
+            TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
+            drcrelexfacbs AS delinquency_rate
+        FROM ANALYTICS.FACT_MACRO_QUARTERLY
+        WHERE drcrelexfacbs IS NOT NULL
+          AND year >= 2008
+        ORDER BY year, quarter
+    """)
+
+    fig6 = px.line(
+        delinquency_df,
+        x="PERIOD_DATE",
+        y="DELINQUENCY_RATE",
+        labels={"PERIOD_DATE": "", "DELINQUENCY_RATE": "Delinquency Rate (%)"},
+    )
+    fig6.update_traces(line_color="#E30613", line_width=1.8)
+
+    gfc_peak_idx = delinquency_df["DELINQUENCY_RATE"].idxmax()
+    gfc_peak_date = delinquency_df.loc[gfc_peak_idx, "PERIOD_DATE"]
+    gfc_peak_val  = delinquency_df.loc[gfc_peak_idx, "DELINQUENCY_RATE"]
+
+    fig6.add_annotation(
+        x=gfc_peak_date, y=gfc_peak_val,
+        text=f"GFC peak: {gfc_peak_val:.1f}%",
+        showarrow=True, arrowhead=2, arrowcolor="#6B7280",
+        font=dict(size=11, color="#6B7280"),
+        ax=50, ay=-30,
+    )
+
+    current_val  = delinquency_df["DELINQUENCY_RATE"].iloc[-1]
+    current_date = delinquency_df["PERIOD_DATE"].iloc[-1]
+
+    fig6.add_annotation(
+        x=current_date, y=current_val,
+        text=f"Today: {current_val:.1f}%<br>Stressed, not systemic",
+        showarrow=True, arrowhead=2, arrowcolor="#6B7280",
+        font=dict(size=11, color="#6B7280"),
+        ax=-80, ay=-40,
+    )
+
+    fig6.update_layout(
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        font_color="#2C2C2C",
+        height=360,
+        margin=dict(t=20, b=20, l=0, r=0),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(gridcolor="#F0F0F0"),
+    )
+
+    st.plotly_chart(fig6, use_container_width=True)
+    st.caption("Source: FRED (DRCRELEXFACBS) via Snowflake · FACT_MACRO_QUARTERLY · 2008–present")
+
+except Exception as e:
+    st.error(f"Could not load delinquency data: {e}")
+
+# ── Outlook ───────────────────────────────────────────────────────────────────
+
+st.divider()
 
 st.markdown('<div class="section-header">Outlook</div>', unsafe_allow_html=True)
 st.markdown("#### Is LA's office demand recovering? Employment in office-using sectors is the earliest signal.")
+st.caption("Companies hire before they sign leases. Employment trends today predict leasing volume 6–18 months from now.")
 
 try:
     metros_df = run_query("""
