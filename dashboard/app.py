@@ -415,7 +415,7 @@ try:
         x0="2020-02-01", x1="2020-05-01",
         fillcolor="#F3F4F6", opacity=0.6, line_width=0,
         annotation_text="COVID", annotation_position="top left",
-        annotation_font_size=11, annotation_font_color="#6B7280",
+        annotation_font=dict(size=11, color="#6B7280"),
     )
 
     fig.update_layout(
@@ -496,12 +496,12 @@ try:
     fig2.add_vline(
         x="2022-03-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
         annotation_text="Fed begins hiking", annotation_position="top left",
-        annotation_font_size=11, annotation_font_color="#6B7280",
+        annotation_font=dict(size=11, color="#6B7280"),
     )
     fig2.add_vline(
         x="2023-07-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
         annotation_text="Rate peak: 5.33%", annotation_position="top right",
-        annotation_font_size=11, annotation_font_color="#6B7280",
+        annotation_font=dict(size=11, color="#6B7280"),
     )
 
     fig2.update_layout(
