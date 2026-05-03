@@ -42,7 +42,7 @@ def load_to_snowflake(df, table_name, create_sql):
     cur.execute(f"TRUNCATE TABLE IF EXISTS RAW.{table_name}")
     df.columns = [c.upper() for c in df.columns]
     cols = list(df.columns)
-    rows = [tuple(r) for r in df.itertuples(index=False)]
+    rows = [tuple(None if pd.isna(v) else v for v in r) for r in df.itertuples(index=False)]
     ph = "(" + ",".join(["%s"] * len(cols)) + ")"
     col_list = ", ".join(cols)
     for i in range(0, len(rows), 5000):
