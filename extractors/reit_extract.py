@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import yfinance as yf
 import snowflake.connector
-from snowflake.connector.pandas_tools import write_pandas
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,7 +41,14 @@ def load_to_snowflake(df, table_name, create_sql):
     cur.execute(create_sql)
     cur.execute(f"TRUNCATE TABLE IF EXISTS RAW.{table_name}")
     df.columns = [c.upper() for c in df.columns]
-    write_pandas(conn, df, table_name, auto_create_table=False)
+    cols = list(df.columns)
+    rows = [tuple(r) for r in df.itertuples(index=False)]
+    ph = "(" + ",".join(["%s"] * len(cols)) + ")"
+    col_list = ", ".join(cols)
+    for i in range(0, len(rows), 5000):
+        chunk = rows[i:i + 5000]
+        vals = ", ".join([ph] * len(chunk))
+        cur.execute(f"INSERT INTO RAW.{table_name} ({col_list}) VALUES {vals}", [v for row in chunk for v in row])
     conn.close()
     print(f"Loaded {len(df)} rows to RAW.{table_name}")
 

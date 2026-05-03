@@ -4,7 +4,6 @@ from datetime import datetime
 import requests
 import pandas as pd
 import snowflake.connector
-from snowflake.connector.pandas_tools import write_pandas
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -92,7 +91,15 @@ def load_to_snowflake(df: pd.DataFrame):
     """)
     conn.cursor().execute("TRUNCATE TABLE IF EXISTS RAW.BLS_METRO_EMPLOYMENT")
     df.columns = [c.upper() for c in df.columns]
-    write_pandas(conn, df, "BLS_METRO_EMPLOYMENT", auto_create_table=False)
+    cur = conn.cursor()
+    cols = list(df.columns)
+    rows = [tuple(r) for r in df.itertuples(index=False)]
+    ph = "(" + ",".join(["%s"] * len(cols)) + ")"
+    col_list = ", ".join(cols)
+    for i in range(0, len(rows), 5000):
+        chunk = rows[i:i + 5000]
+        vals = ", ".join([ph] * len(chunk))
+        cur.execute(f"INSERT INTO RAW.BLS_METRO_EMPLOYMENT ({col_list}) VALUES {vals}", [v for row in chunk for v in row])
     conn.close()
     print(f"Loaded {len(df)} rows to Snowflake RAW.BLS_METRO_EMPLOYMENT")
 

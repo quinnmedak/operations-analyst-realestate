@@ -5,7 +5,6 @@ import json
 from dotenv import load_dotenv
 
 import snowflake.connector
-from snowflake.connector.pandas_tools import write_pandas   
 
 import pandas as pd                                                                                                                          
                   
@@ -48,7 +47,15 @@ def load_to_snowflake(df):
     """)
     conn.cursor().execute("TRUNCATE TABLE IF EXISTS RAW.FRED_OBSERVATIONS")
     df.columns = [c.upper() for c in df.columns]
-    write_pandas(conn, df, "FRED_OBSERVATIONS", auto_create_table=False)                                                                     
+    cur = conn.cursor()
+    cols = list(df.columns)
+    rows = [tuple(r) for r in df.itertuples(index=False)]
+    ph = "(" + ",".join(["%s"] * len(cols)) + ")"
+    col_list = ", ".join(cols)
+    for i in range(0, len(rows), 5000):
+        chunk = rows[i:i + 5000]
+        vals = ", ".join([ph] * len(chunk))
+        cur.execute(f"INSERT INTO RAW.FRED_OBSERVATIONS ({col_list}) VALUES {vals}", [v for row in chunk for v in row])
     conn.close()
     print(f"Loaded {len(df)} rows to Snowflake")
                                                                                                                                                
