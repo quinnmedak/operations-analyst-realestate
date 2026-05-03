@@ -495,15 +495,23 @@ try:
         secondary_y=True,
     )
 
-    fig2.add_vline(
-        x="2022-03-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
-        annotation_text="Fed begins hiking", annotation_position="top left",
+    fig2.add_vline(x="2022-03-01", line_dash="dot", line_color="#6B7280", line_width=1.2)
+    fig2.add_vline(x="2023-07-01", line_dash="dot", line_color="#6B7280", line_width=1.2)
+
+    fig2.add_annotation(
+        xref="x", yref="paper",
+        x="2022-03-01", y=0.98,
+        text="Fed begins hiking",
+        showarrow=False, xanchor="right",
+        font=dict(size=11, color="#6B7280"),
     )
-    fig2.add_vline(
-        x="2023-07-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
-        annotation_text="Rate peak: 5.33%", annotation_position="top right",
+    fig2.add_annotation(
+        xref="x", yref="paper",
+        x="2023-07-01", y=0.98,
+        text="Rate peak: 5.33%",
+        showarrow=False, xanchor="left",
+        font=dict(size=11, color="#6B7280"),
     )
-    fig2.update_annotations(font=dict(size=11, color="#6B7280"))
 
     fig2.update_layout(
         plot_bgcolor="#FFFFFF",
