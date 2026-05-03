@@ -17,7 +17,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests pandas snowflake-connector-python python-dotenv pyarrow
+        run: pip install requests "snowflake-connector-python[pandas]" python-dotenv
 
       - name: Run BLS extractor
         env:

@@ -1,8 +1,8 @@
-name: FRED Extract & Load
+name: REIT Extract & Load
 
 on:
   schedule:
-    - cron: "0 6 1 * *"  # 1st of every month at 6am UTC
+    - cron: "0 7 * * 1"  # Every Monday at 7am UTC
   workflow_dispatch:
 
 jobs:
@@ -17,14 +17,13 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests "snowflake-connector-python[pandas]" python-dotenv
+        run: pip install yfinance "snowflake-connector-python[pandas]" python-dotenv
 
-      - name: Run FRED extractor
+      - name: Run REIT extractor
         env:
-          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-        run: python extractors/fred_extract.py
+        run: python extractors/reit_extract.py
