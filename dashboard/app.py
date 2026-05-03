@@ -498,13 +498,12 @@ try:
     fig2.add_vline(
         x="2022-03-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
         annotation_text="Fed begins hiking", annotation_position="top left",
-        annotation_font=dict(size=11, color="#6B7280"),
     )
     fig2.add_vline(
         x="2023-07-01", line_dash="dot", line_color="#6B7280", line_width=1.2,
         annotation_text="Rate peak: 5.33%", annotation_position="top right",
-        annotation_font=dict(size=11, color="#6B7280"),
     )
+    fig2.update_annotations(font=dict(size=11, color="#6B7280"))
 
     fig2.update_layout(
         plot_bgcolor="#FFFFFF",
@@ -615,7 +614,7 @@ st.markdown("#### Is this 2008? CRE loans are stressed — but the system isn't 
 st.caption("Delinquency is rising but remains less than one-quarter of the 2010 peak. The lending market is under pressure, not in crisis.")
 
 try:
-    delinquency_df = run_query("""
+    delinquency_df = run_query(f"""
         SELECT
             TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
             drcrelexfacbs AS delinquency_rate
