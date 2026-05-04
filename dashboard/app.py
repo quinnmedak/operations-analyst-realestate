@@ -146,90 +146,6 @@ st.caption("Portfolio project — Quinn Medak · JLL Business Intelligence Analy
 
 st.markdown('<div class="section-header">Current State</div>', unsafe_allow_html=True)
 
-# ── Space Market KPI Row ──────────────────────────────────────────────────────
-
-st.markdown('<div class="sub-header">Space Market</div>', unsafe_allow_html=True)
-
-try:
-    snapshot = run_query("""
-        SELECT
-            property_type,
-            vacancy_rate,
-            vacancy_rate_bps_yoy,
-            ytd_net_absorption_sf,
-            absorption_context
-        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
-        WHERE submarket = 'LA Total'
-        ORDER BY property_type
-    """)
-
-    off = snapshot[snapshot["PROPERTY_TYPE"] == "Office"].iloc[0]
-    ind = snapshot[snapshot["PROPERTY_TYPE"] == "Industrial"].iloc[0]
-
-    def fmt_absorption(sf):
-        sf = int(sf)
-        sign = "+" if sf > 0 else ""
-        if abs(sf) >= 1_000_000:
-            return f"{sign}{sf / 1_000_000:.1f}M"
-        return f"{sign}{sf / 1_000:.0f}K"
-
-    def fmt_bps(bps):
-        bps = int(bps)
-        arrow = "▲" if bps > 0 else "▼"
-        return f"{arrow} {abs(bps)} bps YoY"
-
-    def absorption_css(sf):
-        return "kpi-value-green" if int(sf) > 0 else "kpi-value-red"
-
-    def bps_delta_css(bps):
-        return "kpi-delta-bad" if int(bps) > 0 else "kpi-delta-good"
-
-    def context_delta_css(sf):
-        return "kpi-delta-bad" if int(sf) < 0 else "kpi-delta-good"
-
-    sm1, sm2, sm3, sm4 = st.columns(4)
-
-    with sm1:
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Office Vacancy</div>
-            <div class="kpi-value">{off['VACANCY_RATE']:.1f}%</div>
-            <div class="kpi-unit">&nbsp;</div>
-            <div class="{bps_delta_css(off['VACANCY_RATE_BPS_YOY'])}">{fmt_bps(off['VACANCY_RATE_BPS_YOY'])}</div>
-        </div>""", unsafe_allow_html=True)
-
-    with sm2:
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Industrial Vacancy</div>
-            <div class="kpi-value">{ind['VACANCY_RATE']:.1f}%</div>
-            <div class="kpi-unit">&nbsp;</div>
-            <div class="{bps_delta_css(ind['VACANCY_RATE_BPS_YOY'])}">{fmt_bps(ind['VACANCY_RATE_BPS_YOY'])}</div>
-        </div>""", unsafe_allow_html=True)
-
-    with sm3:
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Office YTD Absorption</div>
-            <div class="{absorption_css(off['YTD_NET_ABSORPTION_SF'])}">{fmt_absorption(off['YTD_NET_ABSORPTION_SF'])}</div>
-            <div class="kpi-unit">SF YTD</div>
-            <div class="{context_delta_css(off['YTD_NET_ABSORPTION_SF'])}">{off['ABSORPTION_CONTEXT']}</div>
-        </div>""", unsafe_allow_html=True)
-
-    with sm4:
-        st.markdown(f"""
-        <div class="kpi-card">
-            <div class="kpi-label">Industrial YTD Absorption</div>
-            <div class="{absorption_css(ind['YTD_NET_ABSORPTION_SF'])}">{fmt_absorption(ind['YTD_NET_ABSORPTION_SF'])}</div>
-            <div class="kpi-unit">SF YTD</div>
-            <div class="{context_delta_css(ind['YTD_NET_ABSORPTION_SF'])}">{ind['ABSORPTION_CONTEXT']}</div>
-        </div>""", unsafe_allow_html=True)
-
-    st.caption("Source: Cushman & Wakefield MarketBeat · Office Q2 2025 · Industrial Q3 2025")
-
-except Exception as e:
-    st.error(f"Could not load market snapshot: {e}")
-
 # ── Financial Signals KPI Row ─────────────────────────────────────────────────
 
 st.markdown('<div class="sub-header">Financial Signals</div>', unsafe_allow_html=True)
@@ -306,11 +222,87 @@ try:
 except Exception as e:
     st.error(f"Could not load KPI data: {e}")
 
-# ── Market Fundamentals — Submarket Expander ─────────────────────────────────
+# ── Space Market KPI Row + Submarket Breakdown ────────────────────────────────
 
-st.divider()
+st.markdown('<div class="sub-header">Space Market · Cushman & Wakefield MarketBeat</div>', unsafe_allow_html=True)
 
-st.markdown('<div class="section-header">Market Fundamentals</div>', unsafe_allow_html=True)
+try:
+    snapshot = run_query("""
+        SELECT
+            property_type,
+            vacancy_rate,
+            vacancy_rate_bps_yoy,
+            ytd_net_absorption_sf,
+            absorption_context
+        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
+        WHERE submarket = 'LA Total'
+        ORDER BY property_type
+    """)
+
+    off = snapshot[snapshot["PROPERTY_TYPE"] == "Office"].iloc[0]
+    ind = snapshot[snapshot["PROPERTY_TYPE"] == "Industrial"].iloc[0]
+
+    def fmt_absorption(sf):
+        sf = int(sf)
+        sign = "+" if sf > 0 else ""
+        if abs(sf) >= 1_000_000:
+            return f"{sign}{sf / 1_000_000:.1f}M"
+        return f"{sign}{sf / 1_000:.0f}K"
+
+    def fmt_bps(bps):
+        bps = int(bps)
+        arrow = "▲" if bps > 0 else "▼"
+        return f"{arrow} {abs(bps)} bps YoY"
+
+    def absorption_css(sf):
+        return "kpi-value-green" if int(sf) > 0 else "kpi-value-red"
+
+    def bps_delta_css(bps):
+        return "kpi-delta-bad" if int(bps) > 0 else "kpi-delta-good"
+
+    def context_delta_css(sf):
+        return "kpi-delta-bad" if int(sf) < 0 else "kpi-delta-good"
+
+    sm1, sm2, sm3, sm4 = st.columns(4)
+
+    with sm1:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Office Vacancy</div>
+            <div class="kpi-value">{off['VACANCY_RATE']:.1f}%</div>
+            <div class="kpi-unit">&nbsp;</div>
+            <div class="{bps_delta_css(off['VACANCY_RATE_BPS_YOY'])}">{fmt_bps(off['VACANCY_RATE_BPS_YOY'])}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with sm2:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Industrial Vacancy</div>
+            <div class="kpi-value">{ind['VACANCY_RATE']:.1f}%</div>
+            <div class="kpi-unit">&nbsp;</div>
+            <div class="{bps_delta_css(ind['VACANCY_RATE_BPS_YOY'])}">{fmt_bps(ind['VACANCY_RATE_BPS_YOY'])}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with sm3:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Office YTD Absorption</div>
+            <div class="{absorption_css(off['YTD_NET_ABSORPTION_SF'])}">{fmt_absorption(off['YTD_NET_ABSORPTION_SF'])}</div>
+            <div class="kpi-unit">SF YTD</div>
+            <div class="{context_delta_css(off['YTD_NET_ABSORPTION_SF'])}">{off['ABSORPTION_CONTEXT']}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with sm4:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-label">Industrial YTD Absorption</div>
+            <div class="{absorption_css(ind['YTD_NET_ABSORPTION_SF'])}">{fmt_absorption(ind['YTD_NET_ABSORPTION_SF'])}</div>
+            <div class="kpi-unit">SF YTD</div>
+            <div class="{context_delta_css(ind['YTD_NET_ABSORPTION_SF'])}">{ind['ABSORPTION_CONTEXT']}</div>
+        </div>""", unsafe_allow_html=True)
+
+except Exception as e:
+    st.error(f"Could not load market snapshot: {e}")
 
 try:
     submarkets_raw = run_query("""
