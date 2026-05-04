@@ -25,9 +25,11 @@ National retail vacancy is near historic lows with positive net absorption retur
 
 CBRE identifies the winning tenants explicitly: grocery, discount, off-price, quick-service restaurants, and service retailers — all formats that serve essential or convenience needs. The losers are non-essential specialty retailers facing "squeezed discretionary budgets" and discretionary big-box formats (CBRE 2026 Outlook). This is not a market-wide story; it is a format rotation.
 
-### Multifamily — Stable demand, supply absorption underway
+### Multifamily — Stabilizing demand, supply pipeline thinning
 
-National multifamily vacancy is 4.4%, below the 2010–2019 average of 5.2%, but a 50-year-high supply wave concentrated in the Sun Belt is forcing operators to prioritize occupancy over rent growth (CBRE 2026 Outlook). The structural demand case is strong — 105% monthly premium to buy vs. rent, 3.4 million single-family homes short nationally — but near-term rent growth is muted as excess Sun Belt units clear. Global investment volumes for the living sector rose 24% in 2025 (JLL Global Perspective Feb 2026).
+National multifamily vacancy fell 20 bps to 4.8% in Q1 2026 as net absorption (78,100 units) outpaced completions (58,100 units) for the first time in three quarters (CBRE Q1 2026 US Multifamily Figures, April 2026). Average rent rose to $2,217/month (+0.2% YOY). Completions declined 30% YOY and are expected to fall further, providing a cleaner path to vacancy tightening. 63 of 69 tracked markets recorded positive net absorption in Q1.
+
+Context from the CBRE 2026 Outlook: a 50-year-high supply wave concentrated in the Sun Belt is still being absorbed, forcing operators to prioritize occupancy over rent growth. The structural demand case is strong — 105% monthly premium to buy vs. rent, 3.4 million single-family homes short nationally — but near-term rent growth is muted. Global investment volumes for the living sector rose 24% in 2025 (JLL Global Perspective Feb 2026). Investment volume dipped 6% YOY to $29.5B in Q1 2026, with portfolio sales especially soft.
 
 ### Life Sciences — Oversupplied, long recovery horizon
 
@@ -117,3 +119,4 @@ LA's position — same phase as Boston and Chicago, behind New York and Dallas �
 - `02-cbre-us-real-estate-market-outlook-2026.md` — CBRE US Real Estate Market Outlook 2026
 - `03-cushman-wakefield-greater-los-angeles-marketbeats.md` — C&W Greater LA MarketBeat (national context sections)
 - `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026
+- `2026-05-04_02-16-41_www-cbre-com-insights-figures-q1-2026-us-multifamily-figures.md` — CBRE Q1 2026 US Multifamily Figures (April 28, 2026)

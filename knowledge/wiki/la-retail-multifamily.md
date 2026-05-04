@@ -49,6 +49,26 @@ The convergence between JLL (Q4 2025) and CBRE (2026 Outlook) on retail is stron
 
 ---
 
+## National Multifamily: Q1 2026 Update
+
+CBRE's Q1 2026 US Multifamily Figures (published April 28, 2026) provide the most current hard data on national multifamily performance:
+
+| Metric | Q1 2026 Value | Change |
+|---|---|---|
+| Overall vacancy rate | 4.8% | -20 bps from Q4 2025 |
+| Average monthly rent | $2,217 | +0.2% YOY, +0.4% QOQ |
+| Net absorption | 78,100 units | Down from 120K units in Q1 2025 |
+| Construction completions | 58,100 units | -30% YOY |
+| Multifamily investment volume | $29.5B | -6% YOY |
+
+Source: CBRE Q1 2026 US Multifamily Figures (scraped 2026-05-04)
+
+Vacancy fell 20 bps from Q4 2025 back to 4.8% — the first quarter where net absorption outpaced construction completions in three quarters. This confirms the absorption trajectory is moving in the right direction, though the market remains above the 4.4% level recorded in Q3 2025 (before the supply-demand gap widened through late 2025). 63 of 69 markets tracked recorded positive net absorption in Q1. Construction completions of 58,100 units represent a 30% decline YOY and are expected to fall further in coming quarters as the delivery pipeline thins.
+
+The investment picture is softer: Q1 multifamily volume of $29.5B is down 6% YOY, with portfolio sales especially weak (-23% to $3.9B) while individual asset sales held up better (-2.7% to $25.6B). This divergence suggests institutional buyers remain cautious about portfolio-level bets while single-asset buyers are active.
+
+---
+
 ## National Multifamily: The Supply Overhang Story
 
 CBRE's 2026 multifamily outlook is structurally positive long-term but operationally challenged near-term — a distinction worth unpacking.
@@ -78,3 +98,4 @@ CBRE's 2026 multifamily outlook is structurally positive long-term but operation
 - `14-cbre-us-real-estate-outlook-2026-retail.md` — CBRE US Market Outlook 2026: Retail chapter
 - `13-cbre-us-real-estate-outlook-2026-multifamily.md` — CBRE US Market Outlook 2026: Multifamily chapter
 - `23-jll-global-market-perspectives.md` — JLL Global Perspective Feb 2026 (retail and living sector notes)
+- `2026-05-04_02-16-41_www-cbre-com-insights-figures-q1-2026-us-multifamily-figures.md` — CBRE Q1 2026 US Multifamily Figures (April 28, 2026)
