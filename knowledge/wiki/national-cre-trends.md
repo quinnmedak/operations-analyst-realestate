@@ -35,6 +35,24 @@ National multifamily vacancy is 4.4%, below the 2010–2019 average of 5.2%, but
 
 ---
 
+## Office vs. Industrial Divergence — Cross-Sector Synthesis
+
+The office/industrial gap is the defining cross-sector story of 2025–2026. The two sectors share a Property Clock phase ("Bottoming out" in LA) but for structurally different reasons that produce different investment implications.
+
+**Three layers explain the divergence:**
+
+**Structural demand moved permanently in opposite directions.** E-commerce permanently expanded the physical distribution infrastructure required to serve online purchasing — demand that doesn't reverse in downturns. Meanwhile, hybrid work reduced the office space required per knowledge worker. LA's office-using sectors shed jobs YoY through mid-2025 (financial activities -4,700, professional services -4,100) even as LA industrial logged its highest leasing pace since 2021 (Cushman Q3 2025 / LA Office wiki). These sectors are not on different points of the same cycle; they are on structurally different trajectories.
+
+**Supply dynamics are mirror images.** Industrial supply is structurally constrained — LA's infill nature caps spec construction at ~1.2% of inventory, the pipeline is tapering, and nationally new starts remain flat. Office has the opposite problem: 24.1% vacancy in LA across 212M SF, and nationally the pipeline is low only because nobody is financing new construction into a market already 14%+ vacant. Industrial is tight because demand absorbed the surplus. Office is "low new supply" because the existing glut is still being cleared (LA Office wiki / LA Industrial wiki).
+
+**Capital is differentiating by sector.** REIT share of SoCal industrial acquisitions collapsed from 24.7% to 7.7% in Q4 2025 — not because industrial fundamentals deteriorated, but because private capital moved faster on the bottom call and REITs' cost of capital made acquisitions difficult at current pricing. In office, CBRE's sentiment survey puts office last of five sectors for 10-year performance but notes the first uptick in bullish respondents (14% now expect office to be the best performer, up from near-zero) — the floor is forming, but tentatively (Capital Markets wiki).
+
+**For REIT investors, the divergence shows up in stock vs. fundamentals gaps.** Industrial REITs (Prologis, Rexford, EastGroup) trade at premiums that price in structural demand tailwinds; the risk is stocks running ahead of still-correcting underlying fundamentals (LA industrial Q4 2025 absorption reverted to -116K SF after Q3's positive reading). Office REITs (Kilroy, Hudson Pacific) trade at discounts pricing in structural decline; Hudson Pacific's forced sale of its Element LA campus to Riot Games at reset pricing is the concrete expression of that stress. Whether the 14M SF 2025 LA office leasing total proves durable or was a one-year anomaly is the key question for office REIT investors.
+
+Sources: `la-industrial-market.md`, `la-office-market.md`, `capital-markets.md`, `macro-environment.md`
+
+---
+
 ## Where JLL, CBRE, and C&W Agree
 
 Three areas of clear convergence across all three research firms — meaning the conclusions are more credible than any single-firm view:
