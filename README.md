@@ -144,7 +144,9 @@ erDiagram
 
 ## Dashboard Preview
 
-*Screenshot — add after deployment*
+![Current State — KPI cards showing office vacancy 24.1%, industrial vacancy 4.8%, Fed Funds 3.64%, CRE loan delinquency 1.58%](docs/screenshots/dashboard-current-state.png)
+
+![E-Commerce Share of Retail Sales vs. Industrial REIT Performance — dual-axis chart showing e-commerce share jump from ~11% to ~16% post-COVID alongside indexed industrial REIT prices](docs/screenshots/dashboard-ecommerce-chart.png)
 
 ## Key Insights
 
