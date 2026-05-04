@@ -119,4 +119,4 @@ LA's position — same phase as Boston and Chicago, behind New York and Dallas �
 - `02-cbre-us-real-estate-market-outlook-2026.md` — CBRE US Real Estate Market Outlook 2026
 - `03-cushman-wakefield-greater-los-angeles-marketbeats.md` — C&W Greater LA MarketBeat (national context sections)
 - `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026
-- `2026-05-04_02-16-41_www-cbre-com-insights-figures-q1-2026-us-multifamily-figures.md` — CBRE Q1 2026 US Multifamily Figures (April 28, 2026)
+- `25-cbre-us-multifamily-figures-q1-2026.md` — CBRE Q1 2026 US Multifamily Figures (April 28, 2026)

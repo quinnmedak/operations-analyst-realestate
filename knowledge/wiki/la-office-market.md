@@ -112,7 +112,7 @@ Nationally, JLL US Office Q1 2026 shows positive net absorption for the third co
 
 Cushman & Wakefield's Greater LA MarketBeat landing page (April 21, 2026) characterizes Q1 2026 LA office as: "The LA office market remained under pressure in Q1 2026, as elevated vacancy and continued occupancy losses weighed on fundamentals." This directional signal is consistent with the Q2 2025 baseline — no evidence of recovery through early 2026. Full submarket data for Q1 2026 is not available in this knowledge base (the C&W Q1 2026 LA Office PDF returned a 403 error when scraped).
 
-Source: `2026-05-04_02-16-41_www-cushmanwakefield-com-en-united-states-insights-us-marketbeats-greater-los-angeles-marketbeats.md`
+Source: `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md`
 
 ---
 

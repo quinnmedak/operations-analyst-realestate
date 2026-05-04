@@ -113,7 +113,7 @@ Where sources agree: Cushman's three quarters of data and Bisnow's Q4 investment
 
 Cushman & Wakefield's Greater LA MarketBeat landing page (April 21, 2026) characterizes Q1 2026 LA industrial as: "Vacancy across LA's industrial market remained elevated but showed early signs of stabilization as 2026 began." This headline-level snippet is consistent with the Q4 2025 narrative — the market oscillating around the bottom rather than resuming a downward trend. Full submarket data for Q1 2026 is not available in this knowledge base (the C&W Q1 2026 LA Industrial PDF returned a 403 error when scraped).
 
-Source: `2026-05-04_02-16-41_www-cushmanwakefield-com-en-united-states-insights-us-marketbeats-greater-los-angeles-marketbeats.md`
+Source: `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md`
 
 ---
 

@@ -98,4 +98,4 @@ CBRE's 2026 multifamily outlook is structurally positive long-term but operation
 - `14-cbre-us-real-estate-outlook-2026-retail.md` — CBRE US Market Outlook 2026: Retail chapter
 - `13-cbre-us-real-estate-outlook-2026-multifamily.md` — CBRE US Market Outlook 2026: Multifamily chapter
 - `23-jll-global-market-perspectives.md` — JLL Global Perspective Feb 2026 (retail and living sector notes)
-- `2026-05-04_02-16-41_www-cbre-com-insights-figures-q1-2026-us-multifamily-figures.md` — CBRE Q1 2026 US Multifamily Figures (April 28, 2026)
+- `25-cbre-us-multifamily-figures-q1-2026.md` — CBRE Q1 2026 US Multifamily Figures (April 28, 2026)
