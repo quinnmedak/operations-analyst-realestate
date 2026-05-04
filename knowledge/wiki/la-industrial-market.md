@@ -7,16 +7,16 @@
 
 ## Market Snapshot (Q3 2025 — most recent full quarter)
 
-| Metric | Q1 2025 | Q2 2025 | Q3 2025 |
-|---|---|---|---|
-| Vacancy rate | 4.9% | 4.8% | 4.8% |
-| QTR net absorption | -730K SF | -1.12M SF | +475K SF |
-| YTD net absorption | -730K SF | -56K SF | +1.6M SF |
-| QTR leasing activity | 8.0M SF | 7.6M SF | 9.7M SF |
-| YTD leasing activity | 8.0M SF | 16.2M SF | 26.7M SF |
-| Asking rent (NNN) | $1.37/SF | $1.34/SF | $1.34/SF |
+| Metric | Q1 2025 | Q2 2025 | Q3 2025 | Q4 2025 |
+|---|---|---|---|---|
+| Vacancy rate | 4.9% | 4.8% | 4.8% | ~5.0% (+20 bps QOQ) |
+| QTR net absorption | -730K SF | -1.12M SF | +475K SF | -116K SF |
+| YTD net absorption | -730K SF | -56K SF | +1.6M SF | — |
+| QTR leasing activity | 8.0M SF | 7.6M SF | 9.7M SF | — |
+| YTD leasing activity | 8.0M SF | 16.2M SF | 26.7M SF | ~33.3M SF |
+| Asking rent (NNN) | $1.37/SF | $1.34/SF | $1.34/SF | — |
 
-Sources: Cushman & Wakefield LA Industrial MarketBeat Q1, Q2, Q3 2025
+Sources: Cushman & Wakefield LA Industrial MarketBeat Q1, Q2, Q3 2025; Bisnow/CBRE Q4 2025
 
 ---
 
@@ -100,6 +100,8 @@ Nationally, industrial leasing rallied to 145.2M SF in Q1 2026 (+17.8% YOY) with
 LA industrial's three-quarter 2025 trajectory tells a recovery story that is more credible than most pundits acknowledged at mid-year. The market absorbed the post-pandemic vacancy surge, flipped positive YTD absorption for the first time since 2022, and posted record quarterly leasing velocity in Q3 — all while national industrial fundamentals were also strengthening.
 
 The risk is LA South: persistent over-delivery of spec space in Long Beach/Compton is the one structural headwind that the SGV and Central LA recovery has not yet offset. Whether LA South stabilizes in 2026 depends on whether port throughput normalizes after tariff-related volatility and whether the spec pipeline tapers (construction under construction fell from 4.9M SF in Q1 to 4.0M SF by Q3 — a positive sign).
+
+Q4 2025 snapped back to negative absorption (-116K SF per CBRE via Bisnow) — but notably it was the lowest negative quarter in two years, suggesting the market is oscillating around the bottom rather than resuming a downward trend. CBRE's Michael Longo framed LA's unique position directly: "We're so port-focused, and we had the tariff shock to the system. We're still recovering from that increase in vacancy we saw coming out of the pandemic. No other market had that." (Bisnow, Jan 2026). For context, the Inland Empire — LA's closest peer market — ended 2025 at 7.1% vacancy, 220 bps above LA's Q3 reading, confirming LA industrial's relative supply constraint even in the correction.
 
 Where sources agree: Cushman's three quarters of data and Bisnow's Q4 investment activity both point to bottoming fundamentals and recovering investor conviction. The Bisnow/CBRE "calling a bottom" characterization aligns with Cushman's explicit Q3 forecast language about rents "bottoming out soon."
 
