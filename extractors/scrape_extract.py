@@ -22,6 +22,41 @@ QUERIES = [
 ]
 
 
+def current_quarter():
+    now = datetime.now()
+    return now.year, (now.month - 1) // 3 + 1
+
+
+def get_direct_urls():
+    year, q = current_quarter()
+    q_str = f"q{q}"
+    return [
+        # C&W landing page — always lists the latest quarterly reports
+        "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/greater-los-angeles-marketbeats",
+        # Current-quarter C&W LA Office and Industrial PDFs
+        f"https://assets.cushmanwakefield.com/-/media/cw/marketbeat-pdfs/{year}/{q_str}/us-reports/office/los-angeles_office_marketbeat-{q_str}-{year}.pdf",
+        f"https://assets.cushmanwakefield.com/-/media/cw/marketbeat-pdfs/{year}/{q_str}/us-reports/industrial/la_americas_marketbeat_industrial_{q_str}{year}.pdf",
+    ]
+
+
+def scrape_url(url: str):
+    resp = requests.post(
+        "https://api.firecrawl.dev/v1/scrape",
+        headers={"Authorization": f"Bearer {FIRECRAWL_API_KEY}"},
+        json={"url": url, "formats": ["markdown"]},
+    )
+    if resp.status_code != 200:
+        print(f"  ERROR {resp.status_code} scraping {url}: {resp.text[:200]}")
+        return None
+    data = resp.json().get("data", {})
+    return {
+        "title": data.get("metadata", {}).get("title", url),
+        "url": url,
+        "markdown": data.get("markdown", ""),
+        "source_query": "direct",
+    }
+
+
 def slugify_url(url: str) -> str:
     slug = re.sub(r"^https?://", "", url)
     slug = re.sub(r"[^a-zA-Z0-9]+", "-", slug)
@@ -82,6 +117,18 @@ if __name__ == "__main__":
 
     all_results = []
 
+    # Direct URL scrapes: C&W landing page + current-quarter MarketBeat PDFs
+    print("\nScraping direct URLs...")
+    for url in get_direct_urls():
+        print(f"\n  Scraping: {url}")
+        result = scrape_url(url)
+        if result:
+            print(f"  - {result['title']}")
+            print(f"    markdown length: {len(result.get('markdown') or '')} chars")
+            all_results.append(result)
+        time.sleep(1)
+
+    # Search queries: broader knowledge base content
     for query in QUERIES:
         print(f"\nSearching: {query}")
         payload = {
