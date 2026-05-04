@@ -28,7 +28,7 @@ Three-quarter trend Q1–Q3 2025 using Cushman data; South Bay aerospace/logisti
 
 **[LA Tenant Landscape](wiki/la-tenant-landscape.md)**
 Who is leasing LA office and industrial space, and where: finance and legal anchor DTLA (Oaktree Capital 220K SF, legal sector 287K SF Q2 2025); El Segundo outperforming with genuine expansion demand (Canvas Worldwide doubled to 68K SF, KPMG 50K SF); Hollywood entertainment-adjacent tenants under stress at 31.3% availability; entertainment industry shifting toward flexible production space (Reframe Studios industrial-to-soundstage conversion); suburban markets renewal-driven not growth-driven.
-→ Cross-references: [LA Office Market](wiki/la-office-market.md) for submarket vacancy/absorption data behind the tenant patterns; [Capital Markets](#investment--capital-markets) for how tenant profiles shape investment theses (e.g. value-add in Hollywood).
+→ Cross-references: [LA Office Market](wiki/la-office-market.md) for submarket vacancy/absorption data behind the tenant patterns; [LA Industrial Market](wiki/la-industrial-market.md) for Reframe Studios industrial-to-soundstage context and South Bay aerospace/defense demand; [Capital Markets](#investment--capital-markets) for how tenant profiles shape investment theses (e.g. value-add in Hollywood).
 
 **[LA Retail & Multifamily](wiki/la-retail-multifamily.md)**
 Grocery/discount/services formats driving LA retail demand; national multifamily supply glut concentrated in Sun Belt and Midwest; explicit note that LA multifamily data is thin in this knowledge base.
