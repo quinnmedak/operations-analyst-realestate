@@ -133,7 +133,7 @@ with st.sidebar:
     st.markdown("### LA CRE Analytics")
     st.caption("JLL Business Intelligence · Commercial Real Estate")
     st.divider()
-    start_year = st.slider("Start Year", 2008, 2024, 2018)
+    start_year = st.slider("Start Year", 2008, 2024, 2020)
     st.divider()
     st.caption("Data: yfinance · FRED · BLS")
 
@@ -353,7 +353,7 @@ st.markdown('<div class="section-header">Market Performance</div>', unsafe_allow
 
 # ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
 
-st.markdown("#### How has investor confidence in office vs. industrial shifted?")
+st.markdown("#### Office vs. Industrial REIT Price Performance")
 st.caption("Industrial REITs up ~160% since 2018; office down ~36% — and the gap is still widening.")
 
 SECTOR_COLORS = {
@@ -428,12 +428,65 @@ try:
 except Exception as e:
     st.error(f"Could not load price trend: {e}")
 
+# ── Table A — Annual REIT Return % by Ticker ──────────────────────────────────
+
+try:
+    annual_returns = run_query("""
+        WITH yearly AS (
+            SELECT
+                r.ticker,
+                r.property_type,
+                YEAR(f.date_day) AS yr,
+                FIRST_VALUE(f.close) OVER (
+                    PARTITION BY r.ticker, YEAR(f.date_day)
+                    ORDER BY f.date_day
+                ) AS yr_open,
+                LAST_VALUE(f.close) OVER (
+                    PARTITION BY r.ticker, YEAR(f.date_day)
+                    ORDER BY f.date_day
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                ) AS yr_close
+            FROM ANALYTICS.FACT_DAILY_PRICES f
+            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
+            WHERE r.property_type IN ('Office', 'Industrial')
+              AND YEAR(f.date_day) >= 2020
+            QUALIFY ROW_NUMBER() OVER (
+                PARTITION BY r.ticker, YEAR(f.date_day) ORDER BY f.date_day
+            ) = 1
+        )
+        SELECT
+            ticker,
+            property_type,
+            yr,
+            ROUND((yr_close / yr_open - 1) * 100, 1) AS annual_return_pct
+        FROM yearly
+        ORDER BY property_type, ticker, yr
+    """)
+
+    pivot = annual_returns.pivot(index=["PROPERTY_TYPE", "TICKER"], columns="YR", values="ANNUAL_RETURN_PCT")
+    pivot.index.names = ["Sector", "REIT"]
+    pivot.columns = [str(c) for c in pivot.columns]
+
+    def color_returns(val):
+        if val is None or (isinstance(val, float) and val != val):
+            return ""
+        color = "#16a34a" if val > 0 else "#dc2626"
+        return f"color: {color}; font-weight: 600"
+
+    styled = pivot.style.applymap(color_returns).format("{:+.1f}%", na_rep="—")
+    st.markdown("**Annual Return % by REIT — Office vs. Industrial**")
+    st.dataframe(styled, use_container_width=True)
+    st.caption("Source: yfinance via Snowflake · FACT_DAILY_PRICES · Year-open to year-close price return")
+
+except Exception as e:
+    st.error(f"Could not load annual return table: {e}")
+
 # ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
 
 st.markdown('<div class="section-header">The Drivers</div>', unsafe_allow_html=True)
 
-st.markdown("#### Rising rates crushed office valuations — as borrowing got expensive, investors priced buildings lower")
-st.caption("The fastest rate hike cycle in 40 years hit office from both sides: higher borrowing costs reduced what buyers could pay, while remote work simultaneously killed tenant demand.")
+st.markdown("#### Fed Rate Hike Cycle and Office REIT Valuations")
+st.caption("The 2022–2023 hike accelerated office decline. But rates have since eased — and office hasn't recovered. That persistence points to structural demand loss from hybrid work, not a rate cycle that will self-correct.")
 
 try:
     rates = run_query(f"""
@@ -504,6 +557,15 @@ try:
         showarrow=False, xanchor="left",
         font=dict(size=11, color="#6B7280"),
     )
+    fig2.add_annotation(
+        xref="x", yref="paper",
+        x="2024-09-01", y=0.12,
+        text="Rates ease — office stays down",
+        showarrow=True, arrowhead=2, arrowcolor="#6B7280",
+        ax=0, ay=40,
+        font=dict(size=11, color="#6B7280"),
+        xanchor="center",
+    )
 
     fig2.update_layout(
         plot_bgcolor="#FFFFFF",
@@ -523,10 +585,50 @@ try:
 except Exception as e:
     st.error(f"Could not load rate hike chart: {e}")
 
+# ── Table B — Revenue YoY Change by Property Type ────────────────────────────
+
+try:
+    rev_yoy = run_query("""
+        WITH annual AS (
+            SELECT
+                r.property_type,
+                f.fiscal_year,
+                SUM(f.revenue) AS total_revenue
+            FROM ANALYTICS.FACT_QUARTERLY_FINANCIALS f
+            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
+            WHERE r.property_type IN ('Office', 'Industrial')
+              AND f.fiscal_year >= 2019
+            GROUP BY r.property_type, f.fiscal_year
+        )
+        SELECT
+            property_type,
+            fiscal_year,
+            total_revenue,
+            ROUND(
+                (total_revenue / LAG(total_revenue) OVER (
+                    PARTITION BY property_type ORDER BY fiscal_year
+                ) - 1) * 100, 1
+            ) AS revenue_yoy_pct
+        FROM annual
+        ORDER BY property_type, fiscal_year
+    """)
+
+    pivot_rev = rev_yoy.pivot(index="PROPERTY_TYPE", columns="FISCAL_YEAR", values="REVENUE_YOY_PCT")
+    pivot_rev.index.name = "Sector"
+    pivot_rev.columns = [str(c) for c in pivot_rev.columns]
+
+    styled_rev = pivot_rev.style.applymap(color_returns).format("{:+.1f}%", na_rep="—")
+    st.markdown("**Aggregate Revenue Growth YoY % — Office vs. Industrial**")
+    st.dataframe(styled_rev, use_container_width=True)
+    st.caption("Source: yfinance quarterly financials via Snowflake · FACT_QUARTERLY_FINANCIALS · Confirms whether price divergence reflects real fundamentals")
+
+except Exception as e:
+    st.error(f"Could not load revenue table: {e}")
+
 # ── Chart 5 — Why Industrial Held Up ─────────────────────────────────────────
 
-st.markdown("#### E-commerce permanently raised demand for warehouses — industrial never needed a recovery")
-st.caption("E-commerce share of retail sales climbed structurally through COVID and stayed there — warehouse demand followed and never gave it back.")
+st.markdown("#### E-Commerce Share of Retail Sales vs. Industrial REIT Performance")
+st.caption("E-commerce share of retail jumped from ~11% to ~16% post-COVID and held there — a permanent structural shift in how goods move. Industrial demand followed and absorbed a temporary spec oversupply correction.")
 
 try:
     ecom = run_query("""
@@ -608,77 +710,9 @@ try:
 except Exception as e:
     st.error(f"Could not load e-commerce chart: {e}")
 
-# ── Chart 5c — Employment divergence by sector (LA) ──────────────────────────
-
-st.markdown("#### Office is losing the workers who need it — logistics employment holds steady")
-st.caption("LA shed 4,700 finance jobs and 4,100 professional services jobs YoY through mid-2025. Fewer workers need offices. Trade & transportation employment — which moves goods, not people — held its ground.")
-
-try:
-    emp_la = run_query("""
-        SELECT
-            date_day,
-            supersector,
-            employment_thousands
-        FROM ANALYTICS.FACT_METRO_EMPLOYMENT
-        WHERE metro = 'Los Angeles'
-          AND supersector IN (
-              'Financial Activities',
-              'Professional & Business Services',
-              'Trade, Transportation & Utilities'
-          )
-        ORDER BY date_day, supersector
-    """)
-
-    sector_colors = {
-        "Financial Activities": "#2C2C2C",
-        "Professional & Business Services": "#6B7280",
-        "Trade, Transportation & Utilities": "#E30613",
-    }
-
-    fig5c = go.Figure()
-    for sector, color in sector_colors.items():
-        df_s = emp_la[emp_la["SUPERSECTOR"] == sector].copy()
-        if df_s.empty:
-            continue
-        df_s = df_s.sort_values("DATE_DAY")
-        base = df_s["EMPLOYMENT_THOUSANDS"].iloc[0]
-        df_s["indexed"] = (df_s["EMPLOYMENT_THOUSANDS"] / base * 100).round(2)
-        fig5c.add_trace(go.Scatter(
-            x=df_s["DATE_DAY"],
-            y=df_s["indexed"],
-            name=sector,
-            line=dict(color=color, width=2.2),
-            mode="lines",
-        ))
-
-    fig5c.add_hline(y=100, line_dash="dot", line_color="#D1D5DB", line_width=1)
-    fig5c.add_vrect(
-        x0="2022-03-01", x1="2023-07-01",
-        fillcolor="rgba(227,6,19,0.06)", line_width=0,
-        annotation_text="Rate hike cycle", annotation_position="top left",
-        annotation_font=dict(size=10, color="#6B7280"),
-    )
-
-    fig5c.update_layout(
-        plot_bgcolor="#FFFFFF",
-        paper_bgcolor="#FFFFFF",
-        font_color="#2C2C2C",
-        height=380,
-        margin=dict(t=20, b=20, l=0, r=0),
-        xaxis=dict(showgrid=False, title=""),
-        yaxis=dict(gridcolor="#F0F0F0", title="Employment Index (Jan 2020 = 100)"),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    )
-
-    st.plotly_chart(fig5c, use_container_width=True)
-    st.caption("Source: BLS Metro Employment via Snowflake · FACT_METRO_EMPLOYMENT · Los Angeles MSA · Indexed to Jan 2020 = 100")
-
-except Exception as e:
-    st.error(f"Could not load employment divergence chart: {e}")
-
 # ── Chart 6 — CRE Loan Delinquency Rate (moved last — context/reassurance) ───
 
-st.markdown("#### Is this 2008? CRE loans are stressed — but the system isn't breaking.")
+st.markdown("#### CRE Loan Delinquency Rate (2008–Present)")
 st.caption("Delinquency is rising but remains less than one-quarter of the 2010 peak. The lending market is under pressure, not in crisis.")
 
 try:
@@ -744,8 +778,8 @@ except Exception as e:
 st.divider()
 
 st.markdown('<div class="section-header">Outlook</div>', unsafe_allow_html=True)
-st.markdown("#### Is LA's office demand recovering? Employment in office-using sectors is the earliest signal.")
-st.caption("Companies hire before they sign leases. Employment trends today predict leasing volume 6–18 months from now.")
+st.markdown("#### Office-Using Sector Employment: LA vs. Peer Cities")
+st.caption("LA's office-using employment hasn't grown since 2020 — Dallas is up 20%. Markets that added workers recovered faster. When LA's line turns upward, leasing demand follows in 6–18 months.")
 
 try:
     metros_df = run_query("""
