@@ -608,6 +608,74 @@ try:
 except Exception as e:
     st.error(f"Could not load e-commerce chart: {e}")
 
+# ── Chart 5c — Employment divergence by sector (LA) ──────────────────────────
+
+st.markdown("#### Office is losing the workers who need it — logistics employment holds steady")
+st.caption("LA shed 4,700 finance jobs and 4,100 professional services jobs YoY through mid-2025. Fewer workers need offices. Trade & transportation employment — which moves goods, not people — held its ground.")
+
+try:
+    emp_la = run_query("""
+        SELECT
+            date_day,
+            supersector,
+            employment_thousands
+        FROM ANALYTICS.FACT_METRO_EMPLOYMENT
+        WHERE metro = 'Los Angeles'
+          AND supersector IN (
+              'Financial Activities',
+              'Professional & Business Services',
+              'Trade, Transportation & Utilities'
+          )
+        ORDER BY date_day, supersector
+    """)
+
+    sector_colors = {
+        "Financial Activities": "#2C2C2C",
+        "Professional & Business Services": "#6B7280",
+        "Trade, Transportation & Utilities": "#E30613",
+    }
+
+    fig5c = go.Figure()
+    for sector, color in sector_colors.items():
+        df_s = emp_la[emp_la["SUPERSECTOR"] == sector].copy()
+        if df_s.empty:
+            continue
+        df_s = df_s.sort_values("DATE_DAY")
+        base = df_s["EMPLOYMENT_THOUSANDS"].iloc[0]
+        df_s["indexed"] = (df_s["EMPLOYMENT_THOUSANDS"] / base * 100).round(2)
+        fig5c.add_trace(go.Scatter(
+            x=df_s["DATE_DAY"],
+            y=df_s["indexed"],
+            name=sector,
+            line=dict(color=color, width=2.2),
+            mode="lines",
+        ))
+
+    fig5c.add_hline(y=100, line_dash="dot", line_color="#D1D5DB", line_width=1)
+    fig5c.add_vrect(
+        x0="2022-03-01", x1="2023-07-01",
+        fillcolor="rgba(227,6,19,0.06)", line_width=0,
+        annotation_text="Rate hike cycle", annotation_position="top left",
+        annotation_font=dict(size=10, color="#6B7280"),
+    )
+
+    fig5c.update_layout(
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        font_color="#2C2C2C",
+        height=380,
+        margin=dict(t=20, b=20, l=0, r=0),
+        xaxis=dict(showgrid=False, title=""),
+        yaxis=dict(gridcolor="#F0F0F0", title="Employment Index (Jan 2020 = 100)"),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+
+    st.plotly_chart(fig5c, use_container_width=True)
+    st.caption("Source: BLS Metro Employment via Snowflake · FACT_METRO_EMPLOYMENT · Los Angeles MSA · Indexed to Jan 2020 = 100")
+
+except Exception as e:
+    st.error(f"Could not load employment divergence chart: {e}")
+
 # ── Chart 6 — CRE Loan Delinquency Rate (moved last — context/reassurance) ───
 
 st.markdown("#### Is this 2008? CRE loans are stressed — but the system isn't breaking.")
@@ -710,6 +778,7 @@ try:
                     SUM(employment_thousands) AS employment_thousands
                 FROM ANALYTICS.FACT_METRO_EMPLOYMENT
                 WHERE metro IN ({metros_sql})
+                  AND supersector IN ('Financial Activities', 'Professional & Business Services')
                 GROUP BY date_day, metro
             )
             SELECT

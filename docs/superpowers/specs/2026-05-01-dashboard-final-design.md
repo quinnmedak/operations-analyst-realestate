@@ -25,8 +25,9 @@ The market split in two. Office fell — rates crushed valuations and tenants ge
 - **Chart 2** — why office specifically crashed: interest rates went from 0% to 5%, debt got expensive, real estate values fell
 - **Chart 3** — whether office's problems are real or fear-driven: did revenue fall with the price, or did investors just panic?
 - **Chart 5** — why industrial held up: e-commerce permanently raised demand for warehouse and logistics space
+- **Chart 5c** — why the divergence persists at the tenant demand level: LA is shedding office-using jobs (Financial Activities + Professional & Business Services) while Trade/Transportation employment holds. Employment is the structural demand signal beneath the REIT price story.
 
-*Story so far: office fell because of rates and genuine occupancy loss. Industrial held because the underlying demand driver — online shopping — didn't go away.*
+*Story so far: office fell because of rates and genuine occupancy loss. Industrial held because the underlying demand driver — online shopping — didn't go away. The employment data confirms this at the labor market level: fewer workers need offices; more workers move goods.*
 
 ---
 
@@ -48,6 +49,7 @@ The market split in two. Office fell — rates crushed valuations and tenants ge
 | Chart 3 | Real Decline or Investor Fear? | Did office revenue actually fall, or did investors just panic? | FACT_QUARTERLY_FINANCIALS, FACT_DAILY_PRICES | Office / Industrial toggle |
 | Chart 4 | LA Employment vs. Peers | Is LA's office demand recovering relative to other cities? | FACT_METRO_EMPLOYMENT | Metro selector |
 | Chart 5 | Why Industrial Held Up | How did e-commerce permanently change demand for industrial space? | FACT_MACRO_QUARTERLY, FACT_QUARTERLY_FINANCIALS | Date range |
+| Chart 5c | Employment Divergence by Sector | Is LA shedding office-using workers while logistics employment holds? Shows the tenant demand signal beneath REIT prices. | FACT_METRO_EMPLOYMENT (LA only, 3 supersectors: Financial Activities, Professional & Business Services, Trade/Transportation/Utilities) | — |
 | Chart 6 | Revenue by Property Type | Does the gap between office and industrial show up in actual business performance, not just stock prices? | FACT_QUARTERLY_FINANCIALS, DIM_REIT | Date range |
 
 ---
@@ -66,6 +68,7 @@ Chart 6   Revenue by property type
 Chart 2   Rate hike story
 Chart 3   Revenue vs. stock price
 Chart 5   E-commerce vs. industrial revenue
+Chart 5c  Employment divergence — office-using vs. logistics (LA)
 
 ─── ACTIONABLE ───────────────────────────────
 Chart 4   LA employment vs. peer cities

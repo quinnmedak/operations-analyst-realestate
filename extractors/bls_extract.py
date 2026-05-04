@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# BLS CES series — monthly employment (thousands) for office-using industries
+# BLS CES series — monthly employment (thousands) by supersector
 # Format: SMU + state_fips(2) + cbsa(5) + supersector(8) + data_type(2)
-# 55000000 = Financial Activities | 60000000 = Professional & Business Services
+# 40000000 = Trade/Transportation/Utilities | 55000000 = Financial Activities | 60000000 = Professional & Business Services
 METROS = {
     "New York":    ("36", "35620"),
     "Los Angeles": ("06", "31080"),
@@ -23,6 +23,7 @@ METROS = {
 }
 
 SUPERSECTORS = {
+    "40000000": "Trade, Transportation & Utilities",
     "55000000": "Financial Activities",
     "60000000": "Professional & Business Services",
 }
