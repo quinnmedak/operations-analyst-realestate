@@ -236,6 +236,7 @@ try:
             absorption_context
         FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
         WHERE submarket = 'LA Total'
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY property_type ORDER BY period_date DESC) = 1
         ORDER BY property_type
     """)
 
@@ -354,7 +355,7 @@ st.markdown('<div class="section-header">Market Performance</div>', unsafe_allow
 # ── Chart 1 — REIT Price Trend by Sector ─────────────────────────────────────
 
 st.markdown("#### Office vs. Industrial REIT Price Performance")
-st.caption("Industrial REITs up ~160% since 2018; office down ~36% — and the gap is still widening.")
+st.caption("Industrial REITs up ~160% since 2018; office down ~36% — and the gap is still widening. Period fixed to 2018 to show the full pre/post-COVID divergence.")
 
 SECTOR_COLORS = {
     "Office":       "#2C2C2C",
@@ -363,6 +364,8 @@ SECTOR_COLORS = {
     "Multifamily":  "#F59E0B",
     "Life Science": "#10B981",
 }
+
+DIVERGENCE_START = 2018
 
 try:
     prices = run_query(f"""
@@ -373,7 +376,7 @@ try:
                 AVG(f.close) AS avg_close
             FROM ANALYTICS.FACT_DAILY_PRICES f
             JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
-            WHERE YEAR(f.date_day) >= {start_year}
+            WHERE YEAR(f.date_day) >= {DIVERGENCE_START}
               AND r.property_type IN ('Office', 'Industrial')
             GROUP BY f.date_day, r.property_type
         )
@@ -428,9 +431,163 @@ try:
 except Exception as e:
     st.error(f"Could not load price trend: {e}")
 
-# ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
+# ── Chart 5 — Why Industrial Held Up (first diagnostic — strongest) ──────────
 
 st.markdown('<div class="section-header">The Drivers</div>', unsafe_allow_html=True)
+
+st.markdown("#### E-Commerce Share of Retail Sales vs. Industrial REIT Performance")
+st.caption("E-commerce share of retail jumped from ~11% to ~16% post-COVID and held there — a permanent structural shift in how goods move. Industrial demand followed and absorbed a temporary spec oversupply correction.")
+
+try:
+    ecom = run_query("""
+        SELECT
+            TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
+            AVG(ecompctnsa) OVER (
+                ORDER BY year, quarter
+                ROWS BETWEEN 3 PRECEDING AND CURRENT ROW
+            ) AS ecom_4q_avg
+        FROM ANALYTICS.FACT_MACRO_QUARTERLY
+        WHERE ecompctnsa IS NOT NULL
+          AND year >= 2015
+        ORDER BY year, quarter
+    """)
+
+    industrial_q = run_query("""
+        WITH quarterly AS (
+            SELECT
+                DATE_TRUNC('quarter', f.date_day) AS period_date,
+                AVG(f.close) AS avg_price
+            FROM ANALYTICS.FACT_DAILY_PRICES f
+            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
+            WHERE r.property_type = 'Industrial'
+              AND YEAR(f.date_day) >= 2015
+            GROUP BY 1
+        )
+        SELECT
+            period_date,
+            ROUND(
+                avg_price / FIRST_VALUE(avg_price) OVER (ORDER BY period_date) * 100, 2
+            ) AS indexed_price
+        FROM quarterly
+        ORDER BY period_date
+    """)
+
+    fig5 = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig5.add_trace(
+        go.Bar(
+            x=ecom["PERIOD_DATE"],
+            y=ecom["ECOM_4Q_AVG"],
+            name="E-Commerce % of Retail (4Q avg)",
+            marker_color="#9CA3AF",
+            opacity=0.6,
+        ),
+        secondary_y=True,
+    )
+    fig5.add_trace(
+        go.Scatter(
+            x=industrial_q["PERIOD_DATE"],
+            y=industrial_q["INDEXED_PRICE"],
+            name="Industrial REIT Price (Indexed)",
+            line=dict(color="#E30613", width=3),
+            mode="lines",
+        ),
+        secondary_y=False,
+    )
+
+    fig5.add_vrect(
+        x0="2020-01-01", x1="2022-01-01",
+        fillcolor="rgba(134, 239, 172, 0.15)", line_width=0,
+    )
+
+    fig5.update_layout(
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        font_color="#2C2C2C",
+        height=380,
+        margin=dict(t=20, b=20, l=0, r=0),
+        xaxis=dict(showgrid=False),
+        legend=dict(orientation="h", yanchor="top", y=0.99, xanchor="left", x=0.01),
+    )
+    fig5.update_yaxes(title_text="Industrial REIT Price (Start = 100)", secondary_y=False, gridcolor="#F0F0F0")
+    fig5.update_yaxes(title_text="E-Commerce % of Retail Sales", secondary_y=True, showgrid=False)
+
+    st.plotly_chart(fig5, use_container_width=True)
+    st.caption("Source: yfinance · FRED (ECOMPCTNSA) via Snowflake · FACT_DAILY_PRICES, FACT_MACRO_QUARTERLY")
+
+except Exception as e:
+    st.error(f"Could not load e-commerce chart: {e}")
+
+# ── Vacancy Trend — The Core Metric ──────────────────────────────────────────
+
+st.markdown("#### LA Vacancy by Quarter: Office vs. Industrial")
+st.caption("Vacancy is the mechanism behind the REIT divergence. Industrial held near 4.8% across all three 2025 quarters — bottoming out. Office sits at 24.1% with no recovery signal. Source: Cushman & Wakefield MarketBeat.")
+
+try:
+    vacancy_trend = run_query("""
+        SELECT property_type, period, period_date, vacancy_rate
+        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
+        WHERE submarket = 'LA Total'
+        ORDER BY property_type, period_date
+    """)
+
+    off_vac = vacancy_trend[vacancy_trend["PROPERTY_TYPE"] == "Office"]
+    ind_vac = vacancy_trend[vacancy_trend["PROPERTY_TYPE"] == "Industrial"]
+
+    fig_vac = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig_vac.add_trace(
+        go.Scatter(
+            x=ind_vac["PERIOD_DATE"],
+            y=ind_vac["VACANCY_RATE"],
+            name="Industrial Vacancy (%)",
+            line=dict(color="#E30613", width=2.5),
+            mode="lines+markers",
+            marker=dict(size=8),
+        ),
+        secondary_y=False,
+    )
+    fig_vac.add_trace(
+        go.Scatter(
+            x=off_vac["PERIOD_DATE"],
+            y=off_vac["VACANCY_RATE"],
+            name="Office Vacancy (%)",
+            line=dict(color="#2C2C2C", width=2.5),
+            mode="lines+markers",
+            marker=dict(size=8, symbol="square"),
+        ),
+        secondary_y=True,
+    )
+
+    fig_vac.update_layout(
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        font_color="#2C2C2C",
+        height=340,
+        margin=dict(t=20, b=20, l=0, r=0),
+        xaxis=dict(showgrid=False),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    fig_vac.update_yaxes(
+        title_text="Industrial Vacancy (%)",
+        secondary_y=False,
+        gridcolor="#F0F0F0",
+        range=[0, 10],
+    )
+    fig_vac.update_yaxes(
+        title_text="Office Vacancy (%)",
+        secondary_y=True,
+        showgrid=False,
+        range=[0, 35],
+    )
+
+    st.plotly_chart(fig_vac, use_container_width=True)
+    st.caption("Source: Cushman & Wakefield MarketBeat via Snowflake · FACT_LA_MARKET_SNAPSHOT · Industrial Q1–Q3 2025 / Office Q2 2025")
+
+except Exception as e:
+    st.error(f"Could not load vacancy chart: {e}")
+
+# ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
 
 st.markdown("#### Fed Rate Hike Cycle and Office REIT Valuations")
 st.caption("The 2022–2023 hike accelerated office decline. But rates have since eased — and office hasn't recovered. That persistence points to structural demand loss from hybrid work, not a rate cycle that will self-correct.")
@@ -531,91 +688,6 @@ try:
 
 except Exception as e:
     st.error(f"Could not load rate hike chart: {e}")
-
-# ── Chart 5 — Why Industrial Held Up ─────────────────────────────────────────
-
-st.markdown("#### E-Commerce Share of Retail Sales vs. Industrial REIT Performance")
-st.caption("E-commerce share of retail jumped from ~11% to ~16% post-COVID and held there — a permanent structural shift in how goods move. Industrial demand followed and absorbed a temporary spec oversupply correction.")
-
-try:
-    ecom = run_query("""
-        SELECT
-            TO_DATE(year::VARCHAR || '-' || LPAD((quarter * 3 - 2)::VARCHAR, 2, '0') || '-01') AS period_date,
-            AVG(ecompctnsa) OVER (
-                ORDER BY year, quarter
-                ROWS BETWEEN 3 PRECEDING AND CURRENT ROW
-            ) AS ecom_4q_avg
-        FROM ANALYTICS.FACT_MACRO_QUARTERLY
-        WHERE ecompctnsa IS NOT NULL
-          AND year >= 2015
-        ORDER BY year, quarter
-    """)
-
-    industrial_q = run_query("""
-        WITH quarterly AS (
-            SELECT
-                DATE_TRUNC('quarter', f.date_day) AS period_date,
-                AVG(f.close) AS avg_price
-            FROM ANALYTICS.FACT_DAILY_PRICES f
-            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
-            WHERE r.property_type = 'Industrial'
-              AND YEAR(f.date_day) >= 2015
-            GROUP BY 1
-        )
-        SELECT
-            period_date,
-            ROUND(
-                avg_price / FIRST_VALUE(avg_price) OVER (ORDER BY period_date) * 100, 2
-            ) AS indexed_price
-        FROM quarterly
-        ORDER BY period_date
-    """)
-
-    fig5 = make_subplots(specs=[[{"secondary_y": True}]])
-
-    fig5.add_trace(
-        go.Bar(
-            x=ecom["PERIOD_DATE"],
-            y=ecom["ECOM_4Q_AVG"],
-            name="E-Commerce % of Retail (4Q avg)",
-            marker_color="#9CA3AF",
-            opacity=0.6,
-        ),
-        secondary_y=True,
-    )
-    fig5.add_trace(
-        go.Scatter(
-            x=industrial_q["PERIOD_DATE"],
-            y=industrial_q["INDEXED_PRICE"],
-            name="Industrial REIT Price (Indexed)",
-            line=dict(color="#E30613", width=3),
-            mode="lines",
-        ),
-        secondary_y=False,
-    )
-
-    fig5.add_vrect(
-        x0="2020-01-01", x1="2022-01-01",
-        fillcolor="rgba(134, 239, 172, 0.15)", line_width=0,
-    )
-
-    fig5.update_layout(
-        plot_bgcolor="#FFFFFF",
-        paper_bgcolor="#FFFFFF",
-        font_color="#2C2C2C",
-        height=380,
-        margin=dict(t=20, b=20, l=0, r=0),
-        xaxis=dict(showgrid=False),
-        legend=dict(orientation="h", yanchor="top", y=0.99, xanchor="left", x=0.01),
-    )
-    fig5.update_yaxes(title_text="Industrial REIT Price (Start = 100)", secondary_y=False, gridcolor="#F0F0F0")
-    fig5.update_yaxes(title_text="E-Commerce % of Retail Sales", secondary_y=True, showgrid=False)
-
-    st.plotly_chart(fig5, use_container_width=True)
-    st.caption("Source: yfinance · FRED (ECOMPCTNSA) via Snowflake · FACT_DAILY_PRICES, FACT_MACRO_QUARTERLY")
-
-except Exception as e:
-    st.error(f"Could not load e-commerce chart: {e}")
 
 # ── Chart 6 — CRE Loan Delinquency Rate (moved last — context/reassurance) ───
 
