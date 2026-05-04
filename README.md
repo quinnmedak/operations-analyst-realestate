@@ -25,8 +25,6 @@ This project demonstrates the posting's core requirements: SQL-driven descriptiv
 | Knowledge Base | Claude Code (scrape → synthesize → query) |
 | IDE | Cursor (AI-native code editor) |
 | AI Assistant | Claude Code + Superpowers (agentic coding, domain knowledge skills) |
-| IDE | Cursor (AI-native code editor) |
-| AI Assistant | Claude Code + Superpowers (domain knowledge skills, agentic coding) |
 
 ## Pipeline Diagram
 
