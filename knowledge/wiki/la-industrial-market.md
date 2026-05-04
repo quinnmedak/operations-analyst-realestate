@@ -1,24 +1,24 @@
 # LA Industrial Market
 
-**Last updated:** April 2026  
-**Primary sources:** Cushman & Wakefield LA Industrial Q1–Q3 2025, Bisnow SoCal Industrial Q4 2025, Bisnow LA capital markets, JLL US Industrial Q1 2026, JLL Industrial Tenant Demand Study
+**Last updated:** May 2026  
+**Primary sources:** Cushman & Wakefield LA Industrial Q1–Q3 2025, CBRE LA Industrial Q1 2026, Bisnow SoCal Industrial Q4 2025, Bisnow LA capital markets, JLL US Industrial Q1 2026, JLL Industrial Tenant Demand Study
 
 ---
 
-## Market Snapshot (Q3 2025 — most recent full quarter)
+## Market Snapshot (Q1 2026 — most recent)
 
-| Metric | Q1 2025 | Q2 2025 | Q3 2025 | Q4 2025 |
-|---|---|---|---|---|
-| Vacancy rate | 4.9% | 4.8% | 4.8% | ~5.0% (+20 bps QOQ) |
-| QTR net absorption | -730K SF | -1.12M SF | +475K SF | -116K SF |
-| YTD net absorption | -730K SF | -56K SF | +1.6M SF | — |
-| QTR leasing activity | 8.0M SF | 7.6M SF | 9.7M SF | — |
-| YTD leasing activity | 8.0M SF | 16.2M SF | 26.7M SF | ~33.3M SF |
-| Asking rent (NNN) | $1.37/SF | $1.34/SF | $1.34/SF | — |
+| Metric | Q1 2025 | Q2 2025 | Q3 2025 | Q4 2025 | Q1 2026 |
+|---|---|---|---|---|---|
+| Vacancy rate | 4.9% | 4.8% | 4.8% | ~5.0% | 5.4% |
+| Availability rate | — | — | 6.5% | 7.7% | 8.1% |
+| QTR net absorption | -730K SF | -1.12M SF | +475K SF | -116K SF | +934K SF |
+| YTD net absorption | -730K SF | -56K SF | +1.6M SF | — | +934K SF |
+| QTR leasing activity | 8.0M SF | 7.6M SF | 9.7M SF | — | 14.6M SF |
+| Asking rent (NNN) | $1.37/SF | $1.34/SF | $1.34/SF | — | $1.21/SF |
 
-Sources: Cushman & Wakefield LA Industrial MarketBeat Q1, Q2, Q3 2025; Bisnow/CBRE Q4 2025
+Sources: Cushman & Wakefield LA Industrial MarketBeat Q1, Q2, Q3 2025; Bisnow/CBRE Q4 2025; CBRE LA Industrial Q1 2026
 
-**Source conflict:** Cushman's Q3 2025 data shows YTD net absorption turning positive (+1.6M SF). CBRE's Q4 2025 data (via Bisnow, Jan 2026) states "net absorption in the area hasn't reached positive territory since the end of 2022." Both are credible research firms. The most likely explanation is different market-boundary definitions — Cushman and CBRE do not always draw LA industrial submarket lines identically. The wiki's "recovery confirmed" narrative rests on Cushman's reading; readers relying on CBRE data would reach a more pessimistic conclusion. Treat Q3 2025 as stabilization, not confirmed recovery, until a third source resolves the discrepancy.
+**Source conflict resolved:** Prior quarters had a discrepancy — Cushman's Q3 2025 data showed YTD absorption turning positive while CBRE's Q4 2025 data (via Bisnow) stated absorption had not been positive since 2022. CBRE's own Q1 2026 full report now confirms Q1 2026 as the first positive quarter since 2022 (+934K SF), and notes Q1 2025 was -1.9M SF — consistent with Cushman's Q1 reading but not with a positive Q3. The discrepancy is explained by different market boundary definitions: Cushman uses six submarkets, CBRE uses five. Q1 2026 CBRE data is now the most recent authoritative read. Both firms agree the correction bottomed and Q1 2026 marks an inflection.
 
 ---
 
@@ -109,11 +109,64 @@ Where sources agree: Cushman's three quarters of data and Bisnow's Q4 investment
 
 ---
 
-## Q1 2026 Signal (Limited)
+## Q1 2026 Full Report (CBRE)
 
-Cushman & Wakefield's Greater LA MarketBeat landing page (April 21, 2026) characterizes Q1 2026 LA industrial as: "Vacancy across LA's industrial market remained elevated but showed early signs of stabilization as 2026 began." This headline-level snippet is consistent with the Q4 2025 narrative — the market oscillating around the bottom rather than resuming a downward trend. Full submarket data for Q1 2026 is not available in this knowledge base (the C&W Q1 2026 LA Industrial PDF returned a 403 error when scraped).
+CBRE's Q1 2026 LA Industrial Figures confirm the inflection: net absorption turned positive for the first time since 2022 at +934,025 SF, reversing from -1.9M SF in Q1 2025. Vacancy rose to 5.4% (availability 8.1%) even as absorption turned positive — reflecting a pipeline of newly delivered space. The headline is real but carries a caveat: the Trader Joe's ~1.0M SF distribution center in Palmdale delivered and occupied in Q1. Without that single deal, net absorption would have been slightly negative.
 
-Source: `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md`
+### Submarket Performance (Q1 2026, CBRE definitions)
+
+CBRE uses five submarkets (vs. Cushman's six). Submarket definitions are not identical; cross-source submarket comparisons require care.
+
+| Submarket | NRA (MSF) | Vacancy | Availability | Avg Rent ($/SF NNN) | QTR Absorption |
+|---|---|---|---|---|---|
+| Central Los Angeles | 243.3 | 5.3% | 8.0% | $0.99 | +257,000 SF |
+| Greater San Fernando Valley | 172.6 | 4.8% | 6.8% | $1.34 | +590,000 SF |
+| Mid-Counties | 102.4 | 5.8% | 9.1% | $1.26 | -320,000 SF |
+| **South Bay** | 199.0 | 6.3% | 9.5% | **$1.36** | **+643,000 SF** |
+| San Gabriel Valley | 157.8 | 5.0% | 7.3% | $1.22 | -235,000 SF |
+| **LA Total** | **875.2** | **5.4%** | **8.1%** | **$1.21** | **+934,000 SF** |
+
+Source: CBRE Research, Q1 2026
+
+South Bay led absorption (+643K SF) driven by the Anduril 1.185M SF new lease in Long Beach — the largest deal of the quarter. The Greater San Fernando Valley (+590K SF) was the other major driver, benefiting from the Trader Joe's Palmdale delivery. Mid-Counties (-320K SF) and San Gabriel Valley (-235K SF) remained in negative territory.
+
+### Rent Decline: 30.5% from Peak
+
+Asking rent reached $1.21/SF NNN in Q1 2026, down 1.6% QOQ from $1.23 and 8.3% YOY from $1.32. The cumulative decline from Q1 2023's peak of $1.74/SF is 30.5%. Submarket spread: South Bay highest at $1.36/SF, Central LA lowest at $0.99/SF — a $0.37 spread across the five submarkets.
+
+### Availability: Doubled in Three Years
+
+Overall availability closed Q1 2026 at 8.1%, up from 4.0% in Q1 2023. This more than doubling reflects both new spec deliveries and a large volume of sublease space (sublease availability: 1.2% = ~10.5M SF). South Bay has the highest sublease rate at 1.6%.
+
+### Construction: Developers Pulling Back
+
+- Q1 2026 deliveries: 1.57M SF (more than double the 0.7M SF a year earlier)
+- Pipeline: 4.53M SF under construction — down 19.1% QOQ from 5.6M SF and 34.5% YOY from 6.9M SF
+- Greater San Fernando Valley has the largest pipeline share (1.16M SF) and delivered 1.22M SF in Q1 alone
+
+The pipeline contraction is the most important leading indicator: developers have been pulling back for four consecutive quarters. Less new supply coming means absorption will more reliably translate to vacancy reduction in 2026–2027.
+
+### Leasing Velocity: Strongest in Three Years
+
+14.6M SF total gross leasing activity in Q1 2026, up 27.3% QOQ and 4.4% YOY — the highest quarterly velocity in the prior three years. South Bay led with 37.4% (5.5M SF), driven by advanced manufacturing and defense users. Advanced manufacturing accounted for five of the top ten leases.
+
+### Key Q1 2026 Transactions
+
+| Tenant | SF | Type | Submarket |
+|---|---|---|---|
+| Anduril | 1,185,000 | New Lease | South Bay (Long Beach) |
+| Apex Logistics | 443,000 | New Lease | South Bay (Torrance) |
+| SpeedX | 327,000 | New Lease | Commerce |
+| Neros | 252,000 | Sublease | South Bay (Torrance) |
+| Icer Holdings | 220,000 | Renewal | Mid-Counties (Cerritos) |
+
+Anduril — a defense technology company — anchors the aerospace/defense demand story in South Bay. This is the largest deal in the LA market in Q1 2026 and illustrates the shift in demand mix from pure e-commerce/logistics toward advanced manufacturing and defense.
+
+### Port Context
+
+San Pedro Bay (Ports of LA and Long Beach) handled 20M+ TEUs in 2025 (+0.9% YOY). Port of LA: 10.2M TEUs (3rd busiest calendar year in its 118-year history). Port of Long Beach: 9.9M TEUs (all-time record). Port throughput remains the structural demand anchor for South Bay and Central LA industrial.
+
+Source: `27-cbre-la-industrial-marketbeat-q1-2026.md`
 
 ---
 
@@ -122,6 +175,8 @@ Source: `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md`
 - `08-cushman-wakefield-la-industrial-marketbeat-q1-2025.md` — C&W LA Industrial Q1 2025
 - `09-cushman-wakefield-la-industrial-marketbeat-q2-2025.md` — C&W LA Industrial Q2 2025
 - `10-cushman-wakefield-la-industrial-marketbeat-q3-2025.md` — C&W LA Industrial Q3 2025
+- `27-cbre-la-industrial-marketbeat-q1-2026.md` — CBRE LA Industrial Q1 2026 (full report — primary Q1 2026 source)
+- `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md` — C&W Greater LA MarketBeats hub Q1 2026 (qualitative snippet only)
 - `2026-04-28_23-17-26_www-jll-com-en-us-insights-market-dynamics-los-angeles-industrial.md` — JLL LA Industrial Q1 2026 (stub — gated)
 - `16-jll-industrial-market-statistics-trends.md` — JLL US Industrial Q1 2026
 - `15-jll-industrial-tenant-demand-study.md` — JLL Industrial Tenant Demand Study (Aug 2025)
