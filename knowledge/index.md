@@ -2,7 +2,15 @@
 
 Synthesizes scraped CRE market research from JLL, CBRE, Cushman & Wakefield, and Bisnow. Each page synthesizes multiple sources — not summaries of individual reports. Queryable via Claude Code.
 
-**Round 2 pages in progress:** `overview.md`, `la-tenant-landscape.md`
+---
+
+## JLL & Market Context
+
+*Use these pages to orient a client on where LA fits in the national cycle, or to answer questions about JLL's firm, services, and research framework.*
+
+**[Overview: JLL and the LA CRE Market](wiki/overview.md)**
+JLL's business (Fortune 500, $23.4B revenue, 112,000+ employees), service lines, research publications, and Property Clock framework. LA positioned in "Bottoming out" for office and industrial as of Q4 2025 alongside SF, Boston, and DC — behind Dallas and New York which are already "Growth accelerating." Global investment volumes up 19% in 2025.
+→ Cross-references: [National CRE Trends](#national-cre-and-cross-sector-context) for LA vs. peer city benchmarks; [Macro Environment](#macro--demand-drivers) for the rate-cycle context behind LA's cycle positioning.
 
 ---
 
@@ -17,6 +25,10 @@ Synthesizes scraped CRE market research from JLL, CBRE, Cushman & Wakefield, and
 **[LA Industrial Market](wiki/la-industrial-market.md)**
 Three-quarter trend Q1–Q3 2025 using Cushman data; South Bay aerospace/logistics driving most new leasing; Amazon 615K SF in Commerce as single-deal signal; total 2025 leasing ~33.3M SF, up from 22.1M in 2022.
 → Cross-references: [National CRE Trends](#national-cre-and-cross-sector-context) for LA vs. national 7.5% vacancy; [Capital Markets](#investment--capital-markets) for Q4 2025 $1.2B SoCal industrial sales.
+
+**[LA Tenant Landscape](wiki/la-tenant-landscape.md)**
+Who is leasing LA office and industrial space, and where: finance and legal anchor DTLA (Oaktree Capital 220K SF, legal sector 287K SF Q2 2025); El Segundo outperforming with genuine expansion demand (Canvas Worldwide doubled to 68K SF, KPMG 50K SF); Hollywood entertainment-adjacent tenants under stress at 31.3% availability; entertainment industry shifting toward flexible production space (Reframe Studios industrial-to-soundstage conversion); suburban markets renewal-driven not growth-driven.
+→ Cross-references: [LA Office Market](wiki/la-office-market.md) for submarket vacancy/absorption data behind the tenant patterns; [Capital Markets](#investment--capital-markets) for how tenant profiles shape investment theses (e.g. value-add in Hollywood).
 
 **[LA Retail & Multifamily](wiki/la-retail-multifamily.md)**
 Grocery/discount/services formats driving LA retail demand; national multifamily supply glut concentrated in Sun Belt and Midwest; explicit note that LA multifamily data is thin in this knowledge base.
