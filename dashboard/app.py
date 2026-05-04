@@ -589,53 +589,14 @@ try:
         .apply(highlight_rate_hike, axis=None)
         .format("{:+.1f}%", na_rep="—")
     )
-    st.markdown("**Rate Hike Hit Both Sectors in 2022 — Only Industrial Recovered**")
-    st.caption("2022 column (highlighted): both sectors fell sharply when rates rose. Industrial bounced back in subsequent years; office resumed declining in 2025–2026 despite a temporary 2023–2024 rebound.")
+    st.markdown("**Annual REIT Price Return (%)**")
+    st.caption("Each cell is the stock price change from January 1 to December 31 for that year. REITs are rate-sensitive — they're valued on discounted future income, so rising rates compress prices regardless of sector. 2022 (highlighted) shows that rate impact: both office and industrial fell sharply when the Fed began hiking. What happened after 2022 is the diagnostic: industrial recovered as e-commerce demand supported fundamentals; office did not, pointing to structural demand loss beyond the rate cycle.")
     st.dataframe(styled, use_container_width=True)
     st.caption("Source: yfinance via Snowflake · FACT_DAILY_PRICES · Year-open to year-close price return")
 
 except Exception as e:
     st.error(f"Could not load annual return table: {e}")
 
-# ── Table B — Revenue YoY Change by Property Type ────────────────────────────
-
-try:
-    rev_yoy = run_query("""
-        WITH annual AS (
-            SELECT
-                r.property_type,
-                YEAR(f.period_date) AS fiscal_year,
-                SUM(f.revenue) AS total_revenue
-            FROM ANALYTICS.FACT_QUARTERLY_FINANCIALS f
-            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
-            WHERE r.property_type IN ('Office', 'Industrial')
-              AND YEAR(f.period_date) >= 2019
-            GROUP BY r.property_type, YEAR(f.period_date)
-        )
-        SELECT
-            property_type,
-            fiscal_year,
-            total_revenue,
-            ROUND(
-                (total_revenue / LAG(total_revenue) OVER (
-                    PARTITION BY property_type ORDER BY fiscal_year
-                ) - 1) * 100, 1
-            ) AS revenue_yoy_pct
-        FROM annual
-        ORDER BY property_type, fiscal_year
-    """)
-
-    pivot_rev = rev_yoy.pivot(index="PROPERTY_TYPE", columns="FISCAL_YEAR", values="REVENUE_YOY_PCT")
-    pivot_rev.index.name = "Sector"
-    pivot_rev.columns = [str(c) for c in pivot_rev.columns]
-
-    styled_rev = pivot_rev.style.applymap(color_returns).format("{:+.1f}%", na_rep="—")
-    st.markdown("**Aggregate Revenue Growth YoY % — Office vs. Industrial**")
-    st.dataframe(styled_rev, use_container_width=True)
-    st.caption("Source: yfinance quarterly financials via Snowflake · FACT_QUARTERLY_FINANCIALS · Confirms whether price divergence reflects real fundamentals")
-
-except Exception as e:
-    st.error(f"Could not load revenue table: {e}")
 
 # ── Chart 5 — Why Industrial Held Up ─────────────────────────────────────────
 
