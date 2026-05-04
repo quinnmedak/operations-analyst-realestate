@@ -26,24 +26,29 @@ This project demonstrates the posting's core requirements: SQL-driven descriptiv
 
 ## Pipeline Diagram
 
+**Structured Data Path**
+
 ```mermaid
-flowchart TB
-    subgraph s1 [Structured Data Path]
-        direction LR
-        A[yfinance\nFRED\nBLS] -->|extractors/*.py| B[GitHub Actions\nscheduled]
-        B --> C[Snowflake RAW\nraw tables]
-        C --> D[dbt Staging\nviews]
-        D --> E[dbt Mart\nstar schema]
-        E --> F[Streamlit\nDashboard]
+flowchart LR
+    subgraph SRC [Sources]
+        A[yfinance]
+        B[FRED API]
+        C[BLS API]
     end
+    SRC --> D[GitHub Actions] --> E[Snowflake RAW] --> F[dbt Staging] --> G[dbt Mart] --> H[Streamlit Dashboard]
+```
 
-    subgraph s2 [Knowledge Base Path]
-        direction LR
-        G[Firecrawl\nMarket Reports] -->|scrape_extract.py| H[knowledge/raw/\n24 sources]
-        H -->|Claude Code| I[knowledge/wiki/\n9 synthesis pages]
+**Knowledge Base Path**
+
+```mermaid
+flowchart LR
+    subgraph SRC2 [Sources]
+        I[JLL]
+        J[CBRE]
+        K[C&W]
+        L[Bisnow]
     end
-
-    s1 ~~~ s2
+    SRC2 --> M[Firecrawl API] --> N[knowledge/raw/] --> O[Claude Code] --> P[knowledge/wiki/]
 ```
 
 ## ERD (Star Schema)
@@ -220,7 +225,7 @@ streamlit run dashboard/app.py
 ```
 .
 ├── .github/workflows/      # GitHub Actions pipelines (scheduled extraction)
-├── extractors/             # Python scripts: reit, fred, bls, scrape
+├── extractors/             # API extractors (reit, fred, bls) + web scrape extractor (scrape)
 ├── dbt/cre_analytics/
 │   ├── models/staging/     # Cleaning, type casting, renaming per source
 │   ├── models/mart/        # Star schema: fact + dimension tables
