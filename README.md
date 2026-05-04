@@ -23,6 +23,10 @@ This project demonstrates the posting's core requirements: SQL-driven descriptiv
 | Orchestration | GitHub Actions (scheduled + manual trigger) |
 | Dashboard | Streamlit (Streamlit Community Cloud) |
 | Knowledge Base | Claude Code (scrape → synthesize → query) |
+| IDE | Cursor (AI-native code editor) |
+| AI Assistant | Claude Code + Superpowers (agentic coding, domain knowledge skills) |
+| IDE | Cursor (AI-native code editor) |
+| AI Assistant | Claude Code + Superpowers (domain knowledge skills, agentic coding) |
 
 ## Pipeline Diagram
 
@@ -144,11 +148,21 @@ erDiagram
 
 ## Key Insights
 
-**Descriptive (what happened?):** LA office vacancy reached 24.1% in Q2 2025 — 12 consecutive quarters of negative net absorption — while industrial held at sub-5% vacancy and posted its first positive YTD absorption since 2022. JLL's Property Clock places LA in "Bottoming out" for both sectors as of Q4 2025.
+**Descriptive — LA Office at 24.1% Vacancy vs. Industrial at 4.8%: The Market Split in Two**
 
-**Diagnostic (why did it happen?):** The Fed raised rates from near zero to 5.3% in 18 months. Every incremental rate increase raised the cost to finance a building purchase and raised the cost to refinance existing debt. Office absorbed both hits simultaneously: remote work reduced tenant demand while rising rates reduced buyer demand. Industrial was insulated because e-commerce growth permanently raised warehouse demand regardless of borrowing costs.
+The LA CRE market diverged on both prices and fundamentals. Industrial outperformed: vacancy held at 4.8% in Q3 2025 (well below the 7.5% national average), leasing hit its highest quarterly velocity since Q2 2021, and industrial REIT prices are up from their 2020 baseline. Office went the other direction: vacancy reached 24.1% across 212M SF with over 12 consecutive quarters of negative net absorption, and office REIT prices are down materially over the same period.
 
-**Recommendation:** LA leasing brokers should advise tenant clients to sign long-term office leases now → office landlords are offering the most aggressive concessions in a decade (free rent, large TI allowances, below-market rents) because they need cash flow to service debt on underwater assets. The window closes when rates fall enough to relieve landlord financial pressure.
+*SQL: `SELECT property_type, vacancy_rate, ytd_net_absorption_sf FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT WHERE submarket = 'LA Total'`*
+
+**Diagnostic — E-Commerce Share of Retail Jumped from 11% to 16% Post-COVID and Held: Industrial Demand Is Durable**
+
+E-commerce share of retail sales jumped from ~11% pre-COVID to ~16% and held — a permanent shift in how goods move that created lasting warehouse demand. That is why industrial vacancy stayed tight and leasing recovered even as the broader market softened. Office went the other direction: the rate hike cycle (0% → 5.33%) hit valuations hard, and while office REIT prices partially recovered in 2024 on rate-cut optimism, they fell again in 2025–2026. Office distress has not resolved.
+
+*SQL: `SELECT year, quarter, fedfunds, ecompctnsa FROM ANALYTICS.FACT_MACRO_QUARTERLY ORDER BY year, quarter`*
+
+**Actionable — Invest in Industrial for Stability: Low Vacancy, Strong Leasing, and a Confirmed Demand Driver**
+
+Industrial is the stable investment case. Vacancy at 4.8%, leasing at its highest quarterly velocity since Q2 2021, and the demand driver — e-commerce — is confirmed permanent in the dashboard data. This is not a cycle to time; the shift in how goods move already happened and is visible in the numbers. Office presents meaningful uncertainty: distress is real but the path to recovery is unclear and rate normalization alone will not resolve it. For an investor prioritizing stability, the fundamentals point to industrial. *(Wiki context: private capital drove 63.8% of SoCal industrial acquisitions in Q4 2025, moving ahead of institutional buyers — `knowledge/wiki/la-industrial-market.md`; national industrial leasing up 17.8% YOY in Q1 2026 — `knowledge/wiki/national-cre-trends.md`)*
 
 ## Live Dashboard
 
