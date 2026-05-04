@@ -224,7 +224,7 @@ except Exception as e:
 
 # ── Space Market KPI Row + Submarket Breakdown ────────────────────────────────
 
-st.markdown('<div class="sub-header">Space Market · Cushman & Wakefield MarketBeat</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Space Market · C&W (Office Q2 2025) / CBRE (Industrial Q1 2026)</div>', unsafe_allow_html=True)
 
 try:
     snapshot = run_query("""
@@ -251,6 +251,8 @@ try:
         return f"{sign}{sf / 1_000:.0f}K"
 
     def fmt_bps(bps):
+        if pd.isna(bps):
+            return "&nbsp;"
         bps = int(bps)
         arrow = "▲" if bps > 0 else "▼"
         return f"{arrow} {abs(bps)} bps YoY"
@@ -259,6 +261,8 @@ try:
         return "kpi-value-green" if int(sf) > 0 else "kpi-value-red"
 
     def bps_delta_css(bps):
+        if pd.isna(bps):
+            return "kpi-delta"
         return "kpi-delta-bad" if int(bps) > 0 else "kpi-delta-good"
 
     def context_delta_css(sf):
@@ -307,19 +311,24 @@ except Exception as e:
 
 try:
     submarkets_raw = run_query("""
+        WITH latest AS (
+            SELECT property_type, MAX(period_date) AS max_date
+            FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
+            WHERE submarket = 'LA Total'
+            GROUP BY property_type
+        )
         SELECT
-            property_type,
-            submarket,
-            vacancy_rate,
-            qtr_net_absorption_sf,
-            ytd_net_absorption_sf,
-            asking_rent_psf
-        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
-        WHERE submarket != 'LA Total'
-        ORDER BY
-            property_type,
-            CASE WHEN submarket LIKE '%TOTAL%' THEN 1 ELSE 0 END,
-            vacancy_rate DESC
+            s.property_type,
+            s.submarket,
+            s.period,
+            s.vacancy_rate,
+            s.qtr_net_absorption_sf,
+            s.ytd_net_absorption_sf,
+            s.asking_rent_psf
+        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT s
+        JOIN latest l ON s.property_type = l.property_type AND s.period_date = l.max_date
+        WHERE s.submarket != 'LA Total'
+        ORDER BY s.property_type, s.vacancy_rate DESC
     """)
 
     def fmt_sf(v):
@@ -329,9 +338,13 @@ try:
         sign = "+" if v > 0 else ""
         return f"{sign}{v:,}"
 
-    with st.expander("Submarket breakdown — Office Q2 2025 / Industrial Q3 2025"):
-        for prop_type, period_label in [("Office", "Q2 2025"), ("Industrial", "Q3 2025")]:
+    with st.expander("Submarket breakdown — latest available period per property type"):
+        for prop_type in ["Office", "Industrial"]:
             df_sub = submarkets_raw[submarkets_raw["PROPERTY_TYPE"] == prop_type].copy()
+            if df_sub.empty:
+                continue
+            period_label = df_sub["PERIOD"].iloc[0]
+            source_label = "CBRE" if prop_type == "Industrial" else "Cushman & Wakefield"
             df_display = pd.DataFrame({
                 "Submarket":              df_sub["SUBMARKET"].values,
                 "Vacancy":                df_sub["VACANCY_RATE"].apply(lambda x: f"{x:.1f}%").values,
@@ -339,9 +352,9 @@ try:
                 "YTD Absorption (SF)":    df_sub["YTD_NET_ABSORPTION_SF"].apply(fmt_sf).values,
                 "Asking Rent ($/SF/mo)":  df_sub["ASKING_RENT_PSF"].apply(lambda x: f"${x:.2f}").values,
             })
-            st.markdown(f"**{prop_type} — {period_label}**")
+            st.markdown(f"**{prop_type} — {period_label} ({source_label})**")
             st.dataframe(df_display, hide_index=True, use_container_width=True)
-        st.caption("Source: Cushman & Wakefield MarketBeat · ANALYTICS.FACT_LA_MARKET_SNAPSHOT")
+        st.caption("Source: Cushman & Wakefield (Office) · CBRE (Industrial) · ANALYTICS.FACT_LA_MARKET_SNAPSHOT")
 
 except Exception as e:
     st.error(f"Could not load submarket data: {e}")
@@ -517,75 +530,6 @@ try:
 
 except Exception as e:
     st.error(f"Could not load e-commerce chart: {e}")
-
-# ── Vacancy Trend — The Core Metric ──────────────────────────────────────────
-
-st.markdown("#### LA Vacancy by Quarter: Office vs. Industrial")
-st.caption("Vacancy is the mechanism behind the REIT divergence. Industrial held near 4.8% across all three 2025 quarters — bottoming out. Office sits at 24.1% with no recovery signal. Source: Cushman & Wakefield MarketBeat.")
-
-try:
-    vacancy_trend = run_query("""
-        SELECT property_type, period, period_date, vacancy_rate
-        FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT
-        WHERE submarket = 'LA Total'
-        ORDER BY property_type, period_date
-    """)
-
-    off_vac = vacancy_trend[vacancy_trend["PROPERTY_TYPE"] == "Office"]
-    ind_vac = vacancy_trend[vacancy_trend["PROPERTY_TYPE"] == "Industrial"]
-
-    fig_vac = make_subplots(specs=[[{"secondary_y": True}]])
-
-    fig_vac.add_trace(
-        go.Scatter(
-            x=ind_vac["PERIOD_DATE"],
-            y=ind_vac["VACANCY_RATE"],
-            name="Industrial Vacancy (%)",
-            line=dict(color="#E30613", width=2.5),
-            mode="lines+markers",
-            marker=dict(size=8),
-        ),
-        secondary_y=False,
-    )
-    fig_vac.add_trace(
-        go.Scatter(
-            x=off_vac["PERIOD_DATE"],
-            y=off_vac["VACANCY_RATE"],
-            name="Office Vacancy (%)",
-            line=dict(color="#2C2C2C", width=2.5),
-            mode="lines+markers",
-            marker=dict(size=8, symbol="square"),
-        ),
-        secondary_y=True,
-    )
-
-    fig_vac.update_layout(
-        plot_bgcolor="#FFFFFF",
-        paper_bgcolor="#FFFFFF",
-        font_color="#2C2C2C",
-        height=340,
-        margin=dict(t=20, b=20, l=0, r=0),
-        xaxis=dict(showgrid=False),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    )
-    fig_vac.update_yaxes(
-        title_text="Industrial Vacancy (%)",
-        secondary_y=False,
-        gridcolor="#F0F0F0",
-        range=[0, 10],
-    )
-    fig_vac.update_yaxes(
-        title_text="Office Vacancy (%)",
-        secondary_y=True,
-        showgrid=False,
-        range=[0, 35],
-    )
-
-    st.plotly_chart(fig_vac, use_container_width=True)
-    st.caption("Source: Cushman & Wakefield MarketBeat via Snowflake · FACT_LA_MARKET_SNAPSHOT · Industrial Q1–Q3 2025 / Office Q2 2025")
-
-except Exception as e:
-    st.error(f"Could not load vacancy chart: {e}")
 
 # ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
 
