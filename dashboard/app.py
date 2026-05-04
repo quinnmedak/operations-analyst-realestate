@@ -428,59 +428,6 @@ try:
 except Exception as e:
     st.error(f"Could not load price trend: {e}")
 
-# ── Table A — Annual REIT Return % by Ticker ──────────────────────────────────
-
-try:
-    annual_returns = run_query("""
-        WITH yearly AS (
-            SELECT
-                r.ticker,
-                r.property_type,
-                YEAR(f.date_day) AS yr,
-                FIRST_VALUE(f.close) OVER (
-                    PARTITION BY r.ticker, YEAR(f.date_day)
-                    ORDER BY f.date_day
-                ) AS yr_open,
-                LAST_VALUE(f.close) OVER (
-                    PARTITION BY r.ticker, YEAR(f.date_day)
-                    ORDER BY f.date_day
-                    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-                ) AS yr_close
-            FROM ANALYTICS.FACT_DAILY_PRICES f
-            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
-            WHERE r.property_type IN ('Office', 'Industrial')
-              AND YEAR(f.date_day) >= 2020
-            QUALIFY ROW_NUMBER() OVER (
-                PARTITION BY r.ticker, YEAR(f.date_day) ORDER BY f.date_day
-            ) = 1
-        )
-        SELECT
-            ticker,
-            property_type,
-            yr,
-            ROUND((yr_close / yr_open - 1) * 100, 1) AS annual_return_pct
-        FROM yearly
-        ORDER BY property_type, ticker, yr
-    """)
-
-    pivot = annual_returns.pivot(index=["PROPERTY_TYPE", "TICKER"], columns="YR", values="ANNUAL_RETURN_PCT")
-    pivot.index.names = ["Sector", "REIT"]
-    pivot.columns = [str(c) for c in pivot.columns]
-
-    def color_returns(val):
-        if val is None or (isinstance(val, float) and val != val):
-            return ""
-        color = "#16a34a" if val > 0 else "#dc2626"
-        return f"color: {color}; font-weight: 600"
-
-    styled = pivot.style.applymap(color_returns).format("{:+.1f}%", na_rep="—")
-    st.markdown("**Annual Return % by REIT — Office vs. Industrial**")
-    st.dataframe(styled, use_container_width=True)
-    st.caption("Source: yfinance via Snowflake · FACT_DAILY_PRICES · Year-open to year-close price return")
-
-except Exception as e:
-    st.error(f"Could not load annual return table: {e}")
-
 # ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
 
 st.markdown('<div class="section-header">The Drivers</div>', unsafe_allow_html=True)
@@ -585,6 +532,71 @@ try:
 except Exception as e:
     st.error(f"Could not load rate hike chart: {e}")
 
+# ── Table A — Annual REIT Return % by Ticker (diagnostic) ────────────────────
+
+try:
+    annual_returns = run_query("""
+        WITH yearly AS (
+            SELECT
+                r.ticker,
+                r.property_type,
+                YEAR(f.date_day) AS yr,
+                FIRST_VALUE(f.close) OVER (
+                    PARTITION BY r.ticker, YEAR(f.date_day)
+                    ORDER BY f.date_day
+                ) AS yr_open,
+                LAST_VALUE(f.close) OVER (
+                    PARTITION BY r.ticker, YEAR(f.date_day)
+                    ORDER BY f.date_day
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                ) AS yr_close
+            FROM ANALYTICS.FACT_DAILY_PRICES f
+            JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
+            WHERE r.property_type IN ('Office', 'Industrial')
+              AND YEAR(f.date_day) >= 2022
+            QUALIFY ROW_NUMBER() OVER (
+                PARTITION BY r.ticker, YEAR(f.date_day) ORDER BY f.date_day
+            ) = 1
+        )
+        SELECT
+            ticker,
+            property_type,
+            yr,
+            ROUND((yr_close / yr_open - 1) * 100, 1) AS annual_return_pct
+        FROM yearly
+        ORDER BY property_type, ticker, yr
+    """)
+
+    pivot = annual_returns.pivot(index=["PROPERTY_TYPE", "TICKER"], columns="YR", values="ANNUAL_RETURN_PCT")
+    pivot.index.names = ["Sector", "REIT"]
+    pivot.columns = [str(c) for c in pivot.columns]
+
+    def color_returns(val):
+        if val is None or (isinstance(val, float) and val != val):
+            return ""
+        color = "#16a34a" if val > 0 else "#dc2626"
+        return f"color: {color}; font-weight: 600"
+
+    def highlight_rate_hike(df):
+        styles = pd.DataFrame("", index=df.index, columns=df.columns)
+        if "2022" in styles.columns:
+            styles["2022"] = "background-color: rgba(227,6,19,0.08); border-left: 2px solid #E30613"
+        return styles
+
+    styled = (
+        pivot.style
+        .applymap(color_returns)
+        .apply(highlight_rate_hike, axis=None)
+        .format("{:+.1f}%", na_rep="—")
+    )
+    st.markdown("**Rate Hike Hit Both Sectors in 2022 — Only Industrial Recovered**")
+    st.caption("2022 column (highlighted): both sectors fell sharply when rates rose. Industrial bounced back in subsequent years; office resumed declining in 2025–2026 despite a temporary 2023–2024 rebound.")
+    st.dataframe(styled, use_container_width=True)
+    st.caption("Source: yfinance via Snowflake · FACT_DAILY_PRICES · Year-open to year-close price return")
+
+except Exception as e:
+    st.error(f"Could not load annual return table: {e}")
+
 # ── Table B — Revenue YoY Change by Property Type ────────────────────────────
 
 try:
@@ -592,13 +604,13 @@ try:
         WITH annual AS (
             SELECT
                 r.property_type,
-                f.fiscal_year,
+                YEAR(f.period_date) AS fiscal_year,
                 SUM(f.revenue) AS total_revenue
             FROM ANALYTICS.FACT_QUARTERLY_FINANCIALS f
             JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
             WHERE r.property_type IN ('Office', 'Industrial')
-              AND f.fiscal_year >= 2019
-            GROUP BY r.property_type, f.fiscal_year
+              AND YEAR(f.period_date) >= 2019
+            GROUP BY r.property_type, YEAR(f.period_date)
         )
         SELECT
             property_type,
