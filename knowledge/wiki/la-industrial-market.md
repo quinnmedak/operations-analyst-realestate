@@ -18,6 +18,8 @@
 
 Sources: Cushman & Wakefield LA Industrial MarketBeat Q1, Q2, Q3 2025; Bisnow/CBRE Q4 2025
 
+**Source conflict:** Cushman's Q3 2025 data shows YTD net absorption turning positive (+1.6M SF). CBRE's Q4 2025 data (via Bisnow, Jan 2026) states "net absorption in the area hasn't reached positive territory since the end of 2022." Both are credible research firms. The most likely explanation is different market-boundary definitions — Cushman and CBRE do not always draw LA industrial submarket lines identically. The wiki's "recovery confirmed" narrative rests on Cushman's reading; readers relying on CBRE data would reach a more pessimistic conclusion. Treat Q3 2025 as stabilization, not confirmed recovery, until a third source resolves the discrepancy.
+
 ---
 
 ## Three-Quarter Trend: Absorbing the Correction
