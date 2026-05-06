@@ -28,29 +28,64 @@ This project demonstrates the posting's core requirements: SQL-driven descriptiv
 
 ## Pipeline Diagram
 
-**Structured Data Path**
-
 ```mermaid
 flowchart LR
-    subgraph SRC [Sources]
-        A[yfinance]
-        B[FRED API]
-        C[BLS API]
+    subgraph SRC ["① Sources"]
+        S1["yfinance\n(REIT prices & financials)"]
+        S2["FRED API\n(9 macro series)"]
+        S3["BLS API\n(metro employment)"]
+        S4["JLL · CBRE\nC&W · Bisnow\n(web reports)"]
     end
-    SRC --> D[GitHub Actions] --> E[Snowflake RAW] --> F[dbt Staging] --> G[dbt Mart] --> H[Streamlit Dashboard]
-```
 
-**Knowledge Base Path**
-
-```mermaid
-flowchart LR
-    subgraph SRC2 [Sources]
-        I[JLL]
-        J[CBRE]
-        K[C&W]
-        L[Bisnow]
+    subgraph EXT ["② Extractors  ·  GitHub Actions"]
+        E1["reit_extract.py"]
+        E2["fred_extract.py\n(scheduled monthly)"]
+        E3["bls_extract.py"]
+        E4["scrape_extract.py\n+ Firecrawl API"]
     end
-    SRC2 --> M[Firecrawl API] --> N[knowledge/raw/] --> O[Claude Code] --> P[knowledge/wiki/]
+
+    subgraph RAW ["③ Raw"]
+        R1["Snowflake RAW\nREIT_DAILY_PRICES\nREIT_QUARTERLY_FINANCIALS\nFRED_OBSERVATIONS\nBLS_METRO_EMPLOYMENT"]
+        R2["knowledge/raw/\n24 .md reports"]
+        SEED["dbt seeds/\nla_marketbeat.csv\nreit_companies.csv"]
+    end
+
+    subgraph STG ["④ Staging  ·  dbt views"]
+        ST1["stg_reit_daily_prices\nstg_reit_quarterly_financials"]
+        ST2["stg_fred_observations"]
+        ST3["stg_bls_metro_employment"]
+    end
+
+    subgraph MART ["⑤ Mart  ·  dbt tables  ·  Snowflake ANALYTICS"]
+        M1["dim_reit\ndim_date"]
+        M2["fact_daily_prices\nfact_quarterly_financials"]
+        M3["fact_macro_quarterly"]
+        M4["fact_metro_employment"]
+        M5["fact_la_market_snapshot"]
+    end
+
+    subgraph OUT ["⑥ Outputs"]
+        D["Streamlit Dashboard\n(Community Cloud)"]
+        K["knowledge/wiki/\n9 synthesis pages\n(Claude Code)"]
+    end
+
+    S1 --> E1
+    S2 --> E2
+    S3 --> E3
+    S4 --> E4
+
+    E1 & E2 & E3 --> R1
+    E4 --> R2
+
+    R1 --> ST1 & ST2 & ST3
+    SEED --> M1 & M5
+
+    ST1 --> M1 & M2
+    ST2 --> M3
+    ST3 --> M4
+
+    M1 & M2 & M3 & M4 & M5 --> D
+    R2 --> K
 ```
 
 ## ERD (Star Schema)
@@ -170,7 +205,9 @@ Industrial is the stable investment case. Vacancy at 4.8%, leasing at its highes
 
 ## Knowledge Base
 
-A Claude Code-curated wiki built from 24 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions and cross-references.
+A Claude Code-curated wiki built from 27 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions and cross-references.
+
+Sources were collected via two methods: a Python script (`extractors/scrape_extract.py`) calling the Firecrawl API for recurring, automatable sources — run locally in batches and on a GitHub Actions schedule — and the Firecrawl MCP server inside Claude Code for domain exploration and one-off targeted PDFs. See `knowledge/wiki/data-collection-methodology.md` for the full breakdown and decision framework.
 
 **Query it:** Open Claude Code in this repo and ask:
 

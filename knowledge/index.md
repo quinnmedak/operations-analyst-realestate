@@ -70,6 +70,15 @@ Cross-sector scoreboard (office, industrial, retail, multifamily, life sciences)
 
 ---
 
+## Project Meta
+
+*How this knowledge base was built.*
+
+**[Data Collection Methodology](wiki/data-collection-methodology.md)**
+Python pipeline vs Firecrawl MCP in-session — which of the 27 raw sources came from each tool, when each was used, and the decision framework behind the split.
+
+---
+
 ## How to Query
 
 - "What is the current state of the LA industrial market?"
