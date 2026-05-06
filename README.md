@@ -1,6 +1,6 @@
 # LA Commercial Real Estate Analytics
 
-An end-to-end data pipeline and analytics project targeting the JLL Business Intelligence Analyst role. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 24 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
+An end-to-end data pipeline and analytics project targeting the JLL Business Intelligence Analyst role. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 27 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
 
 ## Job Posting
 
@@ -29,63 +29,59 @@ This project demonstrates the posting's core requirements: SQL-driven descriptiv
 ## Pipeline Diagram
 
 ```mermaid
-flowchart LR
-    subgraph SRC ["① Sources"]
-        S1["yfinance\n(REIT prices & financials)"]
-        S2["FRED API\n(9 macro series)"]
-        S3["BLS API\n(metro employment)"]
-        S4["JLL · CBRE\nC&W · Bisnow\n(web reports)"]
+flowchart TD
+    %% ── PATH A · Structured ─────────────────────────────────────────────────
+    subgraph APIS ["API Sources"]
+        S1["yfinance\nREIT daily prices + quarterly financials"]
+        S2["FRED API\n9 macro series: fed funds, delinquency, e-commerce…"]
+        S3["BLS API\nmetro-level employment by sector"]
     end
 
-    subgraph EXT ["② Extractors  ·  GitHub Actions"]
+    subgraph EXTS ["reit_extract.py · fred_extract.py · bls_extract.py\nGitHub Actions: fred_extract.py monthly cron · others via workflow_dispatch"]
         E1["reit_extract.py"]
-        E2["fred_extract.py\n(scheduled monthly)"]
+        E2["fred_extract.py"]
         E3["bls_extract.py"]
-        E4["scrape_extract.py\n+ Firecrawl API"]
     end
 
-    subgraph RAW ["③ Raw"]
-        R1["Snowflake RAW\nREIT_DAILY_PRICES\nREIT_QUARTERLY_FINANCIALS\nFRED_OBSERVATIONS\nBLS_METRO_EMPLOYMENT"]
-        R2["knowledge/raw/\n24 .md reports"]
-        SEED["dbt seeds/\nla_marketbeat.csv\nreit_companies.csv"]
+    subgraph SFRAW ["Snowflake · RAW schema"]
+        R1["REIT_DAILY_PRICES · REIT_QUARTERLY_FINANCIALS\nFRED_OBSERVATIONS · BLS_METRO_EMPLOYMENT"]
     end
 
-    subgraph STG ["④ Staging  ·  dbt views"]
-        ST1["stg_reit_daily_prices\nstg_reit_quarterly_financials"]
-        ST2["stg_fred_observations"]
-        ST3["stg_bls_metro_employment"]
+    subgraph DBTALL ["dbt · Snowflake ANALYTICS schema"]
+        SEED["dbt seed\nla_marketbeat.csv · reit_companies.csv"]
+        STG["dbt run — staging views\nstg_reit_* · stg_fred_observations · stg_bls_metro_employment · stg_la_marketbeat"]
+        MART["dbt run — mart tables\ndim_reit · dim_date · fact_daily_prices · fact_quarterly_financials\nfact_macro_quarterly · fact_metro_employment · fact_la_market_snapshot"]
     end
 
-    subgraph MART ["⑤ Mart  ·  dbt tables  ·  Snowflake ANALYTICS"]
-        M1["dim_reit\ndim_date"]
-        M2["fact_daily_prices\nfact_quarterly_financials"]
-        M3["fact_macro_quarterly"]
-        M4["fact_metro_employment"]
-        M5["fact_la_market_snapshot"]
+    DASH["Streamlit Dashboard\nStreamlit Community Cloud"]
+
+    %% ── PATH B · Knowledge Base ─────────────────────────────────────────────
+    subgraph WEB ["Web Sources"]
+        S4["JLL · CBRE · Cushman & Wakefield · Bisnow\nCRE market reports"]
     end
 
-    subgraph OUT ["⑥ Outputs"]
-        D["Streamlit Dashboard\n(Community Cloud)"]
-        K["knowledge/wiki/\n9 synthesis pages\n(Claude Code)"]
+    subgraph SCRAPEBOX ["scrape_extract.py + Firecrawl API\nGitHub Actions: workflow_dispatch · or run locally in batches"]
+        E4["firecrawl_scrape\nfirecrawl_crawl"]
     end
 
+    KRAW["knowledge/raw/\n27 scraped .md reports"]
+    CCSTEP["Claude Code\nread raw reports → synthesize → write wiki pages"]
+    KWIKI["knowledge/wiki/\n9 CRE synthesis pages + 2 project-context pages\nqueryable via Claude Code"]
+
+    %% ── Arrows ──────────────────────────────────────────────────────────────
     S1 --> E1
     S2 --> E2
     S3 --> E3
-    S4 --> E4
-
     E1 & E2 & E3 --> R1
-    E4 --> R2
+    R1 --> STG
+    SEED --> MART
+    STG --> MART
+    MART --> DASH
 
-    R1 --> ST1 & ST2 & ST3
-    SEED --> M1 & M5
-
-    ST1 --> M1 & M2
-    ST2 --> M3
-    ST3 --> M4
-
-    M1 & M2 & M3 & M4 & M5 --> D
-    R2 --> K
+    S4 --> E4
+    E4 --> KRAW
+    KRAW --> CCSTEP
+    CCSTEP --> KWIKI
 ```
 
 ## ERD (Star Schema)
@@ -207,6 +203,8 @@ Industrial is the stable investment case. Vacancy at 4.8%, leasing at its highes
 
 A Claude Code-curated wiki built from 27 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions and cross-references.
 
+The 11 wiki pages break into two categories: 9 CRE market synthesis pages (office, industrial, retail/multifamily, capital markets, macro environment, national trends, overview, life sciences, tenant landscape) and 2 project-context pages added per course requirements (`project-role-alignment.md` mapping every project component to the JLL BI Analyst job spec, and `data-collection-methodology.md` documenting the scrape pipeline decision framework).
+
 Sources were collected via two methods: a Python script (`extractors/scrape_extract.py`) calling the Firecrawl API for recurring, automatable sources — run locally in batches and on a GitHub Actions schedule — and the Firecrawl MCP server inside Claude Code for domain exploration and one-off targeted PDFs. See `knowledge/wiki/data-collection-methodology.md` for the full breakdown and decision framework.
 
 **Query it:** Open Claude Code in this repo and ask:
@@ -283,8 +281,8 @@ streamlit run dashboard/app.py
 │   └── seeds/              # Static MarketBeat data (la_marketbeat.csv)
 ├── dashboard/              # Streamlit app (app.py)
 ├── knowledge/
-│   ├── raw/                # 24 scraped market reports
-│   └── wiki/               # 9 Claude Code-generated synthesis pages
+│   ├── raw/                # 27 scraped market reports
+│   └── wiki/               # 11 Claude Code-generated synthesis pages
 ├── docs/                   # Proposal, job posting, specs, plans, slides
 ├── .gitignore
 ├── CLAUDE.md               # Project context for Claude Code
