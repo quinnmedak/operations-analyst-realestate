@@ -72,7 +72,10 @@ Cross-sector scoreboard (office, industrial, retail, multifamily, life sciences)
 
 ## Project Meta
 
-*How this knowledge base was built.*
+*How this knowledge base was built and how it maps to the target role.*
+
+**[Project–Role Alignment](wiki/project-role-alignment.md)**
+Maps every project component to the JLL BI Analyst job requirements; explains the internal stakeholder chain (brokers, leasing teams, research); frames the Streamlit vs. Power BI tool gap; notes what the project intentionally does not cover and why.
 
 **[Data Collection Methodology](wiki/data-collection-methodology.md)**
 Python pipeline vs Firecrawl MCP in-session — which of the 27 raw sources came from each tool, when each was used, and the decision framework behind the split.
