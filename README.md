@@ -1,6 +1,6 @@
 # LA Commercial Real Estate Analytics
 
-An end-to-end data pipeline and analytics project targeting the JLL Business Intelligence Analyst role. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 27 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
+An end-to-end data pipeline and analytics project targeting the JLL Business Intelligence Analyst role. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 28 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
 
 ## Job Posting
 
@@ -64,7 +64,7 @@ flowchart TD
         E4["firecrawl_scrape\nfirecrawl_crawl"]
     end
 
-    KRAW["knowledge/raw/\n27 scraped .md reports"]
+    KRAW["knowledge/raw/\n28 scraped .md reports"]
     CCSTEP["Claude Code\nread raw reports → synthesize → write wiki pages"]
     KWIKI["knowledge/wiki/\n9 CRE synthesis pages + 2 project-context pages\nqueryable via Claude Code"]
 
@@ -201,7 +201,7 @@ Industrial is the stable investment case. Vacancy at 4.8%, leasing at its highes
 
 ## Knowledge Base
 
-A Claude Code-curated wiki built from 27 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions and cross-references.
+A Claude Code-curated wiki built from 28 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions and cross-references.
 
 The 11 wiki pages break into two categories: 9 CRE market synthesis pages (office, industrial, retail/multifamily, capital markets, macro environment, national trends, overview, life sciences, tenant landscape) and 2 project-context pages added per course requirements (`project-role-alignment.md` mapping every project component to the JLL BI Analyst job spec, and `data-collection-methodology.md` documenting the scrape pipeline decision framework).
 
@@ -281,7 +281,7 @@ streamlit run dashboard/app.py
 │   └── seeds/              # Static MarketBeat data (la_marketbeat.csv)
 ├── dashboard/              # Streamlit app (app.py)
 ├── knowledge/
-│   ├── raw/                # 27 scraped market reports
+│   ├── raw/                # 28 scraped market reports
 │   └── wiki/               # 11 Claude Code-generated synthesis pages
 ├── docs/                   # Proposal, job posting, specs, plans, slides
 ├── .gitignore

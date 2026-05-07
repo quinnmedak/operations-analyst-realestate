@@ -19,7 +19,7 @@ JLL's business (Fortune 500, $23.4B revenue, 112,000+ employees), service lines,
 *Start here for questions about specific property types in the Los Angeles metro.*
 
 **[LA Office Market](wiki/la-office-market.md)**
-24.1% overall vacancy Q2 2025 across 8 submarkets; DTLA at 32.1% while LA West is the only submarket with positive net absorption; trophy bifurcation from secondary space; 14M+ SF leased in full-year 2025.
+23.6% overall vacancy Q1 2026 (C&W full report); LA West — previously the only bright spot — turned negative at -545K SF; DTLA Non-CBD highest vacancy at 33.2%; market-wide absorption -1.1M SF confirming continued structural decline; trophy bifurcation persists; 14M+ SF leased in full-year 2025.
 → Cross-references: [National CRE Trends](#national-cre-and-cross-sector-context) for LA vs. SF/NYC/Dallas benchmarks; [Capital Markets](#investment--capital-markets) for Sunset Media Center value-add deal; [Macro Environment](#macro--demand-drivers) for employment → office demand link.
 
 **[LA Industrial Market](wiki/la-industrial-market.md)**
@@ -110,7 +110,7 @@ Python pipeline vs Firecrawl MCP in-session — which of the 27 raw sources came
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | JLL                 | US Office Q1 2026, US Industrial Q1 2026, LA Office Q1 2026 stub, LA Industrial Q1 2026 stub, LA Retail Q2 2025, Life Sciences Outlook, Lab Market Newsroom, Industrial Tenant Demand Study, US Retail Q4 2025, Global Real Estate Perspective Feb 2026 |
 | CBRE                | US Market Outlook 2026, Capital Markets Outlook 2026, Cap Rate Survey H1 2025, Cap Rate Survey H2 2025, Multifamily Outlook 2026, Retail Outlook 2026, Q1 2026 US Multifamily Figures, LA Industrial Q1 2026                                                                             |
-| Cushman & Wakefield | LA Office Q2 2025 (full submarket table), LA Industrial Q1/Q2/Q3 2025, national context, Greater LA MarketBeats Q1 2026 hub                                                                                                                                                                 |
+| Cushman & Wakefield | LA Office Q1 2026 (full report), LA Office Q2 2025 (full submarket table), LA Industrial Q1/Q2/Q3 2025, national context, Greater LA MarketBeats Q1 2026 hub                                                                                                                                                                 |
 | Bisnow              | LA Capital Markets rebound (Feb 2026), SoCal Industrial Q4 2025, Canvas Worldwide El Segundo, Sunset Media Center Hollywood, Reframe Studios adaptive reuse                                                                                             |
 
 
