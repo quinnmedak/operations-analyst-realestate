@@ -1,48 +1,64 @@
 # LA Office Market
 
-**Last updated:** April 2026  
-**Primary sources:** Cushman & Wakefield LA Office Q2 2025, JLL US Office Q1 2026, JLL Global Perspective Feb 2026, Bisnow (Sunset Media Center, LA capital markets), C&W Greater LA MarketBeat
+**Last updated:** May 2026  
+**Primary sources:** Cushman & Wakefield LA Office Q1 2026 (most recent), Cushman & Wakefield LA Office Q2 2025, JLL US Office Q1 2026, JLL Global Perspective Feb 2026, Bisnow (Sunset Media Center, LA capital markets)
 
 ---
 
-## Market Snapshot (Q2 2025)
+## Market Snapshot (Q1 2026 — most recent)
 
 | Metric | Value | Context |
 |---|---|---|
-| Overall vacancy | 24.1% | +10 bps QOQ, +100 bps YOY |
-| Net absorption (Q2) | -129,639 SF | 12th consecutive quarter negative |
-| YTD net absorption | -560,688 SF | — |
-| Asking rent (all classes) | $3.64/SF/mo | Full service |
-| Asking rent (Class A) | $3.93/SF/mo | — |
-| Leasing activity (Q2) | 1.4M SF | -50% QOQ, -35.9% YOY |
+| Overall vacancy | 23.6% | +60 bps QOQ, +20 bps YOY |
+| QTR net absorption | -1,134,507 SF | Move-outs continue to outpace leasing |
+| YTD net absorption | -1,134,507 SF | — |
+| Asking rent (all classes) | $3.62/SF/mo | Full service gross; +1.3% QOQ, +0.7% YOY |
+| Asking rent (Class A) | $3.91/SF/mo | +1.2% QOQ, +1.6% YOY |
+| Leasing activity (Q1) | 2.2M SF | -20.1% QOQ, -23.6% YOY |
 | Full-year 2025 leasing | 14M+ SF | Post-pandemic high (Savills via Bisnow) |
 
-Q2 2025 data from Cushman & Wakefield LA Office Q2 2025. Full-year figure from Bisnow Sunset Media Center story (Jan 2026).
+Source: Cushman & Wakefield LA Office MarketBeat Q1 2026 (`manual-28-cushman-wakefield-la-office-marketbeat-q1-2026.md`)
+
+**Prior period (Q2 2025):** Vacancy 24.1%, absorption -129,639 SF (12th consecutive negative quarter), asking rent $3.64/SF. Source: `04-cushman-wakefield-la-office-marketbeat-q2-2025.md`
 
 ---
 
 ## Submarket Breakdown
 
-The 24.1% marketwide vacancy obscures a wide spread across LA's eight submarkets. Two patterns stand out: DTLA is structurally oversupplied, and LA West is the one submarket actively absorbing space.
+### Q1 2026 (Cushman & Wakefield — most recent)
 
 | Submarket | Inventory (SF) | Vacancy | QTR Net Absorption (SF) | YTD Net Absorption (SF) | Avg Asking Rent |
 |---|---|---|---|---|---|
-| Downtown CBD | 26,429,032 | 32.1% | -159,430 | -289,651 | $3.93 |
-| Downtown Non-CBD | 12,844,141 | 32.8% | -92,286 | -176,846 | $3.78 |
-| Mid-Wilshire | 12,897,137 | 27.1% | -23,439 | -31,015 | $3.02 |
-| **LA West** | 58,646,583 | 24.0% | **+264,295** | +38,735 | $5.14 |
-| LA North | 30,463,499 | 20.5% | +21,586 | -149,845 | $2.52 |
-| LA South | 32,158,852 | 21.4% | -169,554 | +66,344 | $3.07 |
-| Tri-Cities | 26,546,741 | 26.1% | +2,117 | -56,415 | $3.61 |
-| San Gabriel Valley | 12,308,421 | 7.1% | +27,072 | +38,005 | $2.51 |
+| Downtown CBD | 26,429,032 | 31.7% | -94,417 | -94,417 | $3.92 |
+| Downtown Non-CBD | 12,756,631 | 33.2% | -176,504 | -176,504 | $3.51 |
+| Mid-Wilshire | 12,263,591 | 29.4% | -35,513 | -35,513 | $3.14 |
+| **LA West** | 58,899,487 | 23.1% | **-545,136** | -545,136 | $4.93 |
+| LA North | 30,091,879 | 19.5% | -238,498 | -238,498 | $2.51 |
+| LA South | 31,904,839 | 20.2% | +62,803 | +62,803 | $3.10 |
+| Tri-Cities | 26,999,052 | 25.2% | -83,531 | -83,531 | $3.61 |
+| San Gabriel Valley | 12,136,998 | 8.4% | -23,711 | -23,711 | $2.58 |
+| **LA Totals** | **211,481,509** | **23.6%** | **-1,134,507** | **-1,134,507** | **$3.62** |
 
-Source: Cushman & Wakefield LA Office Q2 2025
+Source: `manual-28-cushman-wakefield-la-office-marketbeat-q1-2026.md`
 
-**What the numbers say:** LA West is the only submarket with both positive quarterly and positive YTD net absorption. Its 24.0% vacancy is marketwide average, but it is the only submarket actively drawing tenants in meaningful volume — 1.27M SF of YTD leasing, more than the rest of the market combined. The premium asking rent ($5.14/SF, Class A at $5.39) confirms it is the Westside premium market, not a discount story.
+**What the Q1 2026 numbers say:** LA West — the only bright spot in Q2 2025 with +264K SF absorption — turned sharply negative in Q1 2026 at -545K SF, the single largest drag on the market. This is the clearest signal yet that the office decline is broadening: even the premium Westside submarket is losing occupancy. LA South is the sole positive submarket (+62,803 SF), driven by isolated tenant activity in El Segundo (Faraday, 99,600 SF).
 
-DTLA (CBD + Non-CBD combined) sits at 32%+ vacancy across 39M SF — the largest and worst-performing concentration in the market. The DTLA bifurcation shows up in the key transactions: Oaktree Capital signed a 220K SF new lease at 555 S. Flower (Financial District), but that single deal is the exception in a sea of ongoing vacancy. The 601 S. Figueroa $210M sale — 52-story tower, repositioning play — tells the same story: buyers are interested in DTLA but only at reset pricing.
+Downtown continues to hemorrhage — Non-CBD at 33.2% vacancy is now the highest of any submarket. San Gabriel Valley holds at 8.4%, the lowest vacancy in the market but in a small (12.1M SF) suburban submarket not representative of broader trends.
 
-San Gabriel Valley's 7.1% vacancy looks like an outlier. It is, but context matters: its 12.3M SF inventory is roughly half of one DTLA submarket. The low vacancy reflects limited supply and lower-rent suburban demand, not a signal that Southeast LA is the next Westside.
+### Prior Period Reference (Q2 2025)
+
+| Submarket | Vacancy | QTR Net Absorption (SF) | Avg Asking Rent |
+|---|---|---|---|
+| Downtown CBD | 32.1% | -159,430 | $3.93 |
+| Downtown Non-CBD | 32.8% | -92,286 | $3.78 |
+| Mid-Wilshire | 27.1% | -23,439 | $3.02 |
+| LA West | 24.0% | **+264,295** | $5.14 |
+| LA North | 20.5% | +21,586 | $2.52 |
+| LA South | 21.4% | -169,554 | $3.07 |
+| Tri-Cities | 26.1% | +2,117 | $3.61 |
+| San Gabriel Valley | 7.1% | +27,072 | $2.51 |
+
+Source: `04-cushman-wakefield-la-office-marketbeat-q2-2025.md`
 
 ---
 
@@ -108,20 +124,11 @@ Nationally, JLL US Office Q1 2026 shows positive net absorption for the third co
 
 ---
 
-## Q1 2026 Signal (Limited)
-
-Cushman & Wakefield's Greater LA MarketBeat landing page (April 21, 2026) characterizes Q1 2026 LA office as: "The LA office market remained under pressure in Q1 2026, as elevated vacancy and continued occupancy losses weighed on fundamentals." This directional signal is consistent with the Q2 2025 baseline — no evidence of recovery through early 2026. Full submarket data for Q1 2026 is not available in this knowledge base (the C&W Q1 2026 LA Office PDF returned a 403 error when scraped).
-
-Source: `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md`
-
----
-
 ## Sources
 
-- `04-cushman-wakefield-la-office-marketbeat-q2-2025.md` — Cushman & Wakefield LA Office MarketBeat Q2 2025 (primary data source: submarket table, key transactions, employment)
-- `01-jll-us-office-market-dynamics-q1-2026.md` — JLL US Office Market Dynamics Q1 2026
-- `2026-04-28_23-17-26_www-jll-com-en-us-insights-market-dynamics-los-angeles-office.md` — JLL LA Office Q1 2026 (stub — gated page, confirms report exists)
+- `manual-28-cushman-wakefield-la-office-marketbeat-q1-2026.md` — Cushman & Wakefield LA Office MarketBeat Q1 2026 (primary — full submarket table, economic overview, capital markets)
+- `04-cushman-wakefield-la-office-marketbeat-q2-2025.md` — Cushman & Wakefield LA Office MarketBeat Q2 2025 (prior period reference)
+- `explore-01-jll-us-office-market-dynamics-q1-2026.md` — JLL US Office Market Dynamics Q1 2026
 - `21-bisnow-la-office-kilroy-sunset-media-center.md` — Bisnow: Sunset Media Center sale, 14M SF 2025 leasing figure
 - `11-bisnow-la-capital-markets-rebound-2025.md` — Bisnow: LA capital markets rebound, owner-user activity, private capital dominance
-- `03-cushman-wakefield-greater-los-angeles-marketbeats.md` — C&W Greater LA MarketBeat (Q1 2026 page summary)
 - `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026 (Property Clock, city comparison data)

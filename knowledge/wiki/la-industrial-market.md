@@ -166,7 +166,7 @@ Anduril — a defense technology company — anchors the aerospace/defense deman
 
 San Pedro Bay (Ports of LA and Long Beach) handled 20M+ TEUs in 2025 (+0.9% YOY). Port of LA: 10.2M TEUs (3rd busiest calendar year in its 118-year history). Port of Long Beach: 9.9M TEUs (all-time record). Port throughput remains the structural demand anchor for South Bay and Central LA industrial.
 
-Source: `27-cbre-la-industrial-marketbeat-q1-2026.md`
+Source: `manual-27-cbre-la-industrial-marketbeat-q1-2026.md`
 
 ---
 
@@ -175,7 +175,7 @@ Source: `27-cbre-la-industrial-marketbeat-q1-2026.md`
 - `08-cushman-wakefield-la-industrial-marketbeat-q1-2025.md` — C&W LA Industrial Q1 2025
 - `09-cushman-wakefield-la-industrial-marketbeat-q2-2025.md` — C&W LA Industrial Q2 2025
 - `10-cushman-wakefield-la-industrial-marketbeat-q3-2025.md` — C&W LA Industrial Q3 2025
-- `27-cbre-la-industrial-marketbeat-q1-2026.md` — CBRE LA Industrial Q1 2026 (full report — primary Q1 2026 source)
+- `manual-27-cbre-la-industrial-marketbeat-q1-2026.md` — CBRE LA Industrial Q1 2026 (full report — primary Q1 2026 source)
 - `26-cushman-wakefield-la-marketbeats-hub-q1-2026.md` — C&W Greater LA MarketBeats hub Q1 2026 (qualitative snippet only)
 - `2026-04-28_23-17-26_www-jll-com-en-us-insights-market-dynamics-los-angeles-industrial.md` — JLL LA Industrial Q1 2026 (stub — gated)
 - `16-jll-industrial-market-statistics-trends.md` — JLL US Industrial Q1 2026

@@ -75,6 +75,6 @@ This knowledge base synthesizes scraped CRE market research from JLL, CBRE, Cush
 ## Sources
 
 - `23-jll-global-market-perspectives.md` — JLL Global Real Estate Perspective Feb 2026 (company profile, Property Clock, global investment data)
-- `01-jll-us-office-market-dynamics-q1-2026.md` — JLL US Office Market Dynamics Q1 2026
+- `explore-01-jll-us-office-market-dynamics-q1-2026.md` — JLL US Office Market Dynamics Q1 2026
 - `16-jll-industrial-market-statistics-trends.md` — JLL US Industrial Market Dynamics Q1 2026
-- `02-cbre-us-real-estate-market-outlook-2026.md` — CBRE US Real Estate Market Outlook 2026
+- `explore-02-cbre-us-real-estate-market-outlook-2026.md` — CBRE US Real Estate Market Outlook 2026

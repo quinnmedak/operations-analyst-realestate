@@ -93,7 +93,7 @@ CBRE's 2026 multifamily outlook is structurally positive long-term but operation
 
 ## Sources
 
-- `24-jll-la-retail-market-dynamics-q2-2025.md` — JLL LA Retail Market Dynamics Q2 2025 (PDF — vacancy, absorption, rent, submarket breakdown)
+- `manual-24-jll-la-retail-market-dynamics-q2-2025.md` — JLL LA Retail Market Dynamics Q2 2025 (PDF — vacancy, absorption, rent, submarket breakdown)
 - `22-jll-us-retail-market-dynamics.md` — JLL US Retail Market Dynamics Q4 2025
 - `14-cbre-us-real-estate-outlook-2026-retail.md` — CBRE US Market Outlook 2026: Retail chapter
 - `13-cbre-us-real-estate-outlook-2026-multifamily.md` — CBRE US Market Outlook 2026: Multifamily chapter
