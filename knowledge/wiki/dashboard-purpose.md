@@ -86,6 +86,8 @@ Fixed at 2020 baseline to preserve the pre-hike index point. Annotations ("Fed b
 
 Delinquency is rising but remains well below the 2010 GFC peak. This chart contextualizes the stress: elevated, not systemic. It is *not* a driver of the office/industrial divergence — it is background context for investors evaluating credit risk in the current market. The sidebar slider lets viewers zoom in on recent quarters or pull back to benchmark against prior downturns.
 
+**Why this chart earns its place in the narrative:** After the divergence story — office down, industrial up, structural not cyclical — the natural next question from any investor is: "OK, but are loans going bad? Is this heading toward a systemic blowup?" The delinquency chart answers that question before it's asked. Without it, the dashboard leaves a gap that a stakeholder will fill with anxiety. With it, you've preempted the concern and given the answer: stressed but not systemic, well below GFC levels. The section's position between The Drivers and Outlook is intentional — it closes off the risk question so the viewer can move into the forward-looking outlook with that concern resolved.
+
 The GFC peak annotation and current-level annotation locate the actual max and latest values dynamically — they update as new FRED data comes in. Data: FRED DRCRELEXFACBS via `FACT_MACRO_QUARTERLY`, updated monthly.
 
 ---
@@ -97,6 +99,8 @@ The GFC peak annotation and current-level annotation locate the actual max and l
 **Question:** How is employment in office-using industries growing in LA compared to other major markets, and what does that imply for future leasing demand?
 
 Employment in Financial Activities + Professional & Business Services is the most reliable leading indicator for office leasing. LA's office-using employment has been flat since 2020 while Dallas is up ~20%. When LA's line turns upward, leasing demand typically follows in 6–18 months.
+
+**Why this chart is the right close to the narrative:** Section 3 diagnosed that office is underperforming for structural reasons — hybrid work reducing demand, not a rate cycle that will self-correct. That diagnosis naturally raises the follow-up: *if and when will office recover?* This chart is the answer. Because the demand driver for office leasing is headcount in office-using industries, this employment line is the primary signal to watch for a recovery. When it inflects upward in LA, leasing demand follows with a lag. The fact that LA's line has been flat while Dallas grew 20% confirms the structural diagnosis made in Section 3 — and tells you the recovery signal hasn't appeared yet. This is why the filter stays on office-using sectors only: industrial's demand driver is e-commerce (goods movement), not headcount, so industrial employment would add noise without insight. The outlook chart completes the story — you know what happened, you know why, and now you know what to watch.
 
 The interactive multiselect lets viewers benchmark LA against any metro in the BLS dataset. This is the most forward-looking panel in the dashboard — it tells you what to watch, not just what happened.
 
@@ -110,7 +114,7 @@ Data: BLS Metro Employment via `FACT_METRO_EMPLOYMENT`, updated monthly.
 |---|---|
 | Descriptive analytics (what happened?) | KPI cards, Space Market snapshot, REIT Price Trend |
 | Diagnostic analytics (why did it happen?) | E-Commerce chart, Rate Hike chart |
-| Interactive element | Sidebar slider (delinquency start year), Metro multiselect (employment) |
+| Interactive element | Delinquency Chart - Sidebar slider (delinquency start year), Metro multiselect (employment) |
 | Deployed public URL | https://commercial-real-estate-analytics.streamlit.app/ |
 
 ---

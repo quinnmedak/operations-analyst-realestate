@@ -80,6 +80,9 @@ Maps every project component to the JLL BI Analyst job requirements; explains th
 **[Data Collection Methodology](wiki/data-collection-methodology.md)**
 Python pipeline vs Firecrawl MCP in-session — which of the 27 raw sources came from each tool, when each was used, and the decision framework behind the split.
 
+**[Data Model: Star Schema & dbt](wiki/data-model.md)**
+What dbt is and why it's used, how the star schema is structured, what each fact and dimension table measures, why some fact tables don't join to dimensions, and how the staging layer and schema macro work.
+
 **[Job Posting Relevance](wiki/job-posting-relevance.md)**
 Maps project deliverables to the JLL BI Analyst posting requirements; identifies internal and end-client stakeholders (capital markets brokers, PE funds, institutional investors); documents the selected PE fund stakeholder and how the descriptive→diagnostic→action framework serves them.
 

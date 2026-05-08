@@ -68,6 +68,27 @@ PDFs that could not be retrieved by the Python scraper — either gated behind a
 
 ---
 
+## Automation Design Decisions
+
+These decisions were made implicitly as the pipeline was built rather than planned upfront. Documented here as the reasoning behind what the workflow does.
+
+**Run cadence — quarterly, not monthly**
+The scrape workflow runs on the 1st of January, April, July, and October at 7am UTC. That matches the CRE industry publication cycle — C&W, CBRE, and JLL all release their MarketBeat and outlook reports quarterly. Running monthly would mostly pull duplicates. Contrast with FRED and BLS, which run monthly because macro indicators update on a monthly release schedule.
+
+**Manual vs. scheduled triggers**
+Both `schedule` and `workflow_dispatch` are enabled. The scheduled run handles routine quarterly corpus refresh. `workflow_dispatch` exists for mid-quarter pulls — a significant Bisnow deal article drops in February, you want it ingested before the next quarterly run. In practice, the bulk of the 27 raw sources were collected via local runs during the build phase; the scheduled trigger is the maintenance mechanism for keeping the corpus current going forward.
+
+**What counts as a successful run**
+The git commit step is the implicit success signal: `git diff --cached --quiet || git commit` — it only commits if new files were actually written to `knowledge/raw/`. If Firecrawl returned the same URLs as last quarter and nothing new was scraped, no commit fires. That no-op case is technically not a failure but it is silent — there is no alert if the run completes and produces zero new files.
+
+**What to do on failure**
+No explicit handling beyond GitHub Actions' default: if the Python script exits non-zero, the run turns red in the Actions tab. No retry, no notification, no fallback. The `WARNING: no markdown` log messages printed by the extractor do not fail the run — they are informational stdout only. For a portfolio project, manual inspection of the Actions tab after each quarterly run is sufficient.
+
+**Where credentials live**
+GitHub Actions secrets injected as environment variables at runtime (`${{ secrets.FIRECRAWL_API_KEY }}` etc.) — never in the workflow YAML or anywhere in the repo. Local development uses a `.env` file listed in `.gitignore`. This pattern is consistent across all four extractors.
+
+---
+
 ## How to Identify Which Tool Produced a File
 
 - **Python-generated (`NN-slug`):** YAML frontmatter with `title`, `url`, `scraped_at` fields; no filename prefix
