@@ -133,7 +133,7 @@ with st.sidebar:
     st.markdown("### LA CRE Analytics")
     st.caption("JLL Business Intelligence · Commercial Real Estate")
     st.divider()
-    start_year = st.slider("Start Year", 2008, 2024, 2020)
+    start_year = st.slider("CRE Delinquency — Start Year", 2008, 2024, 2008)
     st.divider()
     st.caption("Data: yfinance · FRED · BLS")
 
@@ -224,7 +224,7 @@ except Exception as e:
 
 # ── Space Market KPI Row + Submarket Breakdown ────────────────────────────────
 
-st.markdown('<div class="sub-header">Space Market · C&W (Office Q2 2025) / CBRE (Industrial Q1 2026)</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Space Market · C&W (Office Q1 2026) / CBRE (Industrial Q1 2026)</div>', unsafe_allow_html=True)
 
 try:
     snapshot = run_query("""
@@ -534,7 +534,7 @@ except Exception as e:
 # ── Chart 2 — Why Did Office Crash? ──────────────────────────────────────────
 
 st.markdown("#### Fed Rate Hike Cycle and Office REIT Valuations")
-st.caption("The 2022–2023 hike accelerated office decline. But rates have since eased — and office hasn't recovered. That persistence points to structural demand loss from hybrid work, not a rate cycle that will self-correct.")
+st.caption("The 2022–2023 hike accelerated office decline. Rates have since eased — and office hasn't recovered. That persistence points to structural demand loss from hybrid work, not a rate cycle that will self-correct. Chart fixed at 2020 to preserve the pre-hike baseline.")
 
 try:
     rates = run_query(f"""
@@ -543,7 +543,7 @@ try:
             fedfunds
         FROM ANALYTICS.FACT_MACRO_QUARTERLY
         WHERE fedfunds IS NOT NULL
-          AND year >= {start_year}
+          AND year >= 2020
         ORDER BY year, quarter
     """)
 
@@ -555,7 +555,7 @@ try:
             FROM ANALYTICS.FACT_DAILY_PRICES f
             JOIN ANALYTICS.DIM_REIT r ON f.ticker = r.ticker
             WHERE r.property_type = 'Office'
-              AND YEAR(f.date_day) >= {start_year}
+              AND YEAR(f.date_day) >= 2020
             GROUP BY 1
         )
         SELECT
@@ -633,10 +633,16 @@ try:
 except Exception as e:
     st.error(f"Could not load rate hike chart: {e}")
 
-# ── Chart 6 — CRE Loan Delinquency Rate (moved last — context/reassurance) ───
+# ── Credit Environment ────────────────────────────────────────────────────────
 
-st.markdown("#### CRE Loan Delinquency Rate (2008–Present)")
-st.caption("Delinquency is rising but remains less than one-quarter of the 2010 peak. The lending market is under pressure, not in crisis.")
+st.divider()
+
+st.markdown('<div class="section-header">Credit Environment</div>', unsafe_allow_html=True)
+
+# ── Chart 6 — CRE Loan Delinquency Rate ──────────────────────────────────────
+
+st.markdown("#### CRE Loan Delinquency Rate")
+st.caption("Use the sidebar slider to zoom in on recent quarters or pull back to compare against past downturns.")
 
 try:
     delinquency_df = run_query(f"""
