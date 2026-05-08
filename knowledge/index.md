@@ -80,6 +80,15 @@ Maps every project component to the JLL BI Analyst job requirements; explains th
 **[Data Collection Methodology](wiki/data-collection-methodology.md)**
 Python pipeline vs Firecrawl MCP in-session — which of the 27 raw sources came from each tool, when each was used, and the decision framework behind the split.
 
+**[Job Posting Relevance](wiki/job-posting-relevance.md)**
+Maps project deliverables to the JLL BI Analyst posting requirements; identifies internal and end-client stakeholders (capital markets brokers, PE funds, institutional investors); documents the selected PE fund stakeholder and how the descriptive→diagnostic→action framework serves them.
+
+**[Dashboard Purpose & Panel Guide](wiki/dashboard-purpose.md)**
+Maps each dashboard panel to the open-ended question it answers, its data source, and whether it updates automatically; explains the descriptive→diagnostic→context→outlook section structure and project requirements mapping.
+
+**[Stakeholder Brief — SoCal Industrial Investment Recommendation](wiki/stakeholder-brief.md)**
+Full brief for the slide deck: stakeholder rationale, verified descriptive and diagnostic stats (sourced to Snowflake and wiki), and a specific $150M recommendation with defended 44% income upside calculation.
+
 ---
 
 ## How to Query
