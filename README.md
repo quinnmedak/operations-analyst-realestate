@@ -82,6 +82,9 @@ flowchart TD
     E4 --> KRAW
     KRAW --> CCSTEP
     CCSTEP --> KWIKI
+
+    style STG min-width:520px
+    style MART min-width:520px
 ```
 
 ## ERD (Star Schema)
