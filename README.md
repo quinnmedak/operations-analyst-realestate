@@ -38,9 +38,9 @@ flowchart TD
     end
 
     subgraph EXTS ["API Source Extractors · GitHub Actions"]
-        E1["reit_extract.py\nworkflow_dispatch"]
+        E1["reit_extract.py\nweekly cron"]
         E2["fred_extract.py\nmonthly cron"]
-        E3["bls_extract.py\nworkflow_dispatch"]
+        E3["bls_extract.py\nmonthly cron"]
     end
 
     subgraph SFRAW ["Snowflake · RAW schema"]
@@ -61,7 +61,7 @@ flowchart TD
     end
 
     subgraph SCRAPEBOX ["Firecrawl Web Scrape · GitHub Actions"]
-        E4["scrape_extract.py\nworkflow_dispatch"]
+        E4["scrape_extract.py\nquarterly cron"]
     end
 
     KRAW["knowledge/raw/\n28 scraped .md reports"]
