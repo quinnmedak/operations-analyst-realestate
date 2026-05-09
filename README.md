@@ -37,20 +37,20 @@ flowchart TD
         S3["BLS API\nmetro-level employment by sector"]
     end
 
-    subgraph EXTS ["reit_extract.py · fred_extract.py · bls_extract.py\nGitHub Actions: fred_extract.py monthly cron · others via workflow_dispatch"]
-        E1["reit_extract.py"]
-        E2["fred_extract.py"]
-        E3["bls_extract.py"]
+    subgraph EXTS ["API Source Extractors · GitHub Actions"]
+        E1["reit_extract.py\nworkflow_dispatch"]
+        E2["fred_extract.py\nmonthly cron"]
+        E3["bls_extract.py\nworkflow_dispatch"]
     end
 
     subgraph SFRAW ["Snowflake · RAW schema"]
-        R1["REIT_DAILY_PRICES · REIT_QUARTERLY_FINANCIALS\nFRED_OBSERVATIONS · BLS_METRO_EMPLOYMENT"]
+        R1["REIT_DAILY_PRICES\nREIT_QUARTERLY_FINANCIALS\nFRED_OBSERVATIONS\nBLS_METRO_EMPLOYMENT"]
     end
 
     subgraph DBTALL ["dbt · Snowflake ANALYTICS schema"]
-        SEED["dbt seed\nla_marketbeat.csv · reit_companies.csv"]
-        STG["dbt run — staging views\nstg_reit_* · stg_fred_observations · stg_bls_metro_employment · stg_la_marketbeat"]
-        MART["dbt run — mart tables\ndim_reit · dim_date · fact_daily_prices · fact_quarterly_financials\nfact_macro_quarterly · fact_metro_employment · fact_la_market_snapshot"]
+        SEED["Seeds\nla_marketbeat.csv · reit_companies.csv"]
+        STG["Staging Views\nstg_reit_* · stg_fred_observations\nstg_bls_metro_employment · stg_la_marketbeat"]
+        MART["Mart Tables\ndim_reit · dim_date · fact_daily_prices\nfact_quarterly_financials · fact_macro_quarterly\nfact_metro_employment · fact_la_market_snapshot"]
     end
 
     DASH["Streamlit Dashboard\nStreamlit Community Cloud"]
@@ -60,13 +60,13 @@ flowchart TD
         S4["JLL · CBRE · Cushman & Wakefield · Bisnow\nCRE market reports"]
     end
 
-    subgraph SCRAPEBOX ["scrape_extract.py + Firecrawl API\nGitHub Actions: workflow_dispatch · or run locally in batches"]
-        E4["firecrawl_scrape\nfirecrawl_crawl"]
+    subgraph SCRAPEBOX ["Firecrawl Web Scrape · GitHub Actions"]
+        E4["scrape_extract.py\nworkflow_dispatch"]
     end
 
     KRAW["knowledge/raw/\n28 scraped .md reports"]
     CCSTEP["Claude Code\nread raw reports → synthesize → write wiki pages"]
-    KWIKI["knowledge/wiki/\n9 CRE synthesis pages + 2 project-context pages\nqueryable via Claude Code"]
+    KWIKI["knowledge/wiki/\n15 wiki pages (9 CRE synthesis + 6 project-context)\nqueryable via Claude Code"]
 
     %% ── Arrows ──────────────────────────────────────────────────────────────
     S1 --> E1
