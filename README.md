@@ -182,21 +182,21 @@ erDiagram
 
 ## Key Insights
 
-**Descriptive — LA Office at 24.1% Vacancy vs. Industrial at 4.8%: The Market Split in Two**
+**Descriptive — A Sharp Divergence in Investor Capital: Industrial +160% vs. Office −36% Since 2018**
 
-The LA CRE market diverged on both prices and fundamentals. Industrial outperformed: vacancy held at 4.8% in Q3 2025 (well below the 7.5% national average), leasing hit its highest quarterly velocity since Q2 2021, and industrial REIT prices are up from their 2020 baseline. Office went the other direction: vacancy reached 24.1% across 212M SF with over 12 consecutive quarters of negative net absorption, and office REIT prices are down materially over the same period.
+The LA CRE market has split in two. Office vacancy reached 23.6% in Q1 2026 with YTD net absorption of −1.1M SF — the Westside, previously the lone bright spot, turned sharply negative at −545K SF. Industrial vacancy held at 5.4% with the first positive absorption quarter since 2022 (+934K SF). REIT prices tell the same story: industrial up ~160% since 2018, office down ~36%.
 
 *SQL: `SELECT property_type, vacancy_rate, ytd_net_absorption_sf FROM ANALYTICS.FACT_LA_MARKET_SNAPSHOT WHERE submarket = 'LA Total'`*
 
-**Diagnostic — E-Commerce Share of Retail Jumped from 11% to 16% Post-COVID and Held: Industrial Demand Is Durable**
+**Diagnostic — Two Structural Shifts, Not a Rate Cycle, Explain the Divergence**
 
-E-commerce share of retail sales jumped from ~11% pre-COVID to ~16% and held — a permanent shift in how goods move that created lasting warehouse demand. That is why industrial vacancy stayed tight and leasing recovered even as the broader market softened. Office went the other direction: the rate hike cycle (0% → 5.33%) hit valuations hard, and while office REIT prices partially recovered in 2024 on rate-cut optimism, they fell again in 2025–2026. Office distress has not resolved.
+E-commerce share of retail sales rose ~4 percentage points in 2020 (from ~11% to ~15.5%) and held — a permanent shift in how goods move that created durable warehouse demand. Industrial's correction was a temporary spec oversupply problem, not a demand problem; absorption turned positive as that supply cleared. Office is different: the 2022–2023 rate hike cycle (0% → 5.33%) accelerated declines, but rates have since eased and office has not recovered. Office REIT prices fell −21% YoY in Q1 2026 even as rates came down — that persistence signals structural demand loss from hybrid work, not a cycle that will self-correct.
 
 *SQL: `SELECT year, quarter, fedfunds, ecompctnsa FROM ANALYTICS.FACT_MACRO_QUARTERLY ORDER BY year, quarter`*
 
-**Actionable — Invest in Industrial for Stability: Low Vacancy, Strong Leasing, and a Confirmed Demand Driver**
+**Recommendation — Rotate ~$150M from Office into SoCal Industrial → +44% Income Growth as Rents Return to Structural Equilibrium**
 
-Industrial is the stable investment case. Vacancy at 4.8%, leasing at its highest quarterly velocity since Q2 2021, and the demand driver — e-commerce — is confirmed permanent in the dashboard data. This is not a cycle to time; the shift in how goods move already happened and is visible in the numbers. Office presents meaningful uncertainty: distress is real but the path to recovery is unclear and rate normalization alone will not resolve it. For an investor prioritizing stability, the fundamentals point to industrial. *(Wiki context: private capital drove 63.8% of SoCal industrial acquisitions in Q4 2025, moving ahead of institutional buyers — `knowledge/wiki/la-industrial-market.md`; national industrial leasing up 17.8% YOY in Q1 2026 — `knowledge/wiki/national-cre-trends.md`)*
+For a $750M LA CRE fund (40% office / 25% industrial / 35% other): reduce office from 40% → 20% and redeploy ~$150M into SoCal industrial. A spec oversupply cycle temporarily pushed industrial rents from $1.74/SF to $1.21/SF NNN — but structural e-commerce demand never left. As absorption turns positive and the construction pipeline contracts (−34.5% YOY for four consecutive quarters), rents return toward equilibrium. Acquiring ~480K SF at $312/SF today yields $6.97M/year at current rents and $10.02M/year at structural equilibrium — a projected +44% income upside (+$3.05M/year).
 
 ## Live Dashboard
 
