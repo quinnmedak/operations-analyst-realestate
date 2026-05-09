@@ -89,7 +89,7 @@ flowchart TD
 
 ## ERD (Star Schema)
 
-![ERD — star schema with dim_date and dim_reit as dimensions, five fact tables: fact_daily_prices, fact_quarterly_financials, fact_macro_quarterly, fact_metro_employment, fact_la_market_snapshot](docs/erd.drawio.png)
+![ERD — star schema with dim_date and dim_reit as dimensions, five fact tables: fact_daily_prices, fact_quarterly_financials, fact_macro_quarterly, fact_metro_employment, fact_la_market_snapshot](docs/erd.png)
 
 ## Dashboard Preview
 
