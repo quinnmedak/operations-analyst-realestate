@@ -49,8 +49,8 @@ flowchart TD
 
     subgraph DBTALL ["dbt · Snowflake ANALYTICS schema"]
         SEED["Seeds\nla_marketbeat.csv · reit_companies.csv"]
-        STG["Staging Views\nstg_reit_* · stg_fred_observations\nstg_bls_metro_employment · stg_la_marketbeat"]
-        MART["Mart Tables\ndim_reit · dim_date · fact_daily_prices\nfact_quarterly_financials · fact_macro_quarterly\nfact_metro_employment · fact_la_market_snapshot"]
+        STG["Staging Views\nstg_reit_* · stg_fred_observations · stg_bls_metro_employment · stg_la_marketbeat"]
+        MART["Mart Tables\ndim_reit · dim_date · fact_daily_prices · fact_quarterly_financials · fact_macro_quarterly · fact_metro_employment · fact_la_market_snapshot"]
     end
 
     DASH["Streamlit Dashboard\nStreamlit Community Cloud"]
