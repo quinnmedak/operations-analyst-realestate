@@ -22,7 +22,7 @@ python extractors/bls_extract.py        # BLS metro employment by sector
 python extractors/scrape_extract.py     # Web scrape → knowledge/raw/ (Firecrawl)
 ```
 
-Only `fred_extract.py` runs on a schedule (GitHub Actions, 1st of month). The others must be triggered manually or via `workflow_dispatch`.
+All four extractors run on a schedule via GitHub Actions. `reit_extract.py` runs weekly (every Monday). `fred_extract.py` and `bls_extract.py` run monthly (1st of month). `scrape_extract.py` runs quarterly (1st of Jan, Apr, Jul, Oct). All also support `workflow_dispatch` for manual triggering.
 
 ### dbt
 
@@ -96,7 +96,7 @@ Required environment variables:
 
 ## Querying the Knowledge Base
 
-The `knowledge/` folder is the project's knowledge base: 24 scraped reports in `knowledge/raw/`, synthesized into 7 wiki pages in `knowledge/wiki/`. `knowledge/index.md` is the entry point — it lists all wiki pages with one-line summaries and cross-references.
+The `knowledge/` folder is the project's knowledge base: 28 scraped reports in `knowledge/raw/`, synthesized into 15 wiki pages in `knowledge/wiki/`. `knowledge/index.md` is the entry point — it lists all wiki pages with one-line summaries and cross-references.
 
 **Conventions when answering knowledge base questions:**
 - Always cite which wiki page or raw source the answer draws from
