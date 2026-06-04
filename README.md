@@ -1,14 +1,6 @@
 # LA Commercial Real Estate Analytics
 
-An end-to-end data pipeline and analytics project targeting the JLL Business Intelligence Analyst role. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 28 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
-
-## Job Posting
-
-- **Role:** Business Intelligence Analyst
-- **Company:** JLL (Jones Lang LaSalle)
-- **Location:** Rosemead, CA
-
-This project demonstrates the posting's core requirements: SQL-driven descriptive and diagnostic analytics, ETL pipelines loading structured data to a cloud data warehouse, dimensional modeling with dbt, and delivering stakeholder-facing insights via an interactive dashboard.
+An end-to-end data pipeline and analytics project demonstrating core CRE analyst competencies. Pulls REIT price and macro data from public APIs, transforms it through a Snowflake star schema via dbt, and surfaces occupancy, investment, and employment insights through an interactive Streamlit dashboard. Supplemented by a Claude Code-queryable knowledge base built from 28 scraped market reports across JLL, CBRE, Cushman & Wakefield, and Bisnow.
 
 ## Tech Stack
 
@@ -93,9 +85,9 @@ flowchart TD
 
 ## Dashboard Preview
 
-![Current State — KPI cards showing office vacancy 24.1%, industrial vacancy 4.8%, Fed Funds 3.64%, CRE loan delinquency 1.58%](docs/screenshots/dashboard-current-state.png)
+![Current State — Financial Signals (Office REIT $44.14, Industrial REIT $90.00, Fed Funds 3.64%, CRE loan delinquency 1.58%) and Space Market KPIs (office vacancy 24.1%, industrial vacancy 4.8%, office YTD absorption −561K SF, industrial YTD absorption +1.6M SF)](docs/screenshots/dashboard-current-state.png)
 
-![E-Commerce Share of Retail Sales vs. Industrial REIT Performance — dual-axis chart showing e-commerce share jump from ~11% to ~16% post-COVID alongside indexed industrial REIT prices](docs/screenshots/dashboard-ecommerce-chart.png)
+![E-Commerce Share of Retail Sales vs. Industrial REIT Performance — dual-axis chart showing e-commerce share rising from ~1% to ~16% post-COVID alongside indexed industrial REIT prices from 2015 to 2026](docs/screenshots/dashboard-ecommerce-chart.png)
 
 ## Key Insights
 
@@ -123,7 +115,7 @@ For a $750M LA CRE fund (40% office / 25% industrial / 35% other): reduce office
 
 A Claude Code-curated wiki built from 28 scraped sources across 4 firms (JLL, CBRE, Cushman & Wakefield, Bisnow). Wiki pages synthesize multiple sources rather than summarizing individual reports. Raw sources live in `knowledge/raw/`, synthesized pages in `knowledge/wiki/`. Browse `knowledge/index.md` for a full index with one-line descriptions and cross-references.
 
-The 11 wiki pages break into two categories: 9 CRE market synthesis pages (office, industrial, retail/multifamily, capital markets, macro environment, national trends, overview, life sciences, tenant landscape) and 2 project-context pages added per course requirements (`project-role-alignment.md` mapping every project component to the JLL BI Analyst job spec, and `data-collection-methodology.md` documenting the scrape pipeline decision framework).
+The 15 wiki pages break into two categories: 9 CRE market synthesis pages (office, industrial, retail/multifamily, capital markets, macro environment, national trends, overview, life sciences, tenant landscape) and 6 project-context pages (`project-role-alignment.md`, `data-collection-methodology.md`, `data-model.md`, `job-posting-relevance.md`, `dashboard-purpose.md`, `stakeholder-brief.md`).
 
 Sources were collected via two methods: a Python script (`extractors/scrape_extract.py`) calling the Firecrawl API for recurring, automatable sources — run locally in batches and on a GitHub Actions schedule — and the Firecrawl MCP server inside Claude Code for domain exploration and one-off targeted PDFs. See `knowledge/wiki/data-collection-methodology.md` for the full breakdown and decision framework.
 
@@ -202,7 +194,7 @@ streamlit run dashboard/app.py
 ├── dashboard/              # Streamlit app (app.py)
 ├── knowledge/
 │   ├── raw/                # 28 scraped market reports
-│   └── wiki/               # 11 Claude Code-generated synthesis pages
+│   └── wiki/               # 15 Claude Code-generated synthesis pages
 ├── docs/                   # Proposal, job posting, specs, plans, slides
 ├── .gitignore
 ├── CLAUDE.md               # Project context for Claude Code

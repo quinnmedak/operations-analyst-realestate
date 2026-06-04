@@ -1,15 +1,14 @@
-# Job Posting Relevance
+# Role Relevance
 
-**Role:** Business Intelligence Analyst — JLL (Rosemead, CA)
-**Salary range:** $65,300 – $94,700
+**Role:** CRE Business Intelligence Analyst
 
-This document maps what the project builds to what the job actually requires, and explains who the internal stakeholders are and what they use the data for.
+This document maps what the project builds to what a CRE BI analyst role actually requires, and explains who the internal stakeholders are and what they use the data for.
 
 ---
 
 ## Who the Stakeholders Are
 
-The BI Analyst's immediate "customers" are internal JLL deal teams:
+The BI Analyst's immediate "customers" are internal CRE firm deal teams:
 
 - **Capital markets brokers** — pitch clients on buying, selling, and financing CRE assets. Need market data to explain pricing, defend valuations, and identify opportunities. The broker is the intermediary — they translate data insights into client conversations.
 - **Leasing teams** — pitch tenants and landlords on space. Need vacancy and absorption data to tell clients whether they have negotiating leverage.
@@ -26,10 +25,12 @@ The end clients those brokers serve include:
 
 ## Selected Stakeholder: PE Fund (Slide Deck Target)
 
-For the presentation slides, a **LA-focused private equity fund** was selected as the target stakeholder. This is the client a JLL capital markets broker is most likely sitting across from right now, and it is the stakeholder our data most directly serves.
+For the presentation slides, a **LA-focused private equity fund** was selected as the target stakeholder. This is the client a CRE capital markets broker is most likely sitting across from right now, and it is the stakeholder our data most directly serves.
 
 **Why this stakeholder:**
 Private capital drove 61.4% of all LA CRE deals in 2025 — the highest share in a decade. These funds hold mixed portfolios (including office) and face two questions our data answers directly: what to do with underperforming office positions, and where to redeploy capital.
+
+
 
 **How the project demonstrates insight delivery to this stakeholder:**
 
@@ -72,7 +73,7 @@ The slide deck (`docs/slides-stakeholder-brief.md`) follows a descriptive → di
 | Strong SQL skills | All mart queries, FRED pivot, cross-source grain alignment |
 | Data warehousing and ETL | Snowflake + dbt staging + mart layers |
 | Reports, dashboards, visualizations | Streamlit app, deployed public URL |
-| Extract, transform, analyze from multiple sources | yfinance + FRED + BLS + JLL scrape, all in one pipeline |
+| Extract, transform, analyze from multiple sources | yfinance + FRED + BLS + Firecrawl scrape, all in one pipeline |
 | Identify trends, patterns, correlations | Rate hike → valuation crash; e-commerce → industrial outperformance |
 | Automated reporting systems | GitHub Actions scheduled pipelines |
 | Data quality and governance | dbt tests on every fact table PK and FK |
@@ -94,7 +95,7 @@ The slide deck (`docs/slides-stakeholder-brief.md`) follows a descriptive → di
 
 The posting lists Power BI, Tableau, Looker, and QlikView as the expected BI tools. This project uses Streamlit.
 
-**How to frame it:** Streamlit demonstrates Python proficiency (a preferred qualification) and end-to-end pipeline ownership — from raw API data to a deployed web app. The underlying SQL and star schema are tool-agnostic: the same `fact_quarterly_financials` and `dim_reit` tables power any BI tool. In the interview, note this explicitly: "I built the dashboard in Streamlit to keep the full stack in Python, but the mart layer connects directly to Power BI or Tableau — same tables, different query layer."
+**How to frame it:** Streamlit demonstrates Python proficiency (a preferred qualification) and end-to-end pipeline ownership — from raw API data to a deployed web app. The underlying SQL and star schema are tool-agnostic: the same `fact_quarterly_financials` and `dim_reit` tables connect directly to Power BI or Tableau — same tables, different query layer.
 
 
 

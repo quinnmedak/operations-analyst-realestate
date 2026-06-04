@@ -4,9 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Portfolio analytics project targeting the JLL Business Intelligence Analyst role. Pulls commercial real estate market data from four sources, transforms it in Snowflake via dbt, and surfaces insights through a Streamlit dashboard and a Claude Code-queryable knowledge base.
+Portfolio analytics project demonstrating core CRE analyst competencies. Pulls commercial real estate market data from four sources, transforms it in Snowflake via dbt, and surfaces insights through a Streamlit dashboard and a Claude Code-queryable knowledge base.
 
-**Target role:** Business Intelligence Analyst — JLL  
 **GitHub repo:** https://github.com/quinnmedak/operations-analyst-realestate
 
 ## Commands

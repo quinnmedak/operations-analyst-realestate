@@ -1,21 +1,20 @@
 # Project–Role Alignment
 
-**Role:** Business Intelligence Analyst — JLL (Rosemead, CA)
-**Salary range:** $65,300 – $94,700
+**Role:** CRE Business Intelligence Analyst
 
-Maps what this project builds to what the job actually requires, explains who the internal stakeholders are, and frames the one tool gap.
+Maps what this project builds to what the role actually requires, explains who the internal stakeholders are, and frames the one tool gap.
 
 ---
 
 ## Who the Stakeholders Are
 
-The BI Analyst's immediate "customers" are internal JLL deal teams:
+The BI Analyst's immediate "customers" are internal CRE firm deal teams:
 
 - **Capital markets brokers** — pitch clients on buying, selling, and financing CRE assets. Need market data to explain pricing, defend valuations, and identify opportunities.
 - **Leasing teams** — pitch tenants and landlords on space. Need vacancy and absorption data to tell clients whether they have negotiating leverage.
 - **Research teams** — produce market reports and thought leadership. Need cross-sector trends and benchmarks.
 
-In practice: you are serving JLL employees who then serve clients. The end clients are PE funds, institutional investors, corporate occupiers, and lenders.
+In practice: you are serving deal team employees who then serve clients. The end clients are PE funds, institutional investors, corporate occupiers, and lenders.
 
 ---
 
@@ -78,7 +77,7 @@ The posting lists Power BI, Tableau, Looker, and QlikView as the expected BI too
 
 **Net absorption is the most important real estate metric on the dashboard**, not REIT stock price. Absorption measures what tenants are actually doing with space — moving in (positive) or moving out (negative). Stock price measures what investors feel. The two diverge frequently and for extended periods.
 
-The vacancy/absorption panel sourced from JLL quarterly marketbeats is the panel most directly useful to leasing teams on a day-to-day basis — the panel that makes this dashboard genuinely useful to JLL employees, not just analytically interesting.
+The vacancy/absorption panel sourced from quarterly marketbeats is the panel most directly useful to leasing teams on a day-to-day basis — the panel that makes this dashboard genuinely useful to deal team employees, not just analytically interesting.
 
 ---
 
